@@ -4,7 +4,7 @@ import styles from '../styles/Home.module.css'
 import Header from '../components/header'
 import Link from 'next/link'
 
-export default function Home() {
+export default function Index() {
 
   return (
     <div>
@@ -28,14 +28,14 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
+          <Link href="/home" className={styles.card}>
+            <h2>Home &rarr;</h2>
+            <p>Learn about Battlemon in an interactive scene!</p>
+          </Link>
+
           <Link href="/hub" className={styles.card}>
             <h2>Hub &rarr;</h2>
             <p>Find in-depth information about our Hub.</p>
-          </Link>
-
-          <Link href="/" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Battlemon in an interactive scene!</p>
           </Link>
 
           <Link

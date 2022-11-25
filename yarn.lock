@@ -17,6 +17,16 @@
   dependencies:
     regenerator-runtime "^0.13.10"
 
+"@babylonjs/core@^5.31.2":
+  version "5.34.0"
+  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-5.34.0.tgz#aaa3b20ba0d277b28c05a756d0e488a1be80dacc"
+  integrity sha512-gK8zc4jqTtKPSmWss4vXc1WC5vMKl10RhM2wXWsn3z9GPt0zOFMwxnBJxTnb6K7WYImPj7r4WniUdm85woT77Q==
+
+"@babylonjs/loaders@^5.31.2":
+  version "5.34.0"
+  resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-5.34.0.tgz#926d6f9a44ff18600b83a72f0cb3839e26e24fbd"
+  integrity sha512-3Ze3ScDIvD+iuMqwsUi1bcimyBg7/G7eMsAmzdb1hQ9IhINk5szclS99s5hK67mDOwO40D382IVPDOY6R/Ch+w==
+
 "@eslint/eslintrc@^1.3.3":
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-1.3.3.tgz#2b044ab39fdfa75b4688184f9e573ce3c5b0ff95"
@@ -571,6 +581,11 @@ axobject-query@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/axobject-query/-/axobject-query-2.2.0.tgz#943d47e10c0b704aa42275e20edf3722648989be"
   integrity sha512-Td525n+iPOOyUQIeBfcASuG6uJsDOITl7Mds5gFyerkWiX7qhUTdYUBlSgNMyVqtSJqwpt1kXGLdUt6SykLMRA==
+
+babylonjs-gltf2interface@^5.31.2:
+  version "5.34.0"
+  resolved "https://registry.yarnpkg.com/babylonjs-gltf2interface/-/babylonjs-gltf2interface-5.34.0.tgz#e0c29fe3f99c7e743ea08c32dcd3e2edf4cba36e"
+  integrity sha512-X+h2V3SGmzyV/47b35I4b4ftupbbQC/K1eWLVcxmv2kYYsMNp7W+mjIyi6jPnUaljNI2qKNJkNxHYtLJLegi0w==
 
 balanced-match@^1.0.0:
   version "1.0.2"
