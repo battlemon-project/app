@@ -33,12 +33,12 @@ export default function HomeScene() {
     
       
       camera.attachControl(canvasRef.current, true);
-      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(-10,10,10), scene);
-      light.intensity = 2
+      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(10,10,-10), scene);
+      light.intensity = 0.1
       
-      var hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("/glb/venice_sunset_1k.hdr", scene);
+      var hdrTexture = new BABYLON.HDRCubeTexture("/glb/clarens_midday_1k.hdr", scene, 23);
       scene.environmentTexture = hdrTexture;
-    
+
       Home(scene);
     
       return scene;
