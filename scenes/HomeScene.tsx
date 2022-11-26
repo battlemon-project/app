@@ -11,13 +11,13 @@ export default function HomeScene() {
   });
 
   useEffect(() => {
-    const engine = new BABYLON.Engine(canvasRef.current, true); // Generate the BABYLON 3D engine
-  
+    const engine = new BABYLON.Engine(canvasRef.current, true);
+    engine.displayLoadingUI();
+
     // Add your code here matching the playground format
     const createScene = function () {
-      
       const scene = new BABYLON.Scene(engine);
-      
+
       const camera = new BABYLON.ArcRotateCamera(
         "camera",
         Math.PI / 2,
@@ -44,8 +44,9 @@ export default function HomeScene() {
       return scene;
     };
     
-    const scene = createScene(); //Call the createScene function
-    
+    const scene = createScene();
+    scene.executeWhenReady(() => engine.hideLoadingUI());   
+
     engine.runRenderLoop(function () {
       scene.render();
     });
