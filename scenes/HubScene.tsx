@@ -41,7 +41,9 @@ export default function HubScene() {
       camera.attachControl(canvasRef.current, true);
       new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
     
-      LoadPlatforms(scene);
+
+
+      LoadPlatforms(scene, canvasRef.current as HTMLCanvasElement);
       Lemon(scene)
       //LoadBackpack(scene)
     
@@ -59,6 +61,9 @@ export default function HubScene() {
       engine.resize();
     });
 
+    return () => {
+      engine.hideLoadingUI()
+    }
   }, []);
 
   return (

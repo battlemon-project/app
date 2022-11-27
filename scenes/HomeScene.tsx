@@ -55,6 +55,9 @@ export default function HomeScene() {
       engine.resize();
     });
 
+    return () => {
+      engine.hideLoadingUI()
+    }
   }, []);
 
   return (

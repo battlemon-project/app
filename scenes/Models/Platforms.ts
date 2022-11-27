@@ -1,6 +1,6 @@
 import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh } from "@babylonjs/core"
 
-export const LoadPlatforms = async (scene: Scene): Promise<void> => {
+export const LoadPlatforms = async (scene: Scene, canvas: HTMLCanvasElement): Promise<void> => {
   let activePlatform: number = 1;
   const direction = [
     {forward: 3, backward: 2},
@@ -86,11 +86,10 @@ export const LoadPlatforms = async (scene: Scene): Promise<void> => {
     }));
     
   });
-
-  const canvas: any = document.getElementById("renderCanvas");              
+           
   const currentPosition = { x: 0, y: 0 };
   let clicked = false;
-
+  console.log(scene)
   canvas.addEventListener("pointerdown", function (evt: MouseEvent) {
     currentPosition.x = evt.clientX;
     clicked = true;
