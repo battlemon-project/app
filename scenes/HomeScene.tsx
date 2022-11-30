@@ -34,10 +34,18 @@ export default function HomeScene() {
         } else if (camera.rotation.x < -0.05) {
           camera.rotation.x = -0.05;
         }
-        if (camera.rotation.y > Math.PI + 0.2) {
-          camera.rotation.y = Math.PI + 0.2;
-        } else if (camera.rotation.y < Math.PI - 0.2) {
-          camera.rotation.y = Math.PI - 0.2;
+        
+        const detaview = document.body.offsetWidth / 1200
+        let angle = 0;
+        if (detaview < 0.5) {
+          angle = detaview/1.2
+        } else if (detaview < 1) {
+          angle = detaview/3.2
+        } 
+        if (camera.rotation.y > Math.PI + angle) {
+          camera.rotation.y = Math.PI + angle;
+        } else if (camera.rotation.y < Math.PI - angle) {
+          camera.rotation.y = Math.PI - angle;
         }
       };
 
