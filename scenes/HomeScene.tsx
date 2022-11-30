@@ -38,6 +38,7 @@ export default function HomeScene() {
       
       var hdrTexture = new BABYLON.HDRCubeTexture("/glb/clarens_midday_1k.hdr", scene, 23);
       scene.environmentTexture = hdrTexture;
+      scene.environmentTexture.level = 1.2;
 
       Home(scene);
     

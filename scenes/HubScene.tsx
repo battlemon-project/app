@@ -39,9 +39,12 @@ export default function HubScene() {
     
       
       camera.attachControl(canvasRef.current, true);
-      new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
+      const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
+      light.intensity = 1.3;
     
-
+      // var hdrTexture = new BABYLON.HDRCubeTexture("/glb/studio_country_hall_1k.hdr", scene, 15);
+      // scene.environmentTexture = hdrTexture;
+      // scene.environmentTexture.level = 0.5;
 
       LoadPlatforms(scene, canvasRef.current as HTMLCanvasElement);
       Lemon(scene)
