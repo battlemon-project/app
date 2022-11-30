@@ -39,6 +39,14 @@ export default function Index() {
           </Link>
 
           <Link
+            href="/newlemon"
+            className={styles.card}
+          >
+            <h2>Test Lemon &rarr;</h2>
+            <p>Scene with placeholders and animations.</p>
+          </Link>
+
+          <Link
             href="/"
             className={styles.card}
           >
