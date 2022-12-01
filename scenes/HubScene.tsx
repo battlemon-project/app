@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
 import { LoadPlatforms } from './Models/Platforms'
-import { Lemon } from './Models/Lemon'
+import { NewLemon } from './Models/NewLemon'
 
 export default function HubScene() {
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
@@ -40,14 +40,14 @@ export default function HubScene() {
       
       camera.attachControl(canvasRef.current, true);
       const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
-      light.intensity = 1.3;
+      light.intensity = 0.5
     
-      // var hdrTexture = new BABYLON.HDRCubeTexture("/glb/studio_country_hall_1k.hdr", scene, 15);
-      // scene.environmentTexture = hdrTexture;
-      // scene.environmentTexture.level = 0.5;
+      var hdrTexture = new BABYLON.HDRCubeTexture("/glb/studio_country_hall_1k.hdr", scene, 15);
+      scene.environmentTexture = hdrTexture;
+      scene.environmentTexture.level = 0.5;
 
       LoadPlatforms(scene, canvasRef.current as HTMLCanvasElement);
-      Lemon(scene)
+      NewLemon(scene)
       //LoadBackpack(scene)
     
       return scene;
