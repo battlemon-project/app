@@ -9,8 +9,11 @@ export const NewLemon = async (scene: Scene): Promise<void> => {
   );
 
 
-  lemonScene.meshes[0].scaling = new Vector3(100,100,100);
-  lemonScene.meshes[0].parent = scene.getNodeByName(`LemonPos_1`) as TransformNode
+  const lemonPosition = scene.getNodeByName(`LemonPos_1`) as TransformNode
+  const lemon = lemonScene.meshes[0];
+  lemon.scaling = new Vector3(100,100,100);
+  lemon.parent = lemonPosition;
+  lemon.rotation = lemonPosition.rotation;
 
   let weapon = (await SceneLoader.ImportMeshAsync("", "/glb/", "katana.glb", scene)).meshes[0];
   weapon.parent = scene.getMeshByName('placeholder_weapon_r') as TransformNode

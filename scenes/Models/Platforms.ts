@@ -21,7 +21,8 @@ export const LoadPlatforms = async (scene: Scene, canvas: HTMLCanvasElement): Pr
   const lookatObjects: string[] = ["LemonPos_1", "LemonPos_2", "LemonPos_3"];
 
   lookatObjects.forEach((name, index) => {
-    const object = scene.getNodeByName(name) as TransformNode    
+    const object = scene.getNodeByName(name) as TransformNode 
+    object.rotate(new Vector3(0,1,0), Math.PI) // This is becouse new lemon rotated by default  
     if (!object) return;
     const Plus = scene.getMeshByName(`Plus_${index + 1}`)
     const Plus_Stroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`)
