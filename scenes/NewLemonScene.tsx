@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
+import loadingScreen from './Models/SceneLoader'
 import { NewLemon } from './Models/NewLemon'
 
 export default function HubScene() {
@@ -12,6 +13,7 @@ export default function HubScene() {
   
   useEffect(() => {
     const engine = new BABYLON.Engine(canvasRef.current, true);
+    engine.loadingScreen = new loadingScreen('test')
     engine.displayLoadingUI();
   
     // Add your code here matching the playground format

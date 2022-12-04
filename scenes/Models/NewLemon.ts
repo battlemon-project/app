@@ -24,6 +24,12 @@ export const NewLemon = async (scene: Scene): Promise<void> => {
   let cloth = (await SceneLoader.ImportMeshAsync("", "/glb/", "BTLMN_Clothes_A.glb", scene)).meshes[0];
   cloth.parent = scene.getMeshByName('placeholder_cloth') as TransformNode
   
+  let back = (await SceneLoader.ImportMeshAsync("", "/glb/", "BTLMN_Backs_A.glb", scene)).meshes[0];
+  back.parent = scene.getMeshByName('placeholder_back') as TransformNode
+
+  let face = (await SceneLoader.ImportMeshAsync("", "/glb/", "BTLMN_Faces_A.glb", scene)).meshes[0];
+  face.parent = scene.getMeshByName('placeholder_face') as TransformNode
+
   const placeholder_weapon_idle_001 = scene.getAnimationGroupByName("placeholder_weapon_idle_001") as AnimationGroup
   placeholder_weapon_idle_001.start(true, 1)
 

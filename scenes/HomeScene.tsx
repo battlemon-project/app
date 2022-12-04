@@ -3,9 +3,12 @@ import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
 import { Home } from './Models/Home'
 import { Vector3 } from "@babylonjs/core";
+import loadingScreen from './Models/SceneLoader'
+import { useRouter } from 'next/router'
 
 export default function HomeScene() {
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
+  const router = useRouter();
   
   BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (loader) {
     (loader as GLTFFileLoader).animationStartMode = GLTFLoaderAnimationStartMode.ALL;
@@ -13,6 +16,7 @@ export default function HomeScene() {
 
   useEffect(() => {
     const engine = new BABYLON.Engine(canvasRef.current, true);
+    engine.loadingScreen = new loadingScreen('test')
     engine.displayLoadingUI();
 
     // Add your code here matching the playground format
@@ -59,7 +63,7 @@ export default function HomeScene() {
       scene.environmentTexture = hdrTexture;
       scene.environmentTexture.level = 1.2;
 
-      Home(scene);
+      Home(scene, router);
     
       return scene;
     };

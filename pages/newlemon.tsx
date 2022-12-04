@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import Header from '../components/header'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 import Loader from '../components/Loader'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
@@ -20,9 +21,13 @@ export default function NewLemon() {
 
       <Header />
 
-      <Suspense fallback={<Loader />}>
+      <Suspense>
         <NewLemonScene />
       </Suspense>
+
+      <Loader />
+
+      <Footer />
     </>
   )
 }

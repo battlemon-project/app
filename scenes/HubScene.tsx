@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
+import loadingScreen from './Models/SceneLoader'
 import { LoadPlatforms } from './Models/Platforms'
 import { NewLemon } from './Models/NewLemon'
 
@@ -13,9 +14,9 @@ export default function HubScene() {
   
   useEffect(() => {
     const engine = new BABYLON.Engine(canvasRef.current, true);
+    engine.loadingScreen = new loadingScreen('test')
     engine.displayLoadingUI();
   
-    // Add your code here matching the playground format
     const createScene = function () {
       
       const scene = new BABYLON.Scene(engine);
@@ -44,7 +45,24 @@ export default function HubScene() {
     
       var hdrTexture = new BABYLON.HDRCubeTexture("/glb/studio_country_hall_1k.hdr", scene, 15);
       scene.environmentTexture = hdrTexture;
-      scene.environmentTexture.level = 0.5;
+      scene.environmentTexture.level = 0.2;
+
+      //skybox
+      const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:4000}, scene);
+      const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+      skyboxMaterial.backFaceCulling = false;
+      skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("assets/hub/", scene, undefined, true, [
+        'assets/hub/px.png',
+        'assets/hub/py.png',
+        'assets/hub/pz.png',
+        'assets/hub/nx.png',
+        'assets/hub/ny.png',
+        'assets/hub/nz.png'
+      ]);
+      skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+      skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+      skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+      skybox.material = skyboxMaterial;
 
       LoadPlatforms(scene, canvasRef.current as HTMLCanvasElement);
       NewLemon(scene)
