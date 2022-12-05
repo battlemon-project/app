@@ -6,10 +6,12 @@ import { LoadPlatforms } from './Models/Platforms'
 import { NewLemon } from './Models/NewLemon'
 import { useSetRecoilState } from 'recoil';
 import { loaderState } from '../atoms/loaderState';
+import type { SuiData } from "@mysten/sui.js";
 
-export default function HubScene() {
+export default function HubScene({ lemons }:{ lemons: SuiData[] }) {
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const setLoader = useSetRecoilState(loaderState);
+  const lastLemon = lemons[0]
 
   BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (loader) {
     (loader as GLTFFileLoader).animationStartMode = GLTFLoaderAnimationStartMode.NONE;
@@ -68,7 +70,7 @@ export default function HubScene() {
       skybox.material = skyboxMaterial;
 
       LoadPlatforms(scene, canvasRef.current as HTMLCanvasElement);
-      NewLemon(scene)
+      NewLemon(scene, lastLemon)
       //LoadBackpack(scene)
     
       return scene;
@@ -86,9 +88,10 @@ export default function HubScene() {
     });
 
     return () => {
-      engine.hideLoadingUI()
+      engine.hideLoadingUI();
+      engine.dispose();
     }
-  }, []);
+  }, [lemons]);
 
   return (
     <canvas ref={canvasRef} className="vh-100 w-100 position-absolute top-0" id="renderCanvas" />

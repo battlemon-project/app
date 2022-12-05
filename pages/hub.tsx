@@ -3,16 +3,61 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Loader from '../components/Loader'
 import dynamic from 'next/dynamic'
-import { Suspense } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil';
 import { loaderState } from '../atoms/loaderState';
+import { loaderLemons } from '../atoms/loaderLemons';
+import { ethos } from 'ethos-connect';
+import type { JsonRpcProvider, SuiObject, SuiData } from "@mysten/sui.js";
 
 const HubScene = dynamic(() => import('../scenes/HubScene'), {
   suspense: true,
 })
 
 export default function Hub() {
-  const [ loader ] = useRecoilState(loaderState);
+  const [ lemonsLoading, setLemonsLoading ] = useState(true)
+  const [ babylonLoading ] = useRecoilState(loaderState);
+  const [ lemons, setLemons ] = useRecoilState(loaderLemons);
+  const { provider }: { provider: JsonRpcProvider} = ethos.useProviderAndSigner()
+  const { wallet } = ethos.useWallet();
+
+  const refreshLemons = async () => {
+    if (!wallet?.address) return [];
+    const list: SuiData[] = [];
+    const objects = await provider.getObjectsOwnedByAddress(wallet.address)
+    for (const object of objects.filter(object => object.type.includes('lemon'))) {
+      let fullObject = await provider.getObject(object.objectId);
+      let { data } = fullObject.details as SuiObject
+      list.push(data)
+    }
+    await setLemons(list)
+    await setLemonsLoading(false)
+  }
+
+  useEffect(() => {
+    refreshLemons();
+  }, [wallet?.address])
+
+  const handleMint = async () => {
+    if (!wallet) return;
+    const signableTransaction = {
+      kind: 'moveCall' as const,
+      data: {
+        packageObjectId: '0x973dac2887dda26626e75b47186ddf9768042617',
+        module: 'lemon',
+        function: 'create_lemon',
+        typeArguments: [],
+        arguments: [
+          '0x998ca90172e084df35a6481688e3f9ed3edd8fa2',
+        ],
+        gasBudget: 10000,
+      },
+    }
+  
+    await wallet.signAndExecuteTransaction(signableTransaction);
+    await refreshLemons();
+  }
+
 
   return (
     <>
@@ -24,10 +69,16 @@ export default function Hub() {
 
       <Header />
       
+      { wallet?.address && 
+        <div className="sticky-top text-center d-inline-block position-absolute" style={{ zIndex: 980, left: '50%', top: '90px', transform: 'translateX(-50%)' }}>
+          <button className="btn btn-lg btn-light px-4" onClick={handleMint}>Mint NFT (Devnet)</button> 
+        </div>
+      }
+
       <Suspense fallback={<Loader />}>
-        <HubScene />
+        {!lemonsLoading && <HubScene lemons={lemons} />}
       </Suspense>
-      {loader && <Loader />}
+      {(babylonLoading || lemonsLoading) && <Loader />}
 
       <Footer />
     </>

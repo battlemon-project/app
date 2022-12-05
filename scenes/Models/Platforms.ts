@@ -90,7 +90,7 @@ export const LoadPlatforms = async (scene: Scene, canvas: HTMLCanvasElement): Pr
            
   const currentPosition = { x: 0, y: 0 };
   let clicked = false;
-  console.log(scene)
+  console.log(scene.getNodes())
   canvas.addEventListener("pointerdown", function (evt: MouseEvent) {
     currentPosition.x = evt.clientX;
     clicked = true;
