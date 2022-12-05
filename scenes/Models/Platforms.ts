@@ -1,6 +1,6 @@
 import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh } from "@babylonjs/core"
 
-export const LoadPlatforms = async (scene: Scene, canvas: HTMLCanvasElement): Promise<void> => {
+export const Platforms = async (scene: Scene, canvas: HTMLCanvasElement): Promise<() => void> => {
   let activePlatform: number = 1;
   const direction = [
     {forward: 3, backward: 2},
@@ -23,7 +23,6 @@ export const LoadPlatforms = async (scene: Scene, canvas: HTMLCanvasElement): Pr
   lookatObjects.forEach((name, index) => {
     const object = scene.getNodeByName(name) as TransformNode 
     object.rotate(new Vector3(0,1,0), Math.PI) // This is becouse new lemon rotated by default  
-    if (!object) return;
     const Plus = scene.getMeshByName(`Plus_${index + 1}`)
     const Plus_Stroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`)
     if (Plus) Plus.rotation = object.rotation;
@@ -90,13 +89,17 @@ export const LoadPlatforms = async (scene: Scene, canvas: HTMLCanvasElement): Pr
            
   const currentPosition = { x: 0, y: 0 };
   let clicked = false;
-  console.log(scene.getNodes())
-  canvas.addEventListener("pointerdown", function (evt: MouseEvent) {
+
+  function pointerDown(evt: MouseEvent) {
     currentPosition.x = evt.clientX;
     clicked = true;
-  });
+  }
   
-  canvas.addEventListener("pointermove", function (evt: MouseEvent) {
+  function pointerUp() {
+    clicked = false;
+  }
+
+  function pointerMove(evt: MouseEvent) {
     if (!clicked) {
       return;
     }
@@ -106,11 +109,15 @@ export const LoadPlatforms = async (scene: Scene, canvas: HTMLCanvasElement): Pr
     activeLemon.rotate(new Vector3(0,1,0), angleY);
     originalRotationAngle -= angleY;
     currentPosition.x = evt.clientX;
-  });
+  }
   
-  canvas.addEventListener("pointerup", function () {
-    clicked = false;
-  });
+  canvas.addEventListener("pointerdown", pointerDown);
+  canvas.addEventListener("pointerup", pointerUp);
+  canvas.addEventListener("pointermove", pointerMove);
 
+  return () => {
+    canvas.removeEventListener("pointerdown", pointerDown, false);
+    canvas.removeEventListener("pointerup", pointerUp, false);
+    canvas.removeEventListener("pointermove", pointerMove, false);
+  }
 }
-

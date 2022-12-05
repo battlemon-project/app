@@ -2,23 +2,26 @@ import { useRef, useEffect } from "react";
 import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
 import loadingScreen from './Models/SceneLoader'
-import { LoadPlatforms } from './Models/Platforms'
+import { Platforms } from './Models/Platforms'
 import { NewLemon } from './Models/NewLemon'
 import { useSetRecoilState } from 'recoil';
 import { loaderState } from '../atoms/loaderState';
 import type { SuiData } from "@mysten/sui.js";
 
 export default function HubScene({ lemons }:{ lemons: SuiData[] }) {
-  const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const setLoader = useSetRecoilState(loaderState);
-  const lastLemon = lemons[0]
-
-  BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (loader) {
-    (loader as GLTFFileLoader).animationStartMode = GLTFLoaderAnimationStartMode.NONE;
-  });
+  const lastLemon = lemons.length ? lemons[lemons.length-1] : null;
+  console.log(lemons)
   
   useEffect(() => {
-    const engine = new BABYLON.Engine(canvasRef.current, true);
+    let removePlatforms: () => void;
+
+    BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (loader) {
+      (loader as GLTFFileLoader).animationStartMode = GLTFLoaderAnimationStartMode.NONE;
+    });
+
+    const canvas = document.getElementById('renderCanvas') as HTMLCanvasElement
+    const engine = new BABYLON.Engine(canvas, true);
     engine.loadingScreen = new loadingScreen('', setLoader)
     engine.displayLoadingUI();
   
@@ -44,7 +47,7 @@ export default function HubScene({ lemons }:{ lemons: SuiData[] }) {
       camera.upperRadiusLimit = 1000;
     
       
-      camera.attachControl(canvasRef.current, true);
+      camera.attachControl(canvas, true);
       const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
       light.intensity = 0.5
     
@@ -68,8 +71,11 @@ export default function HubScene({ lemons }:{ lemons: SuiData[] }) {
       skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
       skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
       skybox.material = skyboxMaterial;
-
-      LoadPlatforms(scene, canvasRef.current as HTMLCanvasElement);
+      
+      Platforms(scene, canvas)
+      .then(unload => {
+        removePlatforms = unload
+      });
       NewLemon(scene, lastLemon)
       //LoadBackpack(scene)
     
@@ -77,7 +83,7 @@ export default function HubScene({ lemons }:{ lemons: SuiData[] }) {
     };
     
     const scene = createScene();
-    scene.executeWhenReady(() => engine.hideLoadingUI()); 
+    scene.executeWhenReady(() => engine.hideLoadingUI());
     
     engine.runRenderLoop(function () {
       scene.render();
@@ -88,12 +94,13 @@ export default function HubScene({ lemons }:{ lemons: SuiData[] }) {
     });
 
     return () => {
+      if (removePlatforms) removePlatforms();
       engine.hideLoadingUI();
       engine.dispose();
     }
   }, [lemons]);
 
   return (
-    <canvas ref={canvasRef} className="vh-100 w-100 position-absolute top-0" id="renderCanvas" />
+    <canvas className="vh-100 w-100 position-absolute top-0" id="renderCanvas" />
   )
 }

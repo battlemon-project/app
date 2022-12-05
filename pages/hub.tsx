@@ -6,7 +6,6 @@ import dynamic from 'next/dynamic'
 import { Suspense, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil';
 import { loaderState } from '../atoms/loaderState';
-import { loaderLemons } from '../atoms/loaderLemons';
 import { ethos } from 'ethos-connect';
 import type { JsonRpcProvider, SuiObject, SuiData } from "@mysten/sui.js";
 
@@ -15,14 +14,15 @@ const HubScene = dynamic(() => import('../scenes/HubScene'), {
 })
 
 export default function Hub() {
-  const [ lemonsLoading, setLemonsLoading ] = useState(true)
   const [ babylonLoading ] = useRecoilState(loaderState);
-  const [ lemons, setLemons ] = useRecoilState(loaderLemons);
+  const [ lemons, setLemons ] = useState<SuiData[]>([]);
   const { provider }: { provider: JsonRpcProvider} = ethos.useProviderAndSigner()
   const { wallet } = ethos.useWallet();
 
   const refreshLemons = async () => {
-    if (!wallet?.address) return [];
+    if (!wallet?.address) {
+      return [];
+    }
     const list: SuiData[] = [];
     const objects = await provider.getObjectsOwnedByAddress(wallet.address)
     for (const object of objects.filter(object => object.type.includes('lemon'))) {
@@ -30,8 +30,7 @@ export default function Hub() {
       let { data } = fullObject.details as SuiObject
       list.push(data)
     }
-    await setLemons(list)
-    await setLemonsLoading(false)
+    setLemons(list)
   }
 
   useEffect(() => {
@@ -76,9 +75,9 @@ export default function Hub() {
       }
 
       <Suspense fallback={<Loader />}>
-        {!lemonsLoading && <HubScene lemons={lemons} />}
+        <HubScene lemons={lemons} />
       </Suspense>
-      {(babylonLoading || lemonsLoading) && <Loader />}
+      {babylonLoading[0] && babylonLoading[1] && <Loader />}
 
       <Footer />
     </>
