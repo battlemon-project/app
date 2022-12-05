@@ -27,7 +27,7 @@ export default function NewLemon() {
       <Suspense fallback={<Loader />}>
         <NewLemonScene />
       </Suspense>
-      {loader && <Loader />}
+      {loader[1] && <Loader />}
 
       <Footer />
     </>

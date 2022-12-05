@@ -14,22 +14,25 @@ const HubScene = dynamic(() => import('../scenes/HubScene'), {
 })
 
 export default function Hub() {
-  const [ babylonLoading ] = useRecoilState(loaderState);
+  const [ loader, setLoader ] = useRecoilState(loaderState);
   const [ lemons, setLemons ] = useState<SuiData[]>([]);
   const { provider }: { provider: JsonRpcProvider} = ethos.useProviderAndSigner()
   const { wallet } = ethos.useWallet();
 
   const refreshLemons = async () => {
     if (!wallet?.address) {
+      setLoader((loader) => [false, loader[1]]);
       return [];
     }
     const list: SuiData[] = [];
     const objects = await provider.getObjectsOwnedByAddress(wallet.address)
+    console.log(objects)
     for (const object of objects.filter(object => object.type.includes('lemon'))) {
       let fullObject = await provider.getObject(object.objectId);
       let { data } = fullObject.details as SuiObject
       list.push(data)
     }
+    setLoader((loader) => [false, loader[1]]);
     setLemons(list)
   }
 
@@ -77,7 +80,7 @@ export default function Hub() {
       <Suspense fallback={<Loader />}>
         <HubScene lemons={lemons} />
       </Suspense>
-      {babylonLoading[0] && babylonLoading[1] && <Loader />}
+      {loader[0] || loader[1] && <Loader />}
 
       <Footer />
     </>

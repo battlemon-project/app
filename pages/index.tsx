@@ -27,7 +27,7 @@ export default function Home() {
       <Suspense fallback={<Loader />}>
         <HomeScene />
       </Suspense>
-      {loader && <Loader />}
+      {loader[1] && <Loader />}
 
       <Footer />
     </>
