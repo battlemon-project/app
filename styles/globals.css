@@ -51,3 +51,10 @@ a {
   font-size: 17px;
   min-width: 200px;
 }
+
+.spinner {
+  animation: spinner 3s linear infinite;
+}
+@keyframes spinner { 
+  100% { transform:rotate(360deg); } 
+}

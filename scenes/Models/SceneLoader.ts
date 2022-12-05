@@ -1,24 +1,20 @@
 import { ILoadingScreen } from "@babylonjs/core"
+import type { SetterOrUpdater } from 'recoil';
 
 export default class CustomLoadingScreen implements ILoadingScreen {
   //optional, but needed due to interface definitions
   public loadingUIBackgroundColor: string
-
-  constructor(public loadingUIText: string) {
+  
+  constructor(public loadingUIText: string, public setLoader: SetterOrUpdater<boolean>) {
     this.loadingUIBackgroundColor = '#000'
+    this.setLoader = setLoader;
   }
 
   public displayLoadingUI() {
-    const loader = document.getElementById('sceneLoaderElement')
-    if (loader) {
-      loader.classList.add('d-block');
-    }
+    this.setLoader(true);
   }
 
   public hideLoadingUI() {
-    const loader = document.getElementById('sceneLoaderElement')
-    if (loader) {
-      loader.classList.add('d-none');
-    }
+    this.setLoader(false);
   }
 }

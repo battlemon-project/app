@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import type { AppProps } from 'next/app';
 import { EthosConnectProvider } from 'ethos-connect';
 import { useEffect } from "react";
+import { RecoilRoot } from 'recoil';
 
 
 
@@ -14,7 +15,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <EthosConnectProvider>
-      <Component {...pageProps} />
+      <RecoilRoot>
+        <Component {...pageProps} />
+      </RecoilRoot>
     </EthosConnectProvider>
   )
 }

@@ -4,12 +4,15 @@ import Footer from '../components/Footer'
 import Loader from '../components/Loader'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
+import { useRecoilState } from 'recoil';
+import { loaderState } from '../atoms/loaderState';
 
 const HubScene = dynamic(() => import('../scenes/HubScene'), {
   suspense: true,
 })
 
 export default function Hub() {
+  const [ loader ] = useRecoilState(loaderState);
 
   return (
     <>
@@ -21,11 +24,11 @@ export default function Hub() {
 
       <Header />
       
-      <Suspense>
+      <Suspense fallback={<Loader />}>
         <HubScene />
       </Suspense>
+      {loader && <Loader />}
 
-      <Loader />
       <Footer />
     </>
   )

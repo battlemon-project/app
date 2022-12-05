@@ -4,9 +4,12 @@ import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders
 import loadingScreen from './Models/SceneLoader'
 import { LoadPlatforms } from './Models/Platforms'
 import { NewLemon } from './Models/NewLemon'
+import { useSetRecoilState } from 'recoil';
+import { loaderState } from '../atoms/loaderState';
 
 export default function HubScene() {
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
+  const setLoader = useSetRecoilState(loaderState);
 
   BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (loader) {
     (loader as GLTFFileLoader).animationStartMode = GLTFLoaderAnimationStartMode.NONE;
@@ -14,7 +17,7 @@ export default function HubScene() {
   
   useEffect(() => {
     const engine = new BABYLON.Engine(canvasRef.current, true);
-    engine.loadingScreen = new loadingScreen('test')
+    engine.loadingScreen = new loadingScreen('', setLoader)
     engine.displayLoadingUI();
   
     const createScene = function () {

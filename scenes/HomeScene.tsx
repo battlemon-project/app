@@ -5,10 +5,13 @@ import { Home } from './Models/Home'
 import { Vector3 } from "@babylonjs/core";
 import loadingScreen from './Models/SceneLoader'
 import { useRouter } from 'next/router'
+import { useSetRecoilState } from 'recoil';
+import { loaderState } from '../atoms/loaderState';
 
 export default function HomeScene() {
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const router = useRouter();
+  const setLoader = useSetRecoilState(loaderState);
   
   BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (loader) {
     (loader as GLTFFileLoader).animationStartMode = GLTFLoaderAnimationStartMode.ALL;
@@ -16,7 +19,7 @@ export default function HomeScene() {
 
   useEffect(() => {
     const engine = new BABYLON.Engine(canvasRef.current, true);
-    engine.loadingScreen = new loadingScreen('test')
+    engine.loadingScreen = new loadingScreen('', setLoader )
     engine.displayLoadingUI();
 
     // Add your code here matching the playground format
@@ -57,11 +60,11 @@ export default function HomeScene() {
       
       camera.attachControl(canvasRef.current, true);
       const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(10,10,-10), scene);
-      light.intensity = 0.1
+      light.intensity = 0.5
       
       var hdrTexture = new BABYLON.HDRCubeTexture("/glb/clarens_midday_1k.hdr", scene, 23);
       scene.environmentTexture = hdrTexture;
-      scene.environmentTexture.level = 1.2;
+      scene.environmentTexture.level = 0.7;
 
       Home(scene, router);
     
