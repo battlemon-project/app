@@ -81,7 +81,7 @@ export default function HubScene(
       .then(unload => {
         removePlatforms = unload
       });
-      NewLemon(scene, lemons[0])
+      NewLemon(scene, lemons)
       //LoadBackpack(scene)
     
       return scene;

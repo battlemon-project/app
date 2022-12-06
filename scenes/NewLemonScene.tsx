@@ -43,7 +43,7 @@ export default function HubScene() {
       scene.environmentTexture = hdrTexture;
       scene.environmentTexture.level = 0.5;
 
-      NewLemon(scene, null)
+      NewLemon(scene, [])
     
       return scene;
     };

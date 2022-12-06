@@ -1,8 +1,8 @@
 import { Scene, SceneLoader, AnimationGroup, TransformNode, Vector3, Mesh } from "@babylonjs/core"
 import type { SuiMoveObject } from "@mysten/sui.js";
 
-export const NewLemon = async (scene: Scene, lastLemon: SuiMoveObject | null): Promise<void> => {
-  
+export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<void> => {
+  const lastLemon = lemons[0];
   if (lastLemon) {
     const lemonScene = await SceneLoader.ImportMeshAsync(
       "",
@@ -29,13 +29,7 @@ export const NewLemon = async (scene: Scene, lastLemon: SuiMoveObject | null): P
     const faceTrait = traits.find(trait => trait.name === 'face');
     if (faceTrait?.flavour == 'Face_Gas_Mask_MA01') {
       faceTrait.flavour = 'Face_Visor_VR_VR01'
-      if (lastLemon.fields.created % 3 == 0) {
-        faceTrait.flavour = 'Face_Empty'
-      }
     }
-    console.log(clothTrait)
-    console.log(faceTrait)
-
 
     const outfits = [
       {
