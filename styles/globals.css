@@ -58,3 +58,29 @@ a {
 @keyframes spinner { 
   100% { transform:rotate(360deg); } 
 }
+
+.short_address {
+  width: 140px;
+  white-space:nowrap;
+  display: inline-flex;
+  margin:0; 
+  padding: 0;
+}
+
+.short_address > span {
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align:middle;
+}
+
+.short_address .ellipsis {
+  display: inline-block;
+  width: calc(40% + 1.2em);
+  text-overflow: ellipsis;
+}
+
+.short_address .indent {
+  display:inline-flex;
+  width: calc(60% - 1.2em);
+  justify-content:flex-end;
+}

@@ -6,9 +6,9 @@ import { Platforms } from './Models/Platforms'
 import { NewLemon } from './Models/NewLemon'
 import { useSetRecoilState } from 'recoil';
 import { loaderState } from '../atoms/loaderState';
-import type { SuiData } from "@mysten/sui.js";
+import type { SuiMoveObject } from "@mysten/sui.js";
 
-export default function HubScene({ lemons }:{ lemons: SuiData[] }) {
+export default function HubScene({ lemons }:{ lemons: SuiMoveObject[] }) {
   const setLoader = useSetRecoilState(loaderState);
   const lastLemon = lemons.length ? lemons[lemons.length-1] : null;
   console.log(lemons)
@@ -43,7 +43,7 @@ export default function HubScene({ lemons }:{ lemons: SuiData[] }) {
       camera.upperBetaLimit = camera.beta;
       camera.lowerBetaLimit = camera.beta;
       camera.wheelPrecision = 0.5;
-      camera.lowerRadiusLimit = 300;
+      camera.lowerRadiusLimit = 500;
       camera.upperRadiusLimit = 1000;
     
       

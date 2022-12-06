@@ -21,7 +21,12 @@ function Header() {
             <li className="nav-item dropdown">
               {wallet?.address ?
                 <>
-                  <button className="btn btn-lg btn-outline-light dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">{wallet?.address}</button>
+                  <button className="btn btn-lg btn-outline-light dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span className="short_address">
+                      <span className="ellipsis">{wallet?.address}</span>
+                      <span className="indent">{wallet?.address}</span>
+                    </span>
+                  </button>
                   <ul className="dropdown-menu w-100" aria-labelledby="navbarDropdown">
                     <li><a className="dropdown-item" href={"#"} onClick={wallet.disconnect}>Sign Out</a></li>
                   </ul>

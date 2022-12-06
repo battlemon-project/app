@@ -7,7 +7,7 @@ import { Suspense, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil';
 import { loaderState } from '../atoms/loaderState';
 import { ethos } from 'ethos-connect';
-import type { JsonRpcProvider, SuiObject, SuiData } from "@mysten/sui.js";
+import type { JsonRpcProvider, SuiObject, SuiMoveObject } from "@mysten/sui.js";
 
 const HubScene = dynamic(() => import('../scenes/HubScene'), {
   suspense: true,
@@ -15,7 +15,7 @@ const HubScene = dynamic(() => import('../scenes/HubScene'), {
 
 export default function Hub() {
   const [ loader, setLoader ] = useRecoilState(loaderState);
-  const [ lemons, setLemons ] = useState<SuiData[]>([]);
+  const [ lemons, setLemons ] = useState<SuiMoveObject[]>([]);
   const { provider }: { provider: JsonRpcProvider} = ethos.useProviderAndSigner()
   const { wallet } = ethos.useWallet();
 
@@ -24,16 +24,16 @@ export default function Hub() {
       setLoader((loader) => [false, loader[1]]);
       return [];
     }
-    const list: SuiData[] = [];
+    const list: SuiMoveObject [] = [];
     const objects = await provider.getObjectsOwnedByAddress(wallet.address)
     console.log(objects)
     for (const object of objects.filter(object => object.type.includes('lemon'))) {
       let fullObject = await provider.getObject(object.objectId);
       let { data } = fullObject.details as SuiObject
-      list.push(data)
+      list.push(data as SuiMoveObject)
     }
     setLoader((loader) => [false, loader[1]]);
-    setLemons(list)
+    setLemons(list.sort((a,b) => a.fields.created - b.fields.created ))
   }
 
   useEffect(() => {
@@ -45,12 +45,12 @@ export default function Hub() {
     const signableTransaction = {
       kind: 'moveCall' as const,
       data: {
-        packageObjectId: '0x973dac2887dda26626e75b47186ddf9768042617',
+        packageObjectId: '0xcadf98b9d718eec44a431798019b64a101ea76df',
         module: 'lemon',
         function: 'create_lemon',
         typeArguments: [],
         arguments: [
-          '0x998ca90172e084df35a6481688e3f9ed3edd8fa2',
+          '0x1485d9f2cf70808655fa172fa8c27a253cac7498',
         ],
         gasBudget: 10000,
       },

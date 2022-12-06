@@ -1,7 +1,7 @@
-import { Scene, SceneLoader, AnimationGroup, TransformNode, Vector3 } from "@babylonjs/core"
-import type { SuiData, SuiMoveObject } from "@mysten/sui.js";
+import { Scene, SceneLoader, AnimationGroup, TransformNode, Vector3, Mesh } from "@babylonjs/core"
+import type { SuiMoveObject } from "@mysten/sui.js";
 
-export const NewLemon = async (scene: Scene, lastLemon: SuiData | null): Promise<void> => {
+export const NewLemon = async (scene: Scene, lastLemon: SuiMoveObject | null): Promise<void> => {
   
   if (lastLemon) {
     const lemonScene = await SceneLoader.ImportMeshAsync(
@@ -42,11 +42,17 @@ export const NewLemon = async (scene: Scene, lastLemon: SuiData | null): Promise
         trait: traits.find(trait => trait.name === 'back')
       },
       {
-        model: 'BTLMN_Outfit_Face_A.glb',
+        model: 'BTLMN_Faces_A.glb',
         placeholder: 'placeholder_face',
-        trait: traits.find(trait => trait.name === 'face')
+        trait: { name: 'face', flavour: lastLemon.fields.created % 2 == 0 ? 'Face_VR_Helmet_VR01' : 'balakjflkdjg'}
       }
-    ]
+    ];
+
+    const placeholder_test = scene.getMeshByName('placeholder_test')
+    if (placeholder_test) placeholder_test.visibility = 0;
+
+    const torso = scene.getNodeByName('torso') as Mesh
+    if (torso) torso.scaling = new Vector3(0,0,0);
 
     for (const outfit of outfits) {
       let trait = (await SceneLoader.ImportMeshAsync("", "/glb/", outfit.model, scene)).meshes[0];
@@ -59,8 +65,9 @@ export const NewLemon = async (scene: Scene, lastLemon: SuiData | null): Promise
           one.visibility = 0;
         }
       })
-      trait.parent = scene.getMeshByName(outfit.placeholder) as TransformNode
-
+      const placeholder = scene.getMeshByName(outfit.placeholder) as TransformNode
+      trait.parent = placeholder
+      
     }
     
     const placeholder_weapon_idle_001 = scene.getAnimationGroupByName("placeholder_weapon_idle_001") as AnimationGroup
