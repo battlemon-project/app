@@ -4,16 +4,12 @@ import Footer from '../components/Footer'
 import Loader from '../components/Loader'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
-import { useRecoilState } from 'recoil';
-import { loaderState } from '../atoms/loaderState';
 
 const HomeScene = dynamic(() => import('../scenes/HomeScene'), {
   suspense: true,
 })
 
 export default function Home() {
-  const [ loader ] = useRecoilState(loaderState);
-
   return (
     <>
       <Head>
@@ -24,11 +20,10 @@ export default function Home() {
 
       <Header />
       
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<Loader status="" />}>
         <HomeScene />
       </Suspense>
-      {loader[1] && <Loader />}
-
+      
       <Footer />
     </>
   )

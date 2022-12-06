@@ -1,18 +1,25 @@
-import { useRef, useEffect } from "react";
+import { useEffect, Dispatch, SetStateAction } from "react";
 import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
-import loadingScreen from './Models/SceneLoader'
 import { Platforms } from './Models/Platforms'
 import { NewLemon } from './Models/NewLemon'
-import { useSetRecoilState } from 'recoil';
-import { loaderState } from '../atoms/loaderState';
 import type { SuiMoveObject } from "@mysten/sui.js";
+import type { Loader } from "../pages/hub";
 
-export default function HubScene({ lemons }:{ lemons: SuiMoveObject[] }) {
-  const setLoader = useSetRecoilState(loaderState);
-  const lastLemon = lemons.length ? lemons[lemons.length-1] : null;
-  console.log(lemons)
+export default function HubScene(
+  { 
+    lemons, 
+    setLoader 
+  }:{ 
+    lemons: SuiMoveObject[], 
+    setLoader: Dispatch<SetStateAction<Loader>> 
+  }) {
+  //console.log(lemons)
   
+  useEffect(() => {
+    setLoader((loader) => ({ ...loader, babylon: true }));
+  }, [])
+
   useEffect(() => {
     let removePlatforms: () => void;
 
@@ -22,8 +29,6 @@ export default function HubScene({ lemons }:{ lemons: SuiMoveObject[] }) {
 
     const canvas = document.getElementById('renderCanvas') as HTMLCanvasElement
     const engine = new BABYLON.Engine(canvas, true);
-    engine.loadingScreen = new loadingScreen('', setLoader)
-    engine.displayLoadingUI();
   
     const createScene = function () {
       
@@ -76,14 +81,16 @@ export default function HubScene({ lemons }:{ lemons: SuiMoveObject[] }) {
       .then(unload => {
         removePlatforms = unload
       });
-      NewLemon(scene, lastLemon)
+      NewLemon(scene, lemons[0])
       //LoadBackpack(scene)
     
       return scene;
     };
     
     const scene = createScene();
-    scene.executeWhenReady(() => engine.hideLoadingUI());
+    scene.executeWhenReady(() => {
+      setLoader((loader) => ({ ...loader, babylon: false }));
+    });
     
     engine.runRenderLoop(function () {
       scene.render();
@@ -95,7 +102,7 @@ export default function HubScene({ lemons }:{ lemons: SuiMoveObject[] }) {
 
     return () => {
       if (removePlatforms) removePlatforms();
-      engine.hideLoadingUI();
+      setLoader((loader) => ({ ...loader, babylon: false }));
       engine.dispose();
     }
   }, [lemons]);

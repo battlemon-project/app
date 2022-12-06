@@ -1,7 +1,7 @@
 import { Scene, SceneLoader, AnimationGroup, TransformNode, Vector3, Mesh } from "@babylonjs/core"
 import type { SuiMoveObject } from "@mysten/sui.js";
 
-export const NewLemon = async (scene: Scene, lastLemon: SuiMoveObject | null): Promise<void> => {
+export const NewLemon = async (scene: Scene, lastLemon: SuiMoveObject | null, platform: number): Promise<void> => {
   
   if (lastLemon) {
     const lemonScene = await SceneLoader.ImportMeshAsync(

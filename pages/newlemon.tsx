@@ -4,15 +4,12 @@ import Footer from '../components/Footer'
 import Loader from '../components/Loader'
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
-import { useRecoilState } from 'recoil';
-import { loaderState } from '../atoms/loaderState';
 
 const NewLemonScene = dynamic(() => import('../scenes/NewLemonScene'), {
   suspense: true,
 })
 
 export default function NewLemon() {
-  const [ loader ] = useRecoilState(loaderState);
 
   return (
     <>
@@ -24,10 +21,9 @@ export default function NewLemon() {
 
       <Header />
       
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<Loader status="" />}>
         <NewLemonScene />
       </Suspense>
-      {loader[1] && <Loader />}
 
       <Footer />
     </>
