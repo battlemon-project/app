@@ -54,11 +54,11 @@ export default function HubScene(
       
       camera.attachControl(canvas, true);
       const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
-      light.intensity = 0.5
+      light.intensity = 0.9
     
       var hdrTexture = new BABYLON.HDRCubeTexture("/glb/studio_country_hall_1k.hdr", scene, 15);
       scene.environmentTexture = hdrTexture;
-      scene.environmentTexture.level = 0.2;
+      scene.environmentTexture.level = 0.4;
 
       //skybox
       const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:4000}, scene);

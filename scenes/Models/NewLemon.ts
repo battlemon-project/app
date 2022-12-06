@@ -7,7 +7,7 @@ export const NewLemon = async (scene: Scene, lastLemon: SuiMoveObject | null): P
     const lemonScene = await SceneLoader.ImportMeshAsync(
       "",
       "/glb/",
-      "BTLMN_Outfits_Lemon_A (2).glb",
+      "BTLMN_Lemon_A.glb",
       scene
     );
 
@@ -15,10 +15,27 @@ export const NewLemon = async (scene: Scene, lastLemon: SuiMoveObject | null): P
     const lemonPosition = scene.getNodeByName(`LemonPos_1`) as TransformNode
     const lemon = lemonScene.meshes[0];
     lemon.scaling = new Vector3(100,100,100);
+    lemon.position.y = lemon.position.y + 9;
     lemon.parent = lemonPosition;
     lemon.rotation = lemonPosition.rotation;
 
     const traits: { flavour: string, name: string }[] = (lastLemon as SuiMoveObject).fields.traits.map((trait: Record<string, string>) => trait.fields)
+
+    const clothTrait = traits.find(trait => trait.name === 'cloth');
+    if (clothTrait?.flavour == 'Cloth_Poncho_CA01') {
+      clothTrait.flavour = 'Cloth_Ninja_Waistband_NA01'
+    }
+    
+    const faceTrait = traits.find(trait => trait.name === 'face');
+    if (faceTrait?.flavour == 'Face_Gas_Mask_MA01') {
+      faceTrait.flavour = 'Face_Visor_VR_VR01'
+      if (lastLemon.fields.created % 3 == 0) {
+        faceTrait.flavour = 'Face_Empty'
+      }
+    }
+    console.log(clothTrait)
+    console.log(faceTrait)
+
 
     const outfits = [
       {
@@ -34,7 +51,8 @@ export const NewLemon = async (scene: Scene, lastLemon: SuiMoveObject | null): P
       {
         model: 'BTLMN_Outfit_Cloth_A.glb',
         placeholder: 'placeholder_cloth',
-        trait: { name: 'cloth', flavour: 'Cloth_Bandolier_MA02' }
+        trait: clothTrait
+        // trait: { name: 'cloth', flavour: lastLemon.fields.created % 2 == 1 ? 'Cloth_Bandolier_MA02' : 'Cloth_Ninja_Waistband_NA01' }
       },
       {
         model: 'BTLMN_Outfit_Back_A.glb',
@@ -42,9 +60,10 @@ export const NewLemon = async (scene: Scene, lastLemon: SuiMoveObject | null): P
         trait: traits.find(trait => trait.name === 'back')
       },
       {
-        model: 'BTLMN_Faces_A.glb',
+        model: 'BTLMN_Outfit_Face_A.glb',
         placeholder: 'placeholder_face',
-        trait: { name: 'face', flavour: lastLemon.fields.created % 2 == 0 ? 'Face_VR_Helmet_VR01' : 'balakjflkdjg'}
+        trait: faceTrait
+        //trait: { name: 'face', flavour: lastLemon.fields.created % 2 == 0 ? 'Face_VR_Helmet_VR01' : 'balakjflkdjg'}
       }
     ];
 
