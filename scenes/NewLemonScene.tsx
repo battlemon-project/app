@@ -1,7 +1,6 @@
 import { useRef, useEffect } from "react";
 import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
-import loadingScreen from './Models/SceneLoader'
 import { NewLemon } from './Models/NewLemon'
 
 export default function HubScene() {
