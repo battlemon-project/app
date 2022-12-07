@@ -11,7 +11,11 @@ export default function App({ Component, pageProps }: AppProps) {
   },[])
 
   return (
-    <EthosConnectProvider>
+    <EthosConnectProvider
+      ethosConfiguration={{
+        hideEmailSignIn: true
+      }}
+    >
       <Component {...pageProps} />
     </EthosConnectProvider>
   )

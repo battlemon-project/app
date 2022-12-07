@@ -16,7 +16,15 @@ export const Platforms = async (scene: Scene, canvas: HTMLCanvasElement): Promis
   let originalRotationAngle = 0;
 
   const platforms = models.meshes[0]
-  platforms.position.y = -100
+  platforms.position.y = -100;
+
+
+  ["PlatformContainer_2", "PlatformContainer_3"].forEach(name => {
+    const platform = scene.getNodeByName(name) as Mesh
+    console.log(platform)
+    if (platform) platform.scaling = new Vector3(0,0,0);
+  })
+
 
   const lookatObjects: string[] = ["LemonPos_1", "LemonPos_2", "LemonPos_3"];
 
@@ -25,8 +33,14 @@ export const Platforms = async (scene: Scene, canvas: HTMLCanvasElement): Promis
     object.rotate(new Vector3(0,1,0), Math.PI) // This is becouse new lemon rotated by default  
     const Plus = scene.getMeshByName(`Plus_${index + 1}`)
     const Plus_Stroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`)
-    if (Plus) Plus.rotation = object.rotation;
-    if (Plus_Stroke) Plus_Stroke.rotation = object.rotation;
+    if (Plus) {
+      Plus.position.y = Plus.position.y + 10
+      Plus.rotation = object.rotation;
+    }
+    if (Plus_Stroke) {
+      Plus_Stroke.position.y = Plus_Stroke.position.y + 10
+      Plus_Stroke.rotation = object.rotation;
+    }
     object.rotate(new Vector3(0,1,0), (Math.PI + Math.PI/3)*index)
   });
 
@@ -49,6 +63,7 @@ export const Platforms = async (scene: Scene, canvas: HTMLCanvasElement): Promis
     if (!collider) return;
     collider.actionManager = new ActionManager(scene);
     collider.visibility = 0;
+
     collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPointerOverTrigger, function(){	
       scene.hoverCursor = "pointer";
     }));
@@ -56,34 +71,34 @@ export const Platforms = async (scene: Scene, canvas: HTMLCanvasElement): Promis
       scene.hoverCursor = "default";
     }));
     
-    collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, function(){
-      let rotationAngle = 0;
-      let platformAnimation: AnimationGroup | null = null;
+    // collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, function(){
+    //   let rotationAngle = 0;
+    //   let platformAnimation: AnimationGroup | null = null;
 
-      if (activePlatform == direction[index].forward) {
-        platformAnimation = scene.getAnimationGroupByName('Forward' + direction[index].forward) as AnimationGroup
-        rotationAngle = 2*Math.PI/3
-      } else
-      if (activePlatform == direction[index].backward) {
-        platformAnimation = scene.getAnimationGroupByName('Backward' + direction[index].backward) as AnimationGroup
-        rotationAngle = -2*Math.PI/3
-      }
+    //   if (activePlatform == direction[index].forward) {
+    //     platformAnimation = scene.getAnimationGroupByName('Forward' + direction[index].forward) as AnimationGroup
+    //     rotationAngle = 2*Math.PI/3
+    //   } else
+    //   if (activePlatform == direction[index].backward) {
+    //     platformAnimation = scene.getAnimationGroupByName('Backward' + direction[index].backward) as AnimationGroup
+    //     rotationAngle = -2*Math.PI/3
+    //   }
 
-      if (platformAnimation) {
-        platformAnimation.start(false, 1);
-      }
+    //   if (platformAnimation) {
+    //     platformAnimation.start(false, 1);
+    //   }
 
-      lookatObjects.forEach((name, index) => {
-        const lemon = scene.getNodeByName(name) as TransformNode;
-        if (activePlatform == index + 1) {
-          lemon.rotate(new Vector3(0,1,0), originalRotationAngle)
-          originalRotationAngle = 0;
-        }
-        Animation.CreateAndStartAnimation(`Lemon_rotation`, lemon, "rotation.y", 60, 25, lemon.rotation.y, lemon.rotation.y + rotationAngle, 0)
-      })
+    //   lookatObjects.forEach((name, index) => {
+    //     const lemon = scene.getNodeByName(name) as TransformNode;
+    //     if (activePlatform == index + 1) {
+    //       lemon.rotate(new Vector3(0,1,0), originalRotationAngle)
+    //       originalRotationAngle = 0;
+    //     }
+    //     Animation.CreateAndStartAnimation(`Lemon_rotation`, lemon, "rotation.y", 60, 25, lemon.rotation.y, lemon.rotation.y + rotationAngle, 0)
+    //   })
 
-      activePlatform = index + 1
-    }));
+    //   activePlatform = index + 1
+    // }));
     
   });
            
