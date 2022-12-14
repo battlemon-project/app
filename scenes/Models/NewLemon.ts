@@ -1,8 +1,26 @@
-import { Scene, SceneLoader, AnimationGroup, TransformNode, Vector3, Mesh } from "@babylonjs/core"
+import { Scene, SceneLoader, AnimationGroup, TransformNode, Vector3, Mesh, AssetContainer } from "@babylonjs/core"
 import type { SuiMoveObject } from "@mysten/sui.js";
 
 export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<void> => {
+  const containers: { [key: string]: AssetContainer } = {}
   const lastLemon = lemons[0];
+
+  if (lemons && lemons.length) {
+    const models = {
+      weapon: 'BTLMN_Outfit_Weapon_A.glb', 
+      cap: 'BTLMN_Outfit_Cap_A.glb', 
+      cloth: 'BTLMN_Outfit_Cloth_A.glb', 
+      back: 'BTLMN_Outfit_Back_A.glb', 
+      face: 'BTLMN_Outfit_Face_A.glb'
+    }
+    for (const [key, link] of Object.entries(models)) {
+      containers[key] = await SceneLoader.LoadAssetContainerAsync(
+        "/glb/", link, scene
+      )
+    }
+  }
+
+
   if (lastLemon) {
     const lemonScene = await SceneLoader.ImportMeshAsync(
       "",
@@ -31,35 +49,28 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
       faceTrait.flavour = 'Face_Visor_VR_VR01'
     }
 
-    const outfits = [
-      {
-        model: 'BTLMN_Outfit_Weapon_A.glb',
-        placeholder: 'placeholder_weapon_r',
-        trait: traits.find(trait => trait.name === 'weapon')
+    const outfits: { [key: string]: { trait: { flavour: string, name: string } | undefined, placeholder: string }} = {
+      weapon: {
+        trait: traits.find(trait => trait.name === 'weapon'),
+        placeholder: 'placeholder_weapon_r'
       },
-      {
-        model: 'BTLMN_Outfit_Cap_A.glb',
-        placeholder: 'placeholder_cap',
-        trait: traits.find(trait => trait.name === 'cap')
+      cap: {
+        trait: traits.find(trait => trait.name === 'cap'),
+        placeholder: 'placeholder_cap'
       },
-      {
-        model: 'BTLMN_Outfit_Cloth_A.glb',
-        placeholder: 'placeholder_cloth',
-        trait: clothTrait
-        // trait: { name: 'cloth', flavour: lastLemon.fields.created % 2 == 1 ? 'Cloth_Bandolier_MA02' : 'Cloth_Ninja_Waistband_NA01' }
+      cloth: {
+        trait: clothTrait,
+        placeholder: 'placeholder_cloth'
       },
-      {
-        model: 'BTLMN_Outfit_Back_A.glb',
-        placeholder: 'placeholder_back',
-        trait: traits.find(trait => trait.name === 'back')
+      back: {
+        trait: traits.find(trait => trait.name === 'back'),
+        placeholder: 'placeholder_back'
       },
-      {
-        model: 'BTLMN_Outfit_Face_A.glb',
-        placeholder: 'placeholder_face',
-        trait: faceTrait
-        //trait: { name: 'face', flavour: lastLemon.fields.created % 2 == 0 ? 'Face_VR_Helmet_VR01' : 'balakjflkdjg'}
-      }
-    ];
+      face: {
+        trait: faceTrait,
+        placeholder: 'placeholder_face'
+      } 
+    }
 
     const placeholder_test = scene.getMeshByName('placeholder_test')
     if (placeholder_test) placeholder_test.visibility = 0;
@@ -67,20 +78,18 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
     const torso = scene.getNodeByName('torso') as Mesh
     if (torso) torso.scaling = new Vector3(0,0,0);
 
-    for (const outfit of outfits) {
-      let trait = (await SceneLoader.ImportMeshAsync("", "/glb/", outfit.model, scene)).meshes[0];
-      const all = trait.getChildMeshes();
+    for (const [key, { trait, placeholder }] of Object.entries(outfits)) {
+      const outfitContainer = containers[key].instantiateModelsToScene((name) => name.split('_primitive')[0], false, { doNotInstantiate: true })
+      const outfit = outfitContainer.rootNodes[0];
+
+      const all = outfit.getChildMeshes();
       all.forEach(one => {
-        // console.log(outfit.trait?.flavour)
-        // console.log(one.name)
-        // debugger;
-        if (!one.name.includes(outfit.trait?.flavour || '')) {
+        if (!one.name.includes(trait?.flavour || '')) {
           one.visibility = 0;
         }
       })
-      const placeholder = scene.getMeshByName(outfit.placeholder) as TransformNode
-      trait.parent = placeholder
-      
+      const placeholderNode = scene.getMeshByName(placeholder) as TransformNode
+      outfit.parent = placeholderNode;      
     }
     
     const placeholder_weapon_idle_001 = scene.getAnimationGroupByName("placeholder_weapon_idle_001") as AnimationGroup
