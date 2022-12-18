@@ -29,8 +29,10 @@ export default function Hub() {
   const refreshLemons = async () => {
     if (!wallet?.address) return;
     let list: SuiMoveObject [] = [];
+
+
+
     const objects = await provider.getObjectsOwnedByAddress(wallet.address)
-    console.log(objects)
     for (const object of objects.filter(object => object.type.includes('lemon'))) {
       let fullObject = await provider.getObject(object.objectId);
       let { data } = fullObject.details as SuiObject
@@ -55,12 +57,12 @@ export default function Hub() {
     const signableTransaction = {
       kind: 'moveCall' as const,
       data: {
-        packageObjectId: '0xf53906d5811685d7e8cfc8ffc11a3be939c34436',
+        packageObjectId: '0xd0b290b77ab543171422cffd7968d0ad749f29bf',
         module: 'lemon',
         function: 'create_lemon',
         typeArguments: [],
         arguments: [
-          '0xadd5d4b969151acd66d5ef688fd3c42c8cd376b6',
+          '0x36e92c0c400e40fc7621dbf883722a522ed093e7',
         ],
         gasBudget: 10000,
       },
@@ -99,7 +101,7 @@ export default function Hub() {
       <Header />
       
       { wallet?.address && 
-        <div className="sticky-top text-center d-inline-block position-absolute" style={{ zIndex: 980, left: '50%', top: '90px', transform: 'translateX(-50%)' }}>
+        <div className="sticky-top text-center d-inline-block position-absolute" style={{ zIndex: 1080, left: '50%', top: '15px', transform: 'translateX(-50%)' }}>
           <button className="btn btn-lg btn-light px-4" onClick={handleMint}>Mint NFT (Devnet)</button> 
         </div>
       }
