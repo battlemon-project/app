@@ -13,9 +13,11 @@ function Header() {
         </button> 
         <div className="collapse navbar-collapse" id="navbarMain">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 fs-5">
-            {/* <li className="nav-item">
-              <a className="nav-link" href="/hub">NFT Hub</a>
-            </li> */}
+            <li className="nav-item">
+              <span className="nav-link" style={{color: 'white'}}>
+                <span id="fps">0</span> FPS
+              </span>
+            </li>
           </ul>
           <ul className="navbar-nav mb-2 mb-lg-0 fs-5">
             <li className="nav-item dropdown">

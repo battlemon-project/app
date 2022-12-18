@@ -1,6 +1,6 @@
-import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh } from "@babylonjs/core"
+import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera } from "@babylonjs/core"
 
-export const Platforms = async (scene: Scene, canvas: HTMLCanvasElement): Promise<() => void> => {
+export const Platforms = async (scene: Scene, camera: ArcRotateCamera,canvas: HTMLCanvasElement): Promise<() => void> => {
   let activePlatform: number = 1;
   const direction = [
     {forward: 3, backward: 2},
@@ -15,6 +15,24 @@ export const Platforms = async (scene: Scene, canvas: HTMLCanvasElement): Promis
   );
   let originalRotationAngle = 0;
 
+
+  const Camera = scene.getCameraByName('Camera')
+  scene.activeCamera = Camera
+
+  const operator = scene.getMeshByName('operator')
+  if (operator) operator.visibility = 0
+  const target = scene.getMeshByName('target')
+  if (target) target.visibility = 0
+  const showPos_feature = scene.getMeshByName('showPos_feature')
+  if (showPos_feature) showPos_feature.visibility = 0
+  const showPos_outfit = scene.getMeshByName('showPos_outfit')
+  if (showPos_outfit) showPos_outfit.visibility = 0
+  // if (operator && target) {
+  //   //camera.parent = operator;
+  //   camera.position = new Vector3(0, -327, 12458);
+  //   camera.target = new Vector3(0, 0, 0);
+  // }
+
   const platforms = models.meshes[0]
   platforms.position.y = -100;
 
@@ -25,6 +43,7 @@ export const Platforms = async (scene: Scene, canvas: HTMLCanvasElement): Promis
     object.rotate(new Vector3(0,1,0), Math.PI) // This is becouse new lemon rotated by default  
     const Plus = scene.getMeshByName(`Plus_${index + 1}`)
     const Plus_Stroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`)
+    console.log(Plus)
     if (Plus) {
       Plus.position.y = Plus.position.y + 10
       Plus.rotation = object.rotation;

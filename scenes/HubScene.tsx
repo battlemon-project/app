@@ -14,8 +14,10 @@ export default function HubScene(
     lemons: SuiMoveObject[], 
     setLoader: Dispatch<SetStateAction<Loader>> 
   }) {
-  //console.log(lemons)
+
+  const FpsElement = document.getElementById("fps");
   
+
   useEffect(() => {
     setLoader((loader) => ({ ...loader, babylon: true }));
   }, [])
@@ -38,7 +40,7 @@ export default function HubScene(
         "camera",
         -Math.PI / 2,
         Math.PI / 2.1,
-        800,
+        450,
         new BABYLON.Vector3(0,0,0),
         scene
       )
@@ -48,8 +50,8 @@ export default function HubScene(
       camera.upperBetaLimit = camera.beta;
       camera.lowerBetaLimit = camera.beta;
       camera.wheelPrecision = 0.5;
-      camera.lowerRadiusLimit = 500;
-      camera.upperRadiusLimit = 1000;
+      camera.lowerRadiusLimit = 2450;
+      camera.upperRadiusLimit = 2450;
     
       
       camera.attachControl(canvas, true);
@@ -77,10 +79,10 @@ export default function HubScene(
       skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
       skybox.material = skyboxMaterial;
       
-      Platforms(scene, canvas)
-      .then(unload => {
-        removePlatforms = unload
-      });
+      Platforms(scene, camera, canvas)
+        .then(unload => {
+          removePlatforms = unload
+        });
       NewLemon(scene, lemons)
       //LoadBackpack(scene)
     
@@ -94,6 +96,7 @@ export default function HubScene(
     
     engine.runRenderLoop(function () {
       scene.render();
+      if (FpsElement) FpsElement.innerHTML = engine.getFps().toFixed(2)
     });
     
     window.addEventListener("resize", function () {
