@@ -9,10 +9,12 @@ import type { Loader } from "../pages/hub";
 export default function HubScene(
   { 
     lemons, 
-    setLoader 
+    setLoader,
+    handleMint
   }:{ 
     lemons: SuiMoveObject[], 
-    setLoader: Dispatch<SetStateAction<Loader>> 
+    setLoader: Dispatch<SetStateAction<Loader>> ,
+    handleMint: () => Promise<void>
   }) {
 
   const FpsElement = document.getElementById("fps");
@@ -79,7 +81,7 @@ export default function HubScene(
       skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
       skybox.material = skyboxMaterial;
       
-      Platforms(scene, camera, canvas)
+      Platforms(scene, camera, handleMint, canvas)
         .then(unload => {
           removePlatforms = unload
         });

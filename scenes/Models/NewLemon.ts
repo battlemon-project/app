@@ -20,6 +20,10 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
     }
 
     lemons.slice(0, 3).forEach((suiLemon, index) => {
+      [`Plus_${index + 1}`, `Plus_${index + 1}_Stroke`].forEach((mesh) => {
+        const plus = scene.getMeshByName(mesh);
+        if (plus) plus.dispose();
+      })
       const lemonPosition = scene.getNodeByName(`LemonPos_${index + 1}`) as TransformNode
       let lemonContainer = containers.lemon.instantiateModelsToScene((name) => name.split('_primitive')[0], false, { doNotInstantiate: true })
       const lemon = lemonContainer.rootNodes[0];
@@ -30,27 +34,20 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
 
       const outfits = getOutfits(suiLemon)
 
-      for (const [key, { trait, placeholder }] of Object.entries(outfits)) {
-        const outfitContainer = containers[key].instantiateModelsToScene((name) => name.split('_primitive')[0], false, { doNotInstantiate: true })
-        const outfit = outfitContainer.rootNodes[0];
-  
-        const all = outfit.getChildMeshes();
-        all.forEach(one => {
-          if (!one.name.includes(trait?.flavour || '')) {
-            one.visibility = 0;
-          }
+      Object.values(outfits).forEach(({ trait, type, placeholder }) => {
+        containers[type].meshes.forEach(mesh => {
+          if (!mesh.name.includes(trait!.flavour)) return;
+          const placeholderNode = lemon.getChildTransformNodes().find(mesh => mesh.name == placeholder);
+          if (placeholderNode) mesh.clone(type + index + 1, placeholderNode)
         })
-        const placeholderNode = lemon.getChildTransformNodes().find(mesh => mesh.name == placeholder)
-        if (placeholderNode) {
-          outfit.parent = placeholderNode;  
-        }    
-      }
-      
+      })
+
       lemonContainer.animationGroups.forEach(animationGroup => {
         if (['placeholder_weapon_idle_001', 'lemon_idle_001', 'placeholder_head_idle_001'].includes(animationGroup.name)) {
           animationGroup.start(true, 1)
         }
       });
+      
     });
   }
 }
@@ -68,25 +65,30 @@ function getOutfits(lemon: SuiMoveObject) {
     faceTrait.flavour = 'Face_Visor_VR_VR01'
   }
 
-  const outfits: { [key: string]: { trait: { flavour: string, name: string } | undefined, placeholder: string }} = {
+  const outfits: { [key: string]: { trait: { flavour: string, name: string } | undefined, placeholder: string, type: string }} = {
     weapon: {
       trait: traits.find(trait => trait.name === 'weapon'),
+      type: 'weapon',
       placeholder: 'placeholder_weapon_r'
     },
     cap: {
       trait: traits.find(trait => trait.name === 'cap'),
+      type: 'cap',
       placeholder: 'placeholder_cap'
     },
     cloth: {
       trait: clothTrait,
+      type: 'cloth',
       placeholder: 'placeholder_cloth'
     },
     back: {
       trait: traits.find(trait => trait.name === 'back'),
+      type: 'back',
       placeholder: 'placeholder_back'
     },
     face: {
       trait: faceTrait,
+      type: 'face',
       placeholder: 'placeholder_face'
     } 
   }

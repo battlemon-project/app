@@ -1,6 +1,6 @@
 import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera } from "@babylonjs/core"
 
-export const Platforms = async (scene: Scene, camera: ArcRotateCamera,canvas: HTMLCanvasElement): Promise<() => void> => {
+export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMint: () => Promise<void>, canvas: HTMLCanvasElement): Promise<() => void> => {
   let activePlatform: number = 1;
   const direction = [
     {forward: 3, backward: 2},
@@ -41,16 +41,14 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera,canvas: HT
   lookatObjects.forEach((name, index) => {
     const object = scene.getNodeByName(name) as TransformNode 
     object.rotate(new Vector3(0,1,0), Math.PI) // This is becouse new lemon rotated by default  
-    const Plus = scene.getMeshByName(`Plus_${index + 1}`)
-    const Plus_Stroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`)
-    console.log(Plus)
-    if (Plus) {
-      Plus.position.y = Plus.position.y + 10
-      Plus.rotation = object.rotation;
+    const plus = scene.getMeshByName(`Plus_${index + 1}`)
+    const plusStroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`)
+    if (plus) {
+      plus.rotation = object.rotation;
     }
-    if (Plus_Stroke) {
-      Plus_Stroke.position.y = Plus_Stroke.position.y + 10
-      Plus_Stroke.rotation = object.rotation;
+    if (plusStroke) {
+      plusStroke.rotation = object.rotation;
+      plusStroke.visibility = 0;
     }
     object.rotate(new Vector3(0,1,0), (Math.PI + Math.PI/3)*index)
   });
@@ -75,16 +73,25 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera,canvas: HT
     collider.actionManager = new ActionManager(scene);
     collider.visibility = 0;
 
-    collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPointerOverTrigger, function(){	
+    let stroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`)	
+    collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPointerOverTrigger, async function(){
+      if (stroke) stroke.visibility = 1;
       scene.hoverCursor = "pointer";
     }));
-    collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPointerOutTrigger, function(){
+    collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPointerOutTrigger, async function(){
+      if (stroke) stroke.visibility = 0;
       scene.hoverCursor = "default";
     }));
     
-    collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, function(){
+    collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, async function(){
       let rotationAngle = 0;
       let platformAnimation: AnimationGroup | null = null;
+
+      stroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`) // refresh stroke
+      if (stroke) {
+        await handleMint();
+        return;
+      }
 
       if (activePlatform == direction[index].forward) {
         platformAnimation = scene.getAnimationGroupByName('Forward' + direction[index].forward) as AnimationGroup
