@@ -100,11 +100,11 @@ export default function Hub() {
 
       <Header />
       
-      { wallet?.address && 
+      {/* { wallet?.address && 
         <div className="sticky-top text-center d-inline-block position-absolute" style={{ zIndex: 1080, left: '50%', top: '15px', transform: 'translateX(-50%)' }}>
           <button className="btn btn-lg btn-light px-4" onClick={handleMint}>Mint NFT (Devnet)</button> 
         </div>
-      }
+      } */}
 
       { !loader.data && <HubScene lemons={lemons} setLoader={setLoader} handleMint={handleMint} /> }
       {JSON.stringify(loader)}

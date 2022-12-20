@@ -1,23 +1,46 @@
-import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera } from "@babylonjs/core"
+import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera, AssetContainer } from "@babylonjs/core"
 
 export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMint: () => Promise<void>, canvas: HTMLCanvasElement): Promise<() => void> => {
+  const containers: { [key: string]: AssetContainer } = {}
+
   let activePlatform: number = 1;
   const direction = [
     {forward: 3, backward: 2},
     {forward: 1, backward: 3},
     {forward: 2, backward: 1}
   ];
-  const models = await SceneLoader.ImportMeshAsync(
-    "",
-    "/glb/",
-    "BTLMN_LemonPlatforms.glb",
-    scene
-  );
+
+  const models = {
+    platforms: 'BTLMN_LemonPlatforms.glb',
+    dots: 'BTLMN_LemonIcons.glb'
+  }
+
+  for (const [key, link] of Object.entries(models)) {
+    containers[key] = await SceneLoader.LoadAssetContainerAsync(
+      "/glb/", link, scene
+    )
+  }
+  
+  containers.platforms.addAllToScene()
+  containers.dots.addAllToScene()
+  const dots = scene.getTransformNodeByName('icons')
+  if (dots) {
+    dots.position.y = dots.position.y + 10
+    dots.getChildMeshes().forEach(mesh => {
+      mesh.renderingGroupId = 2;
+    })
+    dots.scaling = new Vector3(0,0,0);
+  }
+
   let originalRotationAngle = 0;
 
 
   const Camera = scene.getCameraByName('Camera')
-  scene.activeCamera = Camera
+  if (Camera) {
+    scene.activeCamera = Camera
+  }
+
+
 
   const operator = scene.getMeshByName('operator')
   if (operator) operator.visibility = 0
@@ -27,14 +50,9 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
   if (showPos_feature) showPos_feature.visibility = 0
   const showPos_outfit = scene.getMeshByName('showPos_outfit')
   if (showPos_outfit) showPos_outfit.visibility = 0
-  // if (operator && target) {
-  //   //camera.parent = operator;
-  //   camera.position = new Vector3(0, -327, 12458);
-  //   camera.target = new Vector3(0, 0, 0);
-  // }
 
-  const platforms = models.meshes[0]
-  platforms.position.y = -100;
+  // const platforms = models.meshes[0]
+  // platforms.position.y = -100;
 
   const lookatObjects: string[] = ["LemonPos_1", "LemonPos_2", "LemonPos_3"];
 
@@ -103,7 +121,18 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
       }
 
       if (platformAnimation) {
+        if (dots && dots.scaling.x > 0) {
+          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 15, new Vector3(120,120,120), new Vector3(0,0,0), 0)
+        }
         platformAnimation.start(false, 1);
+      } else {
+        const position = scene.getNodeByName(`LemonPos_${index + 1}`) as TransformNode
+        if (dots && dots.scaling.x < 120) {
+          dots.parent = position;
+          dots.rotation = position.rotation;
+          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 15, new Vector3(0,0,0), new Vector3(120,120,120), 0)
+        }
+        return;
       }
 
       lookatObjects.forEach((name, index) => {
