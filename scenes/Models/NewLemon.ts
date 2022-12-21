@@ -28,7 +28,7 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
       let lemonContainer = containers.lemon.instantiateModelsToScene((name) => name.split('_primitive')[0], false, { doNotInstantiate: true })
       const lemon = lemonContainer.rootNodes[0];
       lemon.scaling = new Vector3(120,120,120);
-      lemon.position.y = lemon.position.y + 9;
+      lemon.position.y = lemon.position.y + 10;
       lemon.parent = lemonPosition;
       lemon.rotation = lemonPosition.rotation;
 

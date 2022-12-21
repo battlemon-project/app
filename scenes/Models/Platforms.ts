@@ -3,6 +3,7 @@ import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, Transfor
 export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMint: () => Promise<void>, canvas: HTMLCanvasElement): Promise<() => void> => {
   const containers: { [key: string]: AssetContainer } = {}
 
+  
   let activePlatform: number = 1;
   const direction = [
     {forward: 3, backward: 2},
@@ -31,6 +32,7 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
     })
     dots.scaling = new Vector3(0,0,0);
   }
+  const dotsMeshes = dots?.getChildMeshes() || [];
 
   let originalRotationAngle = 0;
 
@@ -39,8 +41,6 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
   if (Camera) {
     scene.activeCamera = Camera
   }
-
-
 
   const operator = scene.getMeshByName('operator')
   if (operator) operator.visibility = 0
@@ -55,20 +55,22 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
   // platforms.position.y = -100;
 
   const lookatObjects: string[] = ["LemonPos_1", "LemonPos_2", "LemonPos_3"];
+  const lemonPositions: TransformNode[] = lookatObjects.map(pos => {
+    return scene.getNodeByName(pos) as TransformNode
+  })
 
-  lookatObjects.forEach((name, index) => {
-    const object = scene.getNodeByName(name) as TransformNode 
-    object.rotate(new Vector3(0,1,0), Math.PI) // This is becouse new lemon rotated by default  
+  lemonPositions.forEach((position, index) => {
+    position.rotate(new Vector3(0,1,0), Math.PI) // This is becouse new lemon rotated by default  
     const plus = scene.getMeshByName(`Plus_${index + 1}`)
     const plusStroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`)
     if (plus) {
-      plus.rotation = object.rotation;
+      plus.rotation = position.rotation;
     }
     if (plusStroke) {
-      plusStroke.rotation = object.rotation;
+      plusStroke.rotation = position.rotation;
       plusStroke.visibility = 0;
     }
-    object.rotate(new Vector3(0,1,0), (Math.PI + Math.PI/3)*index)
+    position.rotate(new Vector3(0,1,0), (Math.PI + Math.PI/3)*index)
   });
 
   const objects: string[] = ["Plus_Back", "Plus_Cap", "Plus_Cloth", "Plus_Face", "Plus_Back_Stroke", "Plus_Cap_Stroke", "Plus_Cloth_Stroke", "Plus_Face_Stroke", "Line_Back_1", "Line_Back_2", "Line_Cap_1", "Line_Cap_2", "Line_Cloth_1", "Line_Cloth_2", "Line_Face_1", "Line_Face_2", "Point_Back", "Point_Cap", "Point_Cloth", "Point_Face", "Background_Sphere"];
@@ -126,7 +128,7 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
         }
         platformAnimation.start(false, 1);
       } else {
-        const position = scene.getNodeByName(`LemonPos_${index + 1}`) as TransformNode
+        const position = lemonPositions[index];
         if (dots && dots.scaling.x < 120) {
           dots.parent = position;
           dots.rotation = position.rotation;
@@ -139,6 +141,7 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
         const lemon = scene.getNodeByName(name) as TransformNode;
         if (activePlatform == index + 1) {
           lemon.rotate(new Vector3(0,1,0), originalRotationAngle)
+          dotsMeshes.forEach(mesh => mesh.rotate(new Vector3(0,1,0), -1*originalRotationAngle))
           originalRotationAngle = 0;
         }
         Animation.CreateAndStartAnimation(`Lemon_rotation`, lemon, "rotation.y", 60, 25, lemon.rotation.y, lemon.rotation.y + rotationAngle, 0)
@@ -165,10 +168,11 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
     if (!clicked) {
       return;
     }
-    const activeLemon = scene.getNodeByName(`LemonPos_${activePlatform}`) as TransformNode
+    
     const dx = evt.clientX - currentPosition.x;
     const angleY = dx * 0.01;
-    activeLemon.rotate(new Vector3(0,1,0), angleY);
+    lemonPositions[activePlatform - 1].rotate(new Vector3(0,1,0), angleY);
+    dotsMeshes.forEach(mesh => mesh.rotate(new Vector3(0,1,0), -1*angleY))
     originalRotationAngle -= angleY;
     currentPosition.x = evt.clientX;
   }
