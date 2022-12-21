@@ -107,9 +107,8 @@ export default function Hub() {
       } */}
 
       { !loader.data && <HubScene lemons={lemons} setLoader={setLoader} handleMint={handleMint} /> }
-      {JSON.stringify(loader)}
       { (loader.babylon || loader.data) && <Loader status={status} />}
-
+      
       <Footer />
     </>
   )

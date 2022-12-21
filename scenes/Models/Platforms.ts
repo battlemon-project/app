@@ -151,6 +151,20 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
     }));
     
   });
+
+  dotsMeshes.forEach((dot) => {
+    dot.actionManager = new ActionManager(scene);
+
+    dot.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, async function(){
+      const operatorAnimation = scene.getAnimationGroupByName('operator_FocusLemon_f')
+      operatorAnimation?.start(false, 1);
+      console.log(operatorAnimation);
+      const targetAnimation = scene.getAnimationGroupByName('target_FocusLemon_f')
+      targetAnimation?.start(false, 1);
+      console.log(targetAnimation);
+    }));
+
+  })
            
   const currentPosition = { x: 0, y: 0 };
   let clicked = false;

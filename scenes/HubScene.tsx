@@ -68,24 +68,24 @@ export default function HubScene(
       const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:4000}, scene);
       const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
       skyboxMaterial.backFaceCulling = false;
-      skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("assets/hub/", scene, undefined, true, [
-        'assets/hub/px.png',
-        'assets/hub/py.png',
-        'assets/hub/pz.png',
-        'assets/hub/nx.png',
-        'assets/hub/ny.png',
-        'assets/hub/nz.png'
+      skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("/assets/hub/", scene, undefined, true, [
+        '/assets/hub/px.png',
+        '/assets/hub/py.png',
+        '/assets/hub/pz.png',
+        '/assets/hub/nx.png',
+        '/assets/hub/ny.png',
+        '/assets/hub/nz.png'
       ]);
       skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
       skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
       skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
       skybox.material = skyboxMaterial;
       
-      Platforms(scene, camera, handleMint, canvas)
-        .then(unload => {
-          removePlatforms = unload
-        });
-      NewLemon(scene, lemons)
+      Platforms(scene, camera, handleMint, canvas).then(unload => {
+        removePlatforms = unload
+        NewLemon(scene, lemons)
+      });
+      
       //LoadBackpack(scene)
     
       return scene;
@@ -113,6 +113,10 @@ export default function HubScene(
   }, [lemons]);
 
   return (
-    <canvas className="vh-100 w-100 position-absolute top-0" id="renderCanvas" />
+    <> 
+    
+      <canvas className="vh-100 w-100 position-absolute top-0" id="renderCanvas" />
+      {JSON.stringify(lemons)}
+    </>
   )
 }
