@@ -124,7 +124,7 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
 
       if (platformAnimation) {
         if (dots && dots.scaling.x > 0) {
-          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 15, new Vector3(120,120,120), new Vector3(0,0,0), 0)
+          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 25, new Vector3(120,120,120), new Vector3(0,0,0), 0)
         }
         platformAnimation.start(false, 1);
       } else {
@@ -132,7 +132,11 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
         if (dots && dots.scaling.x < 120) {
           dots.parent = position;
           dots.rotation = position.rotation;
-          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 15, new Vector3(0,0,0), new Vector3(120,120,120), 0)
+          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 70, new Vector3(0,0,0), new Vector3(120,120,120), 0)
+          const operatorAnimation = scene.getAnimationGroupByName('operator_FocusLemon_f')
+          operatorAnimation?.start(false, 1);
+          const targetAnimation = scene.getAnimationGroupByName('target_FocusLemon_f')
+          targetAnimation?.start(false, 1);
         }
         return;
       }
@@ -156,12 +160,7 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
     dot.actionManager = new ActionManager(scene);
 
     dot.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, async function(){
-      const operatorAnimation = scene.getAnimationGroupByName('operator_FocusLemon_f')
-      operatorAnimation?.start(false, 1);
-      console.log(operatorAnimation);
-      const targetAnimation = scene.getAnimationGroupByName('target_FocusLemon_f')
-      targetAnimation?.start(false, 1);
-      console.log(targetAnimation);
+
     }));
 
   })
