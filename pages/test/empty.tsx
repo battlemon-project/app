@@ -46,14 +46,9 @@ export default function Hub() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Header />
-
       { !loader.data && <HubScene lemons={lemons} setLoader={setLoader} handleMint={handleMint} /> }
       { (loader.babylon || loader.data) && <Loader status="connected" />}
 
-
-
-      <Footer />
     </>
   )
 }
