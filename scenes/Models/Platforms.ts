@@ -1,4 +1,4 @@
-import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera, AssetContainer } from "@babylonjs/core"
+import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera, AssetContainer, FreeCamera, TargetCamera } from "@babylonjs/core"
 
 export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMint: () => Promise<void>, canvas: HTMLCanvasElement): Promise<() => void> => {
   const containers: { [key: string]: AssetContainer } = {}
@@ -37,15 +37,19 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
   let originalRotationAngle = 0;
 
 
-  const Camera = scene.getCameraByName('Camera')
+  const Camera = scene.getCameraByName('Camera') as TargetCamera
   if (Camera) {
+    Camera.attachControl(canvas, true);
     scene.activeCamera = Camera
   }
 
   const operator = scene.getMeshByName('operator')
   if (operator) operator.visibility = 0
   const target = scene.getMeshByName('target')
-  if (target) target.visibility = 0
+  // if (target) target.visibility = 0
+  
+  console.log(target!.position)
+  console.log(Camera!.position)
   const showPos_feature = scene.getMeshByName('showPos_feature')
   if (showPos_feature) showPos_feature.visibility = 0
   const showPos_outfit = scene.getMeshByName('showPos_outfit')
@@ -137,6 +141,18 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
           operatorAnimation?.start(false, 1);
           const targetAnimation = scene.getAnimationGroupByName('target_FocusLemon_f')
           targetAnimation?.start(false, 1);
+
+          setTimeout(() => {
+            console.log(target!.position)
+            if (Camera) {
+
+              Camera.setTarget(new Vector3(Camera.position.x + 100, Camera.position.y, Camera.position.z - 100))
+              
+              console.log('АУААУУУУУУУУУУУУУУУУУ')
+              console.log(target!.position)
+              console.log(Camera!.target)
+            }
+          }, 1500)
         }
         return;
       }
