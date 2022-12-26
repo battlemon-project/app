@@ -2,7 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
-  answer: any,
   result: number
 }
 
@@ -17,7 +16,5 @@ export default async function handler(
     body: JSON.stringify(req.body)
   });
 
-  const answer = await result.json();
-
-  res.status(200).json({ answer: answer, result: result.status })
+  res.status(200).json({ result: result.status })
 }

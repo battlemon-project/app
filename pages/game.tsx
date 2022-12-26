@@ -5,23 +5,34 @@ import { useEffect } from 'react';
 import { useRouter } from "next/router";
 import { useWallet, useSuiProvider } from '@suiet/wallet-kit';
 
+function arrayBufferToBase64( buffer: Uint8Array ) {
+  var binary = '';
+  var bytes = new Uint8Array( buffer );
+  var len = bytes.byteLength;
+  for (var i = 0; i < len; i++) {
+    binary += String.fromCharCode( bytes[ i ] );
+  }
+  return window.btoa( binary );
+}
+
 export default function Home() {
   const { query } = useRouter();
   const wallet = useWallet();
 
   useEffect(() => {        
     if (wallet && wallet.address) {
+      const clientMessage = query.client_id ? `${query.client_id}` : '';
       (async function () {
         const sign = await wallet.signMessage({
-          message: new TextEncoder().encode(query.client_id as string || '')
+          message: new TextEncoder().encode(clientMessage)
         })
         if (!sign) return;
         const data = {
-          // signedMessage: sign.signedMessage,
-          // signature: sign.signature,
-          // publicKey: wallet.account?.publicKey as Uint8Array,
+          signedMessage: arrayBufferToBase64(sign.signedMessage),
+          signature: arrayBufferToBase64(sign.signature),
+          publicKey: arrayBufferToBase64(wallet.account?.publicKey as Uint8Array),
           sui_wallet_address: wallet.address,
-          client_id: query.client_id
+          client_id: clientMessage
         }
         const result = await fetch('/api/game', {
           method: 'POST',
