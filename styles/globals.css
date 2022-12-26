@@ -84,3 +84,21 @@ a {
   width: calc(60% - 1.2em);
   justify-content:flex-end;
 }
+
+html.mountings {
+  background:url(/assets/pages/main.jpg) center top no-repeat;
+  background-attachment:fixed;
+  background-size:cover
+}
+
+html.mountings body {
+  min-height:100vh;
+  background:url(/assets/pages/mountains.png) center bottom no-repeat;
+  background-attachment:fixed; 
+  background-size:cover; 
+  color:#fff
+}
+
+html.mountings h1,html.mountings h2 {
+  font-weight:700;
+}
