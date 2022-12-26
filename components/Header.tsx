@@ -1,8 +1,8 @@
-import { ethos } from 'ethos-connect'
+import { useWallet, ConnectButton } from '@suiet/wallet-kit';
 import Logo from './Logo'
 
-function Header() {
-  const { wallet } = ethos.useWallet();
+function Header({ fps }: { fps?: boolean }) {
+  const wallet = useWallet();
   
   return (
     <nav className="navbar navbar-expand-lg sticky-top navbar-dark">
@@ -13,11 +13,11 @@ function Header() {
         </button> 
         <div className="collapse navbar-collapse" id="navbarMain">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 fs-5">
-            <li className="nav-item">
+            {fps && <li className="nav-item">
               <span className="nav-link" style={{color: 'white'}}>
                 <span id="fps">0</span> FPS
               </span>
-            </li>
+            </li> }
           </ul>
           <ul className="navbar-nav mb-2 mb-lg-0 fs-5">
             <li className="nav-item dropdown">
@@ -30,11 +30,12 @@ function Header() {
                     </span>
                   </button>
                   <ul className="dropdown-menu w-100" aria-labelledby="navbarDropdown">
-                    <li><a className="dropdown-item" href={"#"} onClick={wallet.disconnect}>Sign Out</a></li>
+                    <li><a className="dropdown-item" href={"#"} onClick={() => {wallet.disconnect()}}>Sign Out</a></li>
                   </ul>
                 </>
                 :
-                <button onClick={ethos.showSignInModal} className="btn btn-lg btn-outline-light">Sign In</button>
+                // <button onClick={ethos.showSignInModal} className="btn btn-lg btn-outline-light">Sign In</button>
+                <ConnectButton />
               }
             </li>
           </ul>

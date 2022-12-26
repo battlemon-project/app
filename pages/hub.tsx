@@ -4,7 +4,7 @@ import Footer from '../components/Footer'
 import Loader from '../components/Loader'
 import dynamic from 'next/dynamic'
 import { Suspense, useEffect, useState } from 'react';
-import { ethos } from 'ethos-connect';
+import { useWallet, useSuiProvider } from '@suiet/wallet-kit';
 import type { JsonRpcProvider, SuiObject, SuiMoveObject } from "@mysten/sui.js";
 
 export interface Loader {
@@ -19,8 +19,8 @@ const HubScene = dynamic(() => import('../scenes/HubScene'), {
 export default function Hub() {
   const [ loader, setLoader ] = useState<Loader>({ babylon: true, data: true });
   const [ lemons, setLemons ] = useState<SuiMoveObject[]>([]);
-  const { provider }: { provider: JsonRpcProvider} = ethos.useProviderAndSigner()
-  const { wallet, status } = ethos.useWallet();
+  const wallet = useWallet();
+  const provider = useSuiProvider('https://fullnode.devnet.sui.io/');
 
   useEffect(() => {
     console.log(loader)
@@ -32,7 +32,7 @@ export default function Hub() {
 
 
 
-    const objects = await provider.getObjectsOwnedByAddress(wallet.address)
+    const objects = await provider.getObjectsOwnedByAddress(wallet.address);
     for (const object of objects.filter(object => object.type.includes('lemon'))) {
       let fullObject = await provider.getObject(object.objectId);
       let { data } = fullObject.details as SuiObject
@@ -44,13 +44,13 @@ export default function Hub() {
   }
 
   useEffect(() => {
-    if (status == 'no_connection') {
+    if (wallet?.status == 'disconnected') {
       setLoader((loader) => ({ ...loader, data: true }));
     }
-    if (status) {
+    if (wallet?.status) {
       refreshLemons();
     } 
-  }, [status, wallet?.address])
+  }, [wallet?.status])
 
   const handleMint = async () => {
     if (!wallet) return;
@@ -70,7 +70,9 @@ export default function Hub() {
 
     setLoader((loader) => ({ ...loader, data: true }));
     try {
-      await wallet.signAndExecuteTransaction(signableTransaction);
+      await wallet.signAndExecuteTransaction({
+        transaction: signableTransaction 
+      });
     } catch (e) {
       setLoader((loader) => ({ ...loader, data: false }));
     }
@@ -98,7 +100,7 @@ export default function Hub() {
     		<meta name="twitter:image" content="https://promo.battlemon.com/battlemon.jpg"/>
       </Head>
 
-      <Header />
+      <Header fps={true} />
       
       {/* { wallet?.address && 
         <div className="sticky-top text-center d-inline-block position-absolute" style={{ zIndex: 1080, left: '50%', top: '15px', transform: 'translateX(-50%)' }}>
@@ -107,7 +109,7 @@ export default function Hub() {
       } */}
 
       { !loader.data && <HubScene lemons={lemons} setLoader={setLoader} handleMint={handleMint} /> }
-      { (loader.babylon || loader.data) && <Loader status={status} />}
+      { (loader.babylon || loader.data) && <Loader status={wallet?.status} />}
       
       <Footer />
     </>

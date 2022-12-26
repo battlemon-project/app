@@ -50,6 +50,9 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
   if (showPos_feature) showPos_feature.visibility = 0
   const showPos_outfit = scene.getMeshByName('showPos_outfit')
   if (showPos_outfit) showPos_outfit.visibility = 0
+  // RINGGGGG
+  const ring = scene.getMeshByName('ring')
+  if (ring) ring.visibility = 0
 
   // const platforms = models.meshes[0]
   // platforms.position.y = -100;
@@ -133,10 +136,8 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
           dots.parent = position;
           dots.rotation = position.rotation;
           Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 70, new Vector3(0,0,0), new Vector3(120,120,120), 0)
-          const operatorAnimation = scene.getAnimationGroupByName('operator_FocusLemon_f')
-          operatorAnimation?.start(false, 1);
-          const targetAnimation = scene.getAnimationGroupByName('target_FocusLemon_f')
-          targetAnimation?.start(false, 1);
+          const operator_FocusLemon_f = scene.getAnimationGroupByName('operator_FocusLemon_f')
+          operator_FocusLemon_f?.start(false, 1);
         }
         return;
       }
