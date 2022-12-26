@@ -17,10 +17,10 @@ export default function Home() {
         })
         if (!sign) return;
         const data = {
-          signedMessage: sign.signedMessage,
-          signature: sign.signature,
-          publicKey: wallet.account?.publicKey as Uint8Array,
-          address: wallet.address,
+          // signedMessage: sign.signedMessage,
+          // signature: sign.signature,
+          // publicKey: wallet.account?.publicKey as Uint8Array,
+          sui_wallet_address: wallet.address,
           client_id: query.client_id
         }
         const result = await fetch('/api/game', {
