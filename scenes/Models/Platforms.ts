@@ -50,9 +50,6 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
   if (showPos_feature) showPos_feature.visibility = 0
   const showPos_outfit = scene.getMeshByName('showPos_outfit')
   if (showPos_outfit) showPos_outfit.visibility = 0
-  // RINGGGGG
-  const ring = scene.getMeshByName('ring')
-  if (ring) ring.visibility = 0
 
   // const platforms = models.meshes[0]
   // platforms.position.y = -100;
@@ -138,6 +135,11 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
           Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 70, new Vector3(0,0,0), new Vector3(120,120,120), 0)
           const operator_FocusLemon_f = scene.getAnimationGroupByName('operator_FocusLemon_f')
           operator_FocusLemon_f?.start(false, 1);
+          
+          const ring = scene.getMeshByName('ring_back')
+          if (ring) {
+            ring.visibility = 1;
+          }
         }
         return;
       }
