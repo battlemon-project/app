@@ -7,6 +7,10 @@ import { Ring } from './Models/Ring'
 import type { SuiMoveObject } from "@mysten/sui.js";
 import type { Loader } from "../pages/hub";
 
+
+let destroyPlatforms: () => void;
+let backPlatforms: () => void;
+
 export default function HubScene(
   { 
     lemons, 
@@ -26,7 +30,6 @@ export default function HubScene(
   }, [])
 
   useEffect(() => {
-    let removePlatforms: () => void;
 
     BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (loader) {
       (loader as GLTFFileLoader).animationStartMode = GLTFLoaderAnimationStartMode.NONE;
@@ -82,8 +85,9 @@ export default function HubScene(
       skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
       skybox.material = skyboxMaterial;
       
-      Platforms(scene, camera, handleMint, canvas).then(unload => {
-        removePlatforms = unload
+      Platforms(scene, camera, handleMint, canvas).then(Platforms => {
+        destroyPlatforms = Platforms.destroy
+        backPlatforms = Platforms.back
         NewLemon(scene, lemons)
         Ring(scene)
       });
@@ -108,17 +112,25 @@ export default function HubScene(
     });
 
     return () => {
-      if (removePlatforms) removePlatforms();
+      if (destroyPlatforms) destroyPlatforms();
       setLoader((loader) => ({ ...loader, babylon: false }));
       engine.dispose();
     }
   }, [lemons]);
 
+  const toggleBack = () => {
+    if (backPlatforms) backPlatforms()
+  }
+
   return (
     <> 
-    
       <canvas className="vh-100 w-100 position-absolute top-0" id="renderCanvas" />
-      {JSON.stringify(lemons)}
+      <div className="container">
+        <button className="btn btn-lg btn-outline-light mb-3 position-absolute pt-0 pb-1 px-4" style={{top: '80px'}} onClick={toggleBack}>
+          <span style={{fontSize: '26px', lineHeight: '32px'}}>&larr; </span> 
+          Back
+        </button>
+      </div>
     </>
   )
 }

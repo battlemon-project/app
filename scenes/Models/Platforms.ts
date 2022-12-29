@@ -1,6 +1,11 @@
 import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera, AssetContainer } from "@babylonjs/core"
 
-export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMint: () => Promise<void>, canvas: HTMLCanvasElement): Promise<() => void> => {
+interface PlatformsType {
+  destroy: () => void
+  back: () => void
+}
+
+export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMint: () => Promise<void>, canvas: HTMLCanvasElement): Promise<PlatformsType> => {
   const containers: { [key: string]: AssetContainer } = {}
 
   
@@ -123,18 +128,20 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
       }
 
       if (platformAnimation) {
-        if (dots && dots.scaling.x > 0) {
-          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 15, new Vector3(1.2,1.2,1.2), new Vector3(0,0,0), 0)
-        }
         platformAnimation.start(false, 1);
       } else {
         const position = lemonPositions[index];
         if (dots && dots.scaling.x < 120) {
           dots.parent = position;
           dots.rotation = position.rotation;
-          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 50, new Vector3(0,0,0), new Vector3(1.2,1.2,1.2), 0)
-          const operator_FocusLemon_f = scene.getAnimationGroupByName('operator_FocusLemon_f')
+          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 50, new Vector3(0,0,0), new Vector3(1.2,1.2,1.2), 0);
+          const operator_FocusLemon_f = scene.getAnimationGroupByName('operator_FocusLemon_f');
           operator_FocusLemon_f?.start(false, 1);
+          lemonPositions.forEach((position, index) => {
+            if (activePlatform != index + 1) {
+              position.scaling = new Vector3(0,0,0);
+            }
+          })
           
           const ring = scene.getMeshByName('ring_back')
           if (ring) {
@@ -144,14 +151,13 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
         return;
       }
 
-      lookatObjects.forEach((name, index) => {
-        const lemon = scene.getNodeByName(name) as TransformNode;
+      lemonPositions.forEach((position, index) => {
         if (activePlatform == index + 1) {
-          lemon.rotate(new Vector3(0,1,0), originalRotationAngle)
+          position.rotate(new Vector3(0,1,0), originalRotationAngle)
           dotsMeshes.forEach(mesh => mesh.rotate(new Vector3(0,1,0), -1*originalRotationAngle))
           originalRotationAngle = 0;
         }
-        Animation.CreateAndStartAnimation(`Lemon_rotation`, lemon, "rotation.y", 60, 25, lemon.rotation.y, lemon.rotation.y + rotationAngle, 0)
+        Animation.CreateAndStartAnimation(`Lemon_rotation`, position, "rotation.y", 60, 25, position.rotation.y, position.rotation.y + rotationAngle, 0)
       })
 
       activePlatform = index + 1
@@ -197,9 +203,23 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
   canvas.addEventListener("pointerup", pointerUp);
   canvas.addEventListener("pointermove", pointerMove);
 
-  return () => {
-    canvas.removeEventListener("pointerdown", pointerDown, false);
-    canvas.removeEventListener("pointerup", pointerUp, false);
-    canvas.removeEventListener("pointermove", pointerMove, false);
+  return {
+    back: () => {
+      if (dots && dots.scaling.x > 0) {
+        Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 15, new Vector3(1.2,1.2,1.2), new Vector3(0,0,0), 0)
+      }
+      const operator_FocusLemon_b = scene.getAnimationGroupByName('operator_FocusLemon_b');
+      operator_FocusLemon_b?.start(false, 1);
+      lemonPositions.forEach((position, index) => {
+        if (activePlatform != index + 1) {
+          position.scaling = new Vector3(1,1,1);
+        }
+      })
+    },
+    destroy: () => {
+      canvas.removeEventListener("pointerdown", pointerDown, false);
+      canvas.removeEventListener("pointerup", pointerUp, false);
+      canvas.removeEventListener("pointermove", pointerMove, false);
+    }
   }
 }
