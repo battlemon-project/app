@@ -124,7 +124,7 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
 
       if (platformAnimation) {
         if (dots && dots.scaling.x > 0) {
-          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 25, new Vector3(120,120,120), new Vector3(0,0,0), 0)
+          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 15, new Vector3(1.2,1.2,1.2), new Vector3(0,0,0), 0)
         }
         platformAnimation.start(false, 1);
       } else {
@@ -132,7 +132,7 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
         if (dots && dots.scaling.x < 120) {
           dots.parent = position;
           dots.rotation = position.rotation;
-          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 70, new Vector3(0,0,0), new Vector3(120,120,120), 0)
+          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 50, new Vector3(0,0,0), new Vector3(1.2,1.2,1.2), 0)
           const operator_FocusLemon_f = scene.getAnimationGroupByName('operator_FocusLemon_f')
           operator_FocusLemon_f?.start(false, 1);
           
