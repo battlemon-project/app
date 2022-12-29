@@ -1,14 +1,21 @@
 import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera, AssetContainer } from "@babylonjs/core"
+import { Dispatch, SetStateAction } from "react"
 
-interface PlatformsType {
+interface PlatformType {
   destroy: () => void
   back: () => void
 }
 
-export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMint: () => Promise<void>, canvas: HTMLCanvasElement): Promise<PlatformsType> => {
-  const containers: { [key: string]: AssetContainer } = {}
+interface PlatformParams {
+  scene: Scene
+  canvas: HTMLCanvasElement
+  mintEvent: () => Promise<void>
+  changeStep: Dispatch<SetStateAction<number>>
+}
 
-  
+export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: PlatformParams): Promise<PlatformType> => {
+  const containers: { [key: string]: AssetContainer } = {}
+  let step = 0;
   let activePlatform: number = 1;
   const direction = [
     {forward: 3, backward: 2},
@@ -114,7 +121,7 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
 
       stroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`) // refresh stroke
       if (stroke) {
-        await handleMint();
+        await mintEvent();
         return;
       }
 
@@ -131,21 +138,28 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
         platformAnimation.start(false, 1);
       } else {
         const position = lemonPositions[index];
-        if (dots && dots.scaling.x < 120) {
-          dots.parent = position;
-          dots.rotation = position.rotation;
-          Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 50, new Vector3(0,0,0), new Vector3(1.2,1.2,1.2), 0);
-          const operator_FocusLemon_f = scene.getAnimationGroupByName('operator_FocusLemon_f');
-          operator_FocusLemon_f?.start(false, 1);
-          lemonPositions.forEach((position, index) => {
-            if (activePlatform != index + 1) {
-              position.scaling = new Vector3(0,0,0);
+        if (step != 1) {
+          console.log(step)
+          if (dots && dots.scaling.x < 120) {
+            dots.parent = position;
+            dots.rotation = position.rotation;
+            Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 50, new Vector3(0,0,0), new Vector3(1.2,1.2,1.2), 0);
+            const operator_FocusLemon_f = scene.getAnimationGroupByName('operator_FocusLemon_f');
+            operator_FocusLemon_f?.start(false, 1);
+            lemonPositions.forEach((position, index) => {
+              if (activePlatform != index + 1) {
+                Animation.CreateAndStartAnimation(`Lemon_scale`, position, "scaling", 60, 80, new Vector3(1,1,1), new Vector3(0,0,0), 0);
+              }
+            })
+            
+            const ring = scene.getMeshByName('ring')
+            if (ring) {
+              Animation.CreateAndStartAnimation(`Ring_scale`, ring, "scaling", 60, 60, new Vector3(0,0,0), new Vector3(1,1,1), 0);
+              Animation.CreateAndStartAnimation(`Ring_rotation`, ring, "rotation.x", 60, 60, Math.PI, 0, 0)
             }
-          })
-          
-          const ring = scene.getMeshByName('ring_back')
-          if (ring) {
-            ring.visibility = 1;
+  
+            changeStep(1);
+            step = 1;
           }
         }
         return;
@@ -212,9 +226,15 @@ export const Platforms = async (scene: Scene, camera: ArcRotateCamera, handleMin
       operator_FocusLemon_b?.start(false, 1);
       lemonPositions.forEach((position, index) => {
         if (activePlatform != index + 1) {
-          position.scaling = new Vector3(1,1,1);
+          Animation.CreateAndStartAnimation(`Lemon_scale`, position, "scaling", 60, 60, new Vector3(0,0,0), new Vector3(1,1,1), 0);
         }
       })
+      const ring = scene.getMeshByName('ring')
+      if (ring) {
+        Animation.CreateAndStartAnimation(`Ring_scale`, ring, "scaling", 60, 60, new Vector3(1,1,1), new Vector3(0,0,0), 0);
+        Animation.CreateAndStartAnimation(`Ring_rotation`, ring, "rotation.x", 60, 60, 0, Math.PI, 0)
+      }
+      step = 0;
     },
     destroy: () => {
       canvas.removeEventListener("pointerdown", pointerDown, false);

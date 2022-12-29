@@ -1,4 +1,4 @@
-import { useEffect, Dispatch, SetStateAction } from "react";
+import { useEffect, Dispatch, SetStateAction, useState } from "react";
 import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
 import { Platforms } from './Models/Platforms'
@@ -23,7 +23,7 @@ export default function HubScene(
   }) {
 
   const FpsElement = document.getElementById("fps");
-  
+  const [step, changeStep] = useState<number>(0)
 
   useEffect(() => {
     setLoader((loader) => ({ ...loader, babylon: true }));
@@ -85,7 +85,12 @@ export default function HubScene(
       skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
       skybox.material = skyboxMaterial;
       
-      Platforms(scene, camera, handleMint, canvas).then(Platforms => {
+      Platforms({
+        scene, 
+        canvas,
+        mintEvent: handleMint,
+        changeStep: changeStep
+      }).then(Platforms => {
         destroyPlatforms = Platforms.destroy
         backPlatforms = Platforms.back
         NewLemon(scene, lemons)
@@ -119,17 +124,20 @@ export default function HubScene(
   }, [lemons]);
 
   const toggleBack = () => {
-    if (backPlatforms) backPlatforms()
+    if (backPlatforms) {
+      changeStep(0);
+      backPlatforms()
+    }
   }
 
   return (
     <> 
       <canvas className="vh-100 w-100 position-absolute top-0" id="renderCanvas" />
       <div className="container">
-        <button className="btn btn-lg btn-outline-light mb-3 position-absolute pt-0 pb-1 px-4" style={{top: '80px'}} onClick={toggleBack}>
+        {step > 0 && <button className="btn btn-lg btn-outline-light mb-3 position-absolute pt-0 pb-1 px-4" style={{top: '80px'}} onClick={toggleBack}>
           <span style={{fontSize: '26px', lineHeight: '32px'}}>&larr; </span> 
           Back
-        </button>
+        </button>}
       </div>
     </>
   )
