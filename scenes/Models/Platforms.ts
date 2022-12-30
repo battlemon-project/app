@@ -1,5 +1,6 @@
 import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera, AssetContainer } from "@babylonjs/core"
 import { Dispatch, SetStateAction } from "react"
+import { Ring } from './Ring'
 
 interface PlatformType {
   destroy: () => void
@@ -36,6 +37,10 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
   
   containers.platforms.addAllToScene()
   containers.dots.addAllToScene()
+
+
+  const ringScene = await Ring(scene)
+
   const dots = scene.getTransformNodeByName('icons')
   if (dots) {
     dots.position.y = dots.position.y + 10
@@ -235,6 +240,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
         Animation.CreateAndStartAnimation(`Ring_rotation`, ring, "rotation.x", 60, 60, 0, Math.PI, 0)
       }
       step = 0;
+      ringScene.reset();
     },
     destroy: () => {
       canvas.removeEventListener("pointerdown", pointerDown, false);

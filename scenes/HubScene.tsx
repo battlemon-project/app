@@ -3,7 +3,6 @@ import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
 import { Platforms } from './Models/Platforms'
 import { NewLemon } from './Models/NewLemon'
-import { Ring } from './Models/Ring'
 import type { SuiMoveObject } from "@mysten/sui.js";
 import type { Loader } from "../pages/hub";
 
@@ -94,7 +93,6 @@ export default function HubScene(
         destroyPlatforms = Platforms.destroy
         backPlatforms = Platforms.back
         NewLemon(scene, lemons)
-        Ring(scene)
       });
       
       //LoadBackpack(scene)
