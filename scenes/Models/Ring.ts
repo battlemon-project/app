@@ -1,15 +1,11 @@
 import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, TransformNode, Vector3, Animation } from "@babylonjs/core"
 
 const originalIcons = (): { order: number, name: string }[] => ([
-  { order: -4, name: 'icon_puton'},
-  { order: -3, name: 'icon_stake'},
   { order: -2, name: 'icon_rent'},
   { order: -1, name: 'icon_sell'},
   { order: 0, name: 'icon_play'},
-  { order: 1, name: 'icon_change'},
-  { order: 2, name: 'icon_craft'},
-  { order: 3, name: 'icon_send'},
-  { order: 4, name: 'icon_takeoff'}
+  { order: 1, name: 'icon_send'},
+  { order: 2, name: 'icon_change'},
 ])
 
 interface RingType {
@@ -52,7 +48,7 @@ export const Ring = async (scene: Scene): Promise<RingType> => {
         if (order == 0) {
           iconBackground?.dispose()
           icon_back_b?.clone('b', icon)
-          icon.scaling = new Vector3(1.4,1.4,1.4);
+          icon.scaling = new Vector3(1.3,1.3,1.3);
         } else {
           iconBackground?.dispose()
           icon_back_a?.clone('a', icon)
