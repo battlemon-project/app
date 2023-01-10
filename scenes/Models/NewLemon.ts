@@ -7,11 +7,12 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
   if (lemons && lemons.length) {
     const models = {
       lemon: 'BTLMN_Lemon_A.glb',
-      weapon: 'BTLMN_Outfit_Weapon_A.glb', 
+      weapon: 'BTLMN_Outfit_Weapons_A.glb', 
       cap: 'BTLMN_Outfit_Cap_A.glb', 
       cloth: 'BTLMN_Outfit_Cloth_A.glb', 
       back: 'BTLMN_Outfit_Back_A.glb', 
-      face: 'BTLMN_Outfit_Face_A.glb'
+      face: 'BTLMN_Outfit_Face_A.glb', 
+      foot: 'BTLMN_Outfit_Shoes_A.glb'
     }
     for (const [key, link] of Object.entries(models)) {
       containers[key] = await SceneLoader.LoadAssetContainerAsync(
@@ -33,6 +34,7 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
       lemon.rotation = lemonPosition.rotation;
 
       const outfits = getOutfits(suiLemon)
+      console.log(outfits)
 
       Object.values(outfits).forEach(({ trait, type, placeholder }) => {
         containers[type].meshes.forEach(mesh => {
@@ -43,7 +45,7 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
       })
 
       lemonContainer.animationGroups.forEach(animationGroup => {
-        if (['placeholder_weapon_idle_001', 'lemon_idle_001', 'placeholder_head_idle_001'].includes(animationGroup.name)) {
+        if (['placeholder_master_idle_a', 'lemon_idle_a', 'placeholder_weapon_r_idle_a'].includes(animationGroup.name)) {
           animationGroup.start(true, 1)
         }
       });
@@ -55,15 +57,15 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
 function getOutfits(lemon: SuiMoveObject) {
   const traits: { flavour: string, name: string }[] = lemon.fields.traits.map((trait: Record<string, string>) => trait.fields)
 
-  const clothTrait = traits.find(trait => trait.name === 'cloth');
-  if (clothTrait?.flavour == 'Cloth_Poncho_CA01') {
-    clothTrait.flavour = 'Cloth_Ninja_Waistband_NA01'
-  }
+  // const clothTrait = traits.find(trait => trait.name === 'cloth');
+  // if (clothTrait?.flavour == 'Cloth_Poncho_CA01') {
+  //   clothTrait.flavour = 'Cloth_Ninja_Waistband_NA01'
+  // }
   
-  const faceTrait = traits.find(trait => trait.name === 'face');
-  if (faceTrait?.flavour == 'Face_Gas_Mask_MA01') {
-    faceTrait.flavour = 'Face_Visor_VR_VR01'
-  }
+  // const faceTrait = traits.find(trait => trait.name === 'face');
+  // if (faceTrait?.flavour == 'Face_Gas_Mask_MA01') {
+  //   faceTrait.flavour = 'Face_Visor_VR_VR01'
+  // }
 
   const outfits: { [key: string]: { trait: { flavour: string, name: string } | undefined, placeholder: string, type: string }} = {
     weapon: {
@@ -77,7 +79,7 @@ function getOutfits(lemon: SuiMoveObject) {
       placeholder: 'placeholder_cap'
     },
     cloth: {
-      trait: clothTrait,
+      trait: traits.find(trait => trait.name === 'cloth'),
       type: 'cloth',
       placeholder: 'placeholder_cloth'
     },
@@ -87,9 +89,19 @@ function getOutfits(lemon: SuiMoveObject) {
       placeholder: 'placeholder_back'
     },
     face: {
-      trait: faceTrait,
+      trait: traits.find(trait => trait.name === 'face'),
       type: 'face',
       placeholder: 'placeholder_face'
+    },
+    foot_r: {
+      trait: { flavour: "Shoe_Kicks_SA01_R", name: 'foot' },
+      type: 'foot',
+      placeholder: 'placeholder_foot_r'
+    },
+    foot_l: {
+      trait: { flavour: "Shoe_Kicks_SA01_L", name: 'foot' },
+      type: 'foot',
+      placeholder: 'placeholder_foot_l'
     } 
   }
 
