@@ -6,13 +6,13 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
 
   if (lemons && lemons.length) {
     const models = {
-      lemon: 'BTLMN_Lemon_A.glb',
+      lemon: 'BTLMN_Lemon_A_parented.glb',
       weapon: 'BTLMN_Outfit_Weapons_A.glb', 
       cap: 'BTLMN_Outfit_Cap_A.glb', 
       cloth: 'BTLMN_Outfit_Cloth_A.glb', 
       back: 'BTLMN_Outfit_Back_A.glb', 
       face: 'BTLMN_Outfit_Face_A.glb', 
-      foot: 'BTLMN_Outfit_Shoes_A.glb'
+      shoes: 'BTLMN_Outfit_Shoes_A.glb'
     }
     for (const [key, link] of Object.entries(models)) {
       containers[key] = await SceneLoader.LoadAssetContainerAsync(
@@ -37,6 +37,9 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
       console.log(outfits)
 
       Object.values(outfits).forEach(({ trait, type, placeholder }) => {
+        if (type == 'lemon') {
+          console.log(containers[type])
+        }
         containers[type].meshes.forEach(mesh => {
           if (!mesh.name.includes(trait!.flavour)) return;
           const placeholderNode = lemon.getChildTransformNodes().find(mesh => mesh.name == placeholder);
@@ -54,6 +57,11 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
   }
 }
 
+interface Trait {
+  flavour: string
+  name: string
+}
+
 function getOutfits(lemon: SuiMoveObject) {
   const traits: { flavour: string, name: string }[] = lemon.fields.traits.map((trait: Record<string, string>) => trait.fields)
 
@@ -67,7 +75,16 @@ function getOutfits(lemon: SuiMoveObject) {
   //   faceTrait.flavour = 'Face_Visor_VR_VR01'
   // }
 
-  const outfits: { [key: string]: { trait: { flavour: string, name: string } | undefined, placeholder: string, type: string }} = {
+  const shoesTrait = traits.find(trait => trait.name === 'shoes')
+  let shoe_r = {...shoesTrait} as Trait;
+  let shoe_l = {...shoesTrait} as Trait;
+  if (shoesTrait?.flavour) {
+    shoe_r.flavour += '_R';
+    shoe_l.flavour += '_L';
+  }
+
+  console.log(traits)
+  const outfits: { [key: string]: { trait: Trait | undefined, placeholder: string, type: string }} = {
     weapon: {
       trait: traits.find(trait => trait.name === 'weapon'),
       type: 'weapon',
@@ -93,15 +110,15 @@ function getOutfits(lemon: SuiMoveObject) {
       type: 'face',
       placeholder: 'placeholder_face'
     },
-    foot_r: {
-      trait: { flavour: "Shoe_Kicks_SA01_R", name: 'foot' },
-      type: 'foot',
-      placeholder: 'placeholder_foot_r'
+    shoe_r: {
+      trait: shoe_r,
+      type: 'shoes',
+      placeholder: 'placeholder_shoes_r'
     },
-    foot_l: {
-      trait: { flavour: "Shoe_Kicks_SA01_L", name: 'foot' },
-      type: 'foot',
-      placeholder: 'placeholder_foot_l'
+    shoe_l: {
+      trait: shoe_l,
+      type: 'shoes',
+      placeholder: 'placeholder_shoes_l'
     } 
   }
 
