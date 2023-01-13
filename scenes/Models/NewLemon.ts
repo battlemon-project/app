@@ -1,5 +1,6 @@
 import { Scene, SceneLoader, AnimationGroup, TransformNode, Vector3, Mesh, AssetContainer } from "@babylonjs/core"
 import type { SuiMoveObject } from "@mysten/sui.js";
+import { traceDeprecation } from "process";
 
 export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<void> => {
   const containers: { [key: string]: AssetContainer } = {}
@@ -28,13 +29,20 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
       const lemonPosition = scene.getNodeByName(`LemonPos_${index + 1}`) as TransformNode
       let lemonContainer = containers.lemon.instantiateModelsToScene((name) => name.split('_primitive')[0], false, { doNotInstantiate: true })
       const lemon = lemonContainer.rootNodes[0];
+
+      const basicTraits = getBasics(suiLemon)
+      lemon.getChildMeshes().forEach(mesh => {
+        if (!basicTraits.includes(mesh.name) && !mesh.name.includes('placeholder')) {
+          mesh.dispose();
+        }
+      })
+
       lemon.scaling = new Vector3(120,120,120);
       lemon.position.y = lemon.position.y + 10;
       lemon.parent = lemonPosition;
       lemon.rotation = lemonPosition.rotation;
 
       const outfits = getOutfits(suiLemon)
-      console.log(outfits)
 
       Object.values(outfits).forEach(({ trait, type, placeholder }) => {
         if (type == 'lemon') {
@@ -62,6 +70,13 @@ interface Trait {
   name: string
 }
 
+
+function getBasics(lemon: SuiMoveObject): string[] {
+  const traits: { flavour: string, name: string }[] = lemon.fields.traits.map((trait: Record<string, string>) => trait.fields)
+  const basics = traits.filter(trait => ['eyes', 'teeth', 'exo', 'head'].includes(trait.name)).map(trait => trait.flavour)
+  return basics;
+}
+
 function getOutfits(lemon: SuiMoveObject) {
   const traits: { flavour: string, name: string }[] = lemon.fields.traits.map((trait: Record<string, string>) => trait.fields)
 
@@ -83,7 +98,6 @@ function getOutfits(lemon: SuiMoveObject) {
     shoe_l.flavour += '_L';
   }
 
-  console.log(traits)
   const outfits: { [key: string]: { trait: Trait | undefined, placeholder: string, type: string }} = {
     weapon: {
       trait: traits.find(trait => trait.name === 'weapon'),
