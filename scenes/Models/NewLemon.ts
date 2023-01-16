@@ -1,6 +1,6 @@
-import { Scene, SceneLoader, AnimationGroup, TransformNode, Vector3, Mesh, AssetContainer } from "@babylonjs/core"
+import { Scene, SceneLoader, Animation, TransformNode, ExecuteCodeAction, ActionManager, Vector3, Mesh, AssetContainer } from "@babylonjs/core"
 import type { SuiMoveObject } from "@mysten/sui.js";
-import { traceDeprecation } from "process";
+import { outfits } from './../../helpers/dummyLemon'
 
 export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<void> => {
   const containers: { [key: string]: AssetContainer } = {}
@@ -63,6 +63,53 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
       
     });
   }
+  
+  const dots = scene.getTransformNodeByName('icons')
+  const dotsMeshes = dots?.getChildMeshes() || [];
+
+
+  dotsMeshes.forEach((dot) => {
+    dot.actionManager = new ActionManager(scene);
+
+    dot.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, async function(){
+      if (dot.name.includes('icon_cap')) {
+        open_caps_menu()
+      }
+    }));
+
+  })
+
+  const setOutfitIcons = () => {
+    [-4,-3,-2,-1,0,1,2,3,4].forEach((order, index) => {
+      const degree = '00' + ((360 + order*10) % 360);
+      const socket = scene.getMeshByName(`socket_${degree.slice(-3)}`);
+      if (socket) {
+        socket.getChildren().forEach(child => child.dispose());
+        const outfitName = outfits.cap[index];
+        containers.cap.meshes.forEach(mesh => {
+          if (mesh.name.includes(outfitName)) {
+            mesh.clone(mesh.name, socket);
+          }
+        })
+      }
+    })   
+  }
+
+  const open_caps_menu = () => {
+    const ring = scene.getMeshByName('ring')
+    const ring_main = scene.getMeshByName('ring_main')
+    const ring_back = scene.getMeshByName('ring_back')
+    if (ring) {
+      Animation.CreateAndStartAnimation(`Ring_rotation`, ring_main, "rotation.x", 60, 30, 0, Math.PI/4, 0)
+      Animation.CreateAndStartAnimation(`Ring_back`, ring_back, "visibility", 60, 10, 1, 0, 0)
+      setTimeout(() => {
+        setOutfitIcons();
+        Animation.CreateAndStartAnimation(`Ring_rotation`, ring_main, "rotation.x", 60, 30, Math.PI/4, 0, 0)
+        Animation.CreateAndStartAnimation(`Ring_back`, ring_back, "visibility", 60, 10, 0, 1, 0)
+      }, 500);
+    }
+  }
+
 }
 
 interface Trait {

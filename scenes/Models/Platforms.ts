@@ -43,7 +43,8 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
 
   const dots = scene.getTransformNodeByName('icons')
   if (dots) {
-    dots.position.y = dots.position.y + 10
+    dots.position.y = dots.position.y + 10;
+
     dots.getChildMeshes().forEach(mesh => {
       mesh.renderingGroupId = 2;
     })
@@ -184,15 +185,6 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
     
   });
 
-  dotsMeshes.forEach((dot) => {
-    dot.actionManager = new ActionManager(scene);
-
-    dot.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, async function(){
-
-    }));
-
-  })
-           
   const currentPosition = { x: 0, y: 0 };
   let clicked = false;
 

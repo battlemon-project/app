@@ -1,4 +1,4 @@
-const outfits = {
+export const outfits = {
   back: [
     'Back_Insecticide_Bottle_ZA01',
     'Back_Bomb_Barrel_PA02',

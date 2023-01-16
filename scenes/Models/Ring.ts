@@ -1,6 +1,6 @@
 import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, TransformNode, Vector3, Animation } from "@babylonjs/core"
 
-const originalIcons = (): { order: number, name: string }[] => ([
+export const originalIcons = (): { order: number, name: string }[] => ([
   { order: -2, name: 'icon_rent'},
   { order: -1, name: 'icon_sell'},
   { order: 0, name: 'icon_play'},
@@ -34,6 +34,8 @@ export const Ring = async (scene: Scene): Promise<RingType> => {
   const ring_main = scene.getMeshByName('ring_main')
   const ring_rotator = scene.getMeshByName('ring_rotator')
   const ring_back = scene.getMeshByName('ring_back')
+  const ring_arrow_up = scene.getMeshByName('ring_arrow_up')
+  const ring_arrow_down = scene.getMeshByName('ring_arrow_down')
 
   const setActiveIcon = (initial?: boolean) => {
     const icon_back_a =  scene.getTransformNodeByName('icon_back_a')
@@ -72,13 +74,16 @@ export const Ring = async (scene: Scene): Promise<RingType> => {
     ring_main.parent = ring
     ring_main.rotation = ring.rotation
     ring_rotator.rotation = ring.rotation
+    ring_back.rotation = ring.rotation
+    // if (ring_arrow_up && ring_arrow_down) {
+    //   ring_arrow_up.rotation = ring.rotation
+    //   ring_arrow_down.rotation = ring.rotation
+    // }
     ring_main.scaling = new Vector3(100,100,100);
 
     setActiveIcon(true)
   }
 
-  const ring_arrow_up = scene.getMeshByName('ring_arrow_up')
-  const ring_arrow_down = scene.getMeshByName('ring_arrow_down')
   if (ring_rotator && ring_arrow_up) {
     ring_arrow_up.visibility = 0;
     ring_arrow_up.actionManager = new ActionManager(scene);
