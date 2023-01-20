@@ -85,7 +85,7 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
       const socket = scene.getMeshByName(`socket_${degree.slice(-3)}`);
       if (socket) {
         socket.getChildren().forEach(child => child.dispose());
-        const outfitName = outfits.cap[index];
+        const { name: outfitName } = outfits.cap[index];
         containers.cap.meshes.forEach(mesh => {
           if (mesh.name.includes(outfitName)) {
             mesh.clone(mesh.name, socket);
