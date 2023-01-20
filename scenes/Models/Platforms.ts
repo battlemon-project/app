@@ -1,6 +1,5 @@
 import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera, AssetContainer } from "@babylonjs/core"
 import { Dispatch, SetStateAction } from "react"
-import { Ring } from './Ring'
 
 interface PlatformType {
   destroy: () => void
@@ -12,9 +11,10 @@ interface PlatformParams {
   canvas: HTMLCanvasElement
   mintEvent: () => Promise<void>
   changeStep: Dispatch<SetStateAction<number>>
+  openInventory: () => Promise<void>
 }
 
-export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: PlatformParams): Promise<PlatformType> => {
+export const Platforms = async ({ scene, canvas, mintEvent, changeStep, openInventory }: PlatformParams): Promise<PlatformType> => {
   const containers: { [key: string]: AssetContainer } = {}
   let step = 0;
   let activePlatform: number = 1;
@@ -36,21 +36,25 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
   }
   
   containers.platforms.addAllToScene()
-  containers.dots.addAllToScene()
-
-
-  const ringScene = await Ring(scene)
-
-  const dots = scene.getTransformNodeByName('icons')
-  if (dots) {
-    dots.position.y = dots.position.y + 10;
-
-    dots.getChildMeshes().forEach(mesh => {
-      mesh.renderingGroupId = 2;
-    })
-    dots.scaling = new Vector3(0,0,0);
+  const ring = scene.getMeshByName('ring')
+  if (ring) {
+    ring.visibility = 0;
   }
-  const dotsMeshes = dots?.getChildMeshes() || [];
+  // containers.dots.addAllToScene()
+
+
+  // const ringScene = await Ring(scene)
+
+  // const dots = scene.getTransformNodeByName('icons')
+  // if (dots) {
+  //   dots.position.y = dots.position.y + 10;
+
+  //   dots.getChildMeshes().forEach(mesh => {
+  //     mesh.renderingGroupId = 2;
+  //   })
+  //   dots.scaling = new Vector3(0,0,0);
+  // }
+  // const dotsMeshes = dots?.getChildMeshes() || [];
 
   let originalRotationAngle = 0;
 
@@ -142,31 +146,20 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
 
       if (platformAnimation) {
         platformAnimation.start(false, 1);
-      } else {
+      } 
+      else {
         const position = lemonPositions[index];
         if (step != 1) {
-          console.log(step)
-          if (dots && dots.scaling.x < 120) {
-            dots.parent = position;
-            dots.rotation = position.rotation;
-            Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 50, new Vector3(0,0,0), new Vector3(1.2,1.2,1.2), 0);
-            const operator_FocusLemon_f = scene.getAnimationGroupByName('operator_FocusLemon_f');
-            operator_FocusLemon_f?.start(false, 1);
-            lemonPositions.forEach((position, index) => {
-              if (activePlatform != index + 1) {
-                Animation.CreateAndStartAnimation(`Lemon_scale`, position, "scaling", 60, 80, new Vector3(1,1,1), new Vector3(0,0,0), 0);
-              }
-            })
-            
-            const ring = scene.getMeshByName('ring')
-            if (ring) {
-              Animation.CreateAndStartAnimation(`Ring_scale`, ring, "scaling", 60, 60, new Vector3(0,0,0), new Vector3(1,1,1), 0);
-              Animation.CreateAndStartAnimation(`Ring_rotation`, ring, "rotation.x", 60, 60, Math.PI, 0, 0)
+          const operator_FocusLemon_f = scene.getAnimationGroupByName('operator_FocusLemon_f');
+          operator_FocusLemon_f?.start(false, 1);
+          await openInventory()
+          lemonPositions.forEach((position, index) => {
+            if (activePlatform != index + 1) {
+              Animation.CreateAndStartAnimation(`Lemon_scale`, position, "scaling", 60, 80, new Vector3(1,1,1), new Vector3(0,0,0), 0);
             }
-  
-            changeStep(1);
-            step = 1;
-          }
+          })
+          changeStep(1);
+          step = 1;
         }
         return;
       }
@@ -174,7 +167,6 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
       lemonPositions.forEach((position, index) => {
         if (activePlatform == index + 1) {
           position.rotate(new Vector3(0,1,0), originalRotationAngle)
-          dotsMeshes.forEach(mesh => mesh.rotate(new Vector3(0,1,0), -1*originalRotationAngle))
           originalRotationAngle = 0;
         }
         Animation.CreateAndStartAnimation(`Lemon_rotation`, position, "rotation.y", 60, 25, position.rotation.y, position.rotation.y + rotationAngle, 0)
@@ -205,7 +197,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
     const dx = evt.clientX - currentPosition.x;
     const angleY = dx * 0.01;
     lemonPositions[activePlatform - 1].rotate(new Vector3(0,1,0), angleY);
-    dotsMeshes.forEach(mesh => mesh.rotate(new Vector3(0,1,0), -1*angleY))
+    //dotsMeshes.forEach(mesh => mesh.rotate(new Vector3(0,1,0), -1*angleY))
     originalRotationAngle -= angleY;
     currentPosition.x = evt.clientX;
   }
@@ -216,9 +208,6 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
 
   return {
     back: () => {
-      if (dots && dots.scaling.x > 0) {
-        Animation.CreateAndStartAnimation(`Lemon_rotation`, dots, "scaling", 60, 15, new Vector3(1.2,1.2,1.2), new Vector3(0,0,0), 0)
-      }
       const operator_FocusLemon_b = scene.getAnimationGroupByName('operator_FocusLemon_b');
       operator_FocusLemon_b?.start(false, 1);
       lemonPositions.forEach((position, index) => {
@@ -226,13 +215,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
           Animation.CreateAndStartAnimation(`Lemon_scale`, position, "scaling", 60, 60, new Vector3(0,0,0), new Vector3(1,1,1), 0);
         }
       })
-      const ring = scene.getMeshByName('ring')
-      if (ring) {
-        Animation.CreateAndStartAnimation(`Ring_scale`, ring, "scaling", 60, 60, new Vector3(1,1,1), new Vector3(0,0,0), 0);
-        Animation.CreateAndStartAnimation(`Ring_rotation`, ring, "rotation.x", 60, 60, 0, Math.PI, 0)
-      }
       step = 0;
-      ringScene.reset();
     },
     destroy: () => {
       canvas.removeEventListener("pointerdown", pointerDown, false);

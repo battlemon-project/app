@@ -5,6 +5,7 @@ import { Platforms } from './Models/Platforms'
 import { NewLemon } from './Models/NewLemon'
 import type { SuiMoveObject } from "@mysten/sui.js";
 import type { Loader } from "../pages/hub";
+import Inventory from "../components/Inventory";
 
 
 let destroyPlatforms: () => void;
@@ -23,6 +24,7 @@ export default function HubScene(
 
   const FpsElement = document.getElementById("fps");
   const [step, changeStep] = useState<number>(0)
+  const [inventory, changeInventory] = useState<boolean>(false)
 
   useEffect(() => {
     setLoader((loader) => ({ ...loader, babylon: true }));
@@ -88,7 +90,8 @@ export default function HubScene(
         scene, 
         canvas,
         mintEvent: handleMint,
-        changeStep: changeStep
+        changeStep: changeStep,
+        openInventory: openInventory
       }).then(Platforms => {
         destroyPlatforms = Platforms.destroy
         backPlatforms = Platforms.back
@@ -121,21 +124,30 @@ export default function HubScene(
     }
   }, [lemons]);
 
+  const openInventory = async () => {
+    changeInventory(true);
+  }
+
   const toggleBack = () => {
     if (backPlatforms) {
       changeStep(0);
-      backPlatforms()
+      changeInventory(false);
+      backPlatforms();
     }
   }
 
   return (
     <> 
       <canvas className="vh-100 w-100 position-absolute top-0" id="renderCanvas" />
-      <div className="container">
+      <div className="container position-relative">
         {step > 0 && <button className="btn btn-lg btn-outline-light mb-3 position-absolute pt-0 pb-1 px-4" style={{top: '80px'}} onClick={toggleBack}>
           <span style={{fontSize: '26px', lineHeight: '32px'}}>&larr; </span> 
           Back
         </button>}
+        
+        {(inventory) && <>
+          <Inventory />
+        </>}
       </div>
     </>
   )

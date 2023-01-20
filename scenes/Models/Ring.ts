@@ -85,7 +85,7 @@ export const Ring = async (scene: Scene): Promise<RingType> => {
   }
 
   if (ring_rotator && ring_arrow_up) {
-    ring_arrow_up.visibility = 0;
+    //ring_arrow_up.visibility = 0;
     ring_arrow_up.actionManager = new ActionManager(scene);
 
     ring_arrow_up.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, async function(){
@@ -102,7 +102,7 @@ export const Ring = async (scene: Scene): Promise<RingType> => {
 
   }
   if (ring_rotator && ring_arrow_down) {
-    ring_arrow_down.visibility = 0;
+    //ring_arrow_down.visibility = 0;
     ring_arrow_down.actionManager = new ActionManager(scene);
 
     ring_arrow_down.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, async function(){
