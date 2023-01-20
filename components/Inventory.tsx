@@ -1,13 +1,15 @@
 import { outfits } from "../helpers/dummyLemon";
 import { useEffect, useState } from "react";
 
+type OutfitType = "back" | "cap" | "shoes" | "face" | "cloth";
+
 function Inventory() {  
   const [opened, setOpened] = useState(false)
   const [outfitList, setOutfitList] = useState<string[]>(Object.values(outfits).flat())
 
   const filterOutifts = (type: string) => (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    setOutfitList(outfits[type])
+    setOutfitList(outfits[type as OutfitType])
   }
 
   useEffect(() => {
@@ -35,7 +37,7 @@ function Inventory() {
         <div className="inventory-center">
           <div className="row">
             {outfitList.map(outfit => 
-              <div className="col col-3 border px-1 px-1">
+              <div className="col col-3 border px-1 px-1" key={outfit}>
                 <img src={`/assets/128/${outfit}_128.png`} className="img-fluid" />
               </div>
             )}
