@@ -1,3 +1,5 @@
+import type { SuiMoveObject } from "@mysten/sui.js";
+
 export type OutfitType = { 
   name: string, 
   type: string 
@@ -95,7 +97,7 @@ function random(array: OutfitType[]): OutfitType {
   return array[Math.floor(Math.random()*array.length)];
 }
 
-export const dummyLemon = () => {
+export const dummyLemon = (): SuiMoveObject => {
   const lemon = {
     type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::lemon::Lemon",
     has_public_transfer: false,

@@ -3,28 +3,26 @@ import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
 import { Platforms } from './Models/Platforms'
 import { NewLemon } from './Models/NewLemon'
-import type { SuiMoveObject } from "@mysten/sui.js";
 import type { Loader } from "../pages/hub";
+import { lemonStore } from "../helpers/lemonStore";
 import Inventory from "../components/Inventory";
+
 
 
 let destroyPlatforms: () => void;
 let backPlatforms: () => void;
 
 export default function HubScene(
-  { 
-    lemons, 
+  {
     setLoader,
     handleMint
-  }:{ 
-    lemons: SuiMoveObject[], 
+  }:{
     setLoader: Dispatch<SetStateAction<Loader>> ,
     handleMint: () => Promise<void>
   }) {
 
   const FpsElement = document.getElementById("fps");
   const [step, changeStep] = useState<number>(0)
-  const [inventory, changeInventory] = useState<boolean>(false)
 
   useEffect(() => {
     setLoader((loader) => ({ ...loader, babylon: true }));
@@ -90,12 +88,11 @@ export default function HubScene(
         scene, 
         canvas,
         mintEvent: handleMint,
-        changeStep: changeStep,
-        openInventory: openInventory
+        changeStep: changeStep
       }).then(Platforms => {
         destroyPlatforms = Platforms.destroy
         backPlatforms = Platforms.back
-        NewLemon(scene, lemons)
+        NewLemon(scene)
       });
       
       //LoadBackpack(scene)
@@ -122,16 +119,12 @@ export default function HubScene(
       setLoader((loader) => ({ ...loader, babylon: false }));
       engine.dispose();
     }
-  }, [lemons]);
-
-  const openInventory = async () => {
-    changeInventory(true);
-  }
+  }, []);
 
   const toggleBack = () => {
     if (backPlatforms) {
       changeStep(0);
-      changeInventory(false);
+      lemonStore.setState((store) => ({ ...store, inventoryIsOpened: false }))
       backPlatforms();
     }
   }
@@ -145,9 +138,7 @@ export default function HubScene(
           Back
         </button>}
         
-        {(inventory) && <>
-          <Inventory />
-        </>}
+        <Inventory />
       </div>
     </>
   )

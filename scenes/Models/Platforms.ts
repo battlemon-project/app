@@ -1,5 +1,6 @@
 import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera, AssetContainer } from "@babylonjs/core"
 import { Dispatch, SetStateAction } from "react"
+import { lemonStore } from "../../helpers/lemonStore";
 
 interface PlatformType {
   destroy: () => void
@@ -11,10 +12,11 @@ interface PlatformParams {
   canvas: HTMLCanvasElement
   mintEvent: () => Promise<void>
   changeStep: Dispatch<SetStateAction<number>>
-  openInventory: () => Promise<void>
 }
 
-export const Platforms = async ({ scene, canvas, mintEvent, changeStep, openInventory }: PlatformParams): Promise<PlatformType> => {
+export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: PlatformParams): Promise<PlatformType> => {
+  
+  const { lemons } = lemonStore.getState()
   const containers: { [key: string]: AssetContainer } = {}
   let step = 0;
   let activePlatform: number = 1;
@@ -152,7 +154,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep, openInve
         if (step != 1) {
           const operator_FocusLemon_f = scene.getAnimationGroupByName('operator_FocusLemon_f');
           operator_FocusLemon_f?.start(false, 1);
-          await openInventory()
+          lemonStore.setState((store) => ({ ...store, inventoryIsOpened: true }))
           lemonPositions.forEach((position, index) => {
             if (activePlatform != index + 1) {
               Animation.CreateAndStartAnimation(`Lemon_scale`, position, "scaling", 60, 80, new Vector3(1,1,1), new Vector3(0,0,0), 0);
@@ -172,7 +174,8 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep, openInve
         Animation.CreateAndStartAnimation(`Lemon_rotation`, position, "rotation.y", 60, 25, position.rotation.y, position.rotation.y + rotationAngle, 0)
       })
 
-      activePlatform = index + 1
+      activePlatform = index + 1;
+      lemonStore.setState((store) => ({ ...store, activePlatform }))
     }));
     
   });

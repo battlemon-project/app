@@ -1,9 +1,10 @@
 import { outfits, OutfitType } from "../helpers/dummyLemon";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { lemonStore } from "../helpers/lemonStore";
 
-function Inventory() {  
-  const [opened, setOpened] = useState(false)
-  const [outfitList, setOutfitList] = useState<OutfitType[]>(Object.values(outfits).flat())
+function Inventory() {
+  const { inventoryIsOpened } = lemonStore.getState();
+  const [ outfitList, setOutfitList ] = useState<OutfitType[]>(Object.values(outfits).flat())
 
   const filterOutifts = (type: string) => (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -12,16 +13,12 @@ function Inventory() {
 
   const wearOutfit = (outfit: OutfitType) => (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    //setOutfitList(outfits[outfit as OutfitType])
+    lemonStore.setState((state) => ({ ...state, changeOutfit: outfit }))
   }
-
-  useEffect(() => {
-    setOpened(true)
-  }, [])
 
   return (
     <div className='inventory-container d-flex'>
-      <div className={`inventory justify-content-center align-self-center w-100 ${opened ? 'opened' : ''}`}>
+      <div className={`inventory justify-content-center align-self-center w-100 ${inventoryIsOpened ? 'opened' : ''}`}>
         <div className="d-flex mb-2 action-buttons">
           <a href={'#'} className="col col-auto d-flex active">
             <span className='justify-content-center align-self-center text-center w-100' style={{color: '#000'}}>INVENTORY</span>

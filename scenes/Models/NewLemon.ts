@@ -1,9 +1,10 @@
-import { Scene, SceneLoader, Animation, TransformNode, ExecuteCodeAction, ActionManager, Vector3, Mesh, AssetContainer } from "@babylonjs/core"
+import { Scene, SceneLoader, Animation, TransformNode, ExecuteCodeAction, ActionManager, Vector3, Mesh, AssetContainer } from "@babylonjs/core";
 import type { SuiMoveObject } from "@mysten/sui.js";
-import { outfits } from './../../helpers/dummyLemon'
+import { lemonStore } from "../../helpers/lemonStore";
 
-export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<void> => {
+export const NewLemon = async (scene: Scene): Promise<void> => {
   const containers: { [key: string]: AssetContainer } = {}
+  const { lemons } = lemonStore.getState();
 
   if (lemons && lemons.length) {
     const models = {
@@ -51,7 +52,10 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
         containers[type].meshes.forEach(mesh => {
           if (!mesh.name.includes(trait!.flavour)) return;
           const placeholderNode = lemon.getChildTransformNodes().find(mesh => mesh.name == placeholder);
-          if (placeholderNode) mesh.clone(type + index + 1, placeholderNode)
+          if (placeholderNode) {
+            placeholderNode.id = `${placeholder}_${index + 1}`;
+            mesh.clone(`outift_${type}_${index + 1}`, placeholderNode)
+          }
         })
       })
 
@@ -63,52 +67,17 @@ export const NewLemon = async (scene: Scene, lemons: SuiMoveObject[]): Promise<v
       
     });
   }
-  
-  const dots = scene.getTransformNodeByName('icons')
-  const dotsMeshes = dots?.getChildMeshes() || [];
 
-
-  dotsMeshes.forEach((dot) => {
-    dot.actionManager = new ActionManager(scene);
-
-    dot.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, async function(){
-      if (dot.name.includes('icon_cap')) {
-        open_caps_menu()
+  lemonStore.subscribe((state, prevState) => {
+    if (state.changeOutfit != prevState.changeOutfit) {
+      let placeholderName = `placeholder_${state.changeOutfit?.type}`
+      //if (state.changeOutfit?.type == 'shoes') placeholderName += '_l'
+      const placeholder = scene.getNodeById(`${placeholderName}_${state.activePlatform}`)
+      if (placeholder) {
+        placeholder.dispose();
       }
-    }));
-
-  })
-
-  const setOutfitIcons = () => {
-    [-4,-3,-2,-1,0,1,2,3,4].forEach((order, index) => {
-      const degree = '00' + ((360 + order*10) % 360);
-      const socket = scene.getMeshByName(`socket_${degree.slice(-3)}`);
-      if (socket) {
-        socket.getChildren().forEach(child => child.dispose());
-        const { name: outfitName } = outfits.cap[index];
-        containers.cap.meshes.forEach(mesh => {
-          if (mesh.name.includes(outfitName)) {
-            mesh.clone(mesh.name, socket);
-          }
-        })
-      }
-    })   
-  }
-
-  const open_caps_menu = () => {
-    const ring = scene.getMeshByName('ring')
-    const ring_main = scene.getMeshByName('ring_main')
-    const ring_back = scene.getMeshByName('ring_back')
-    if (ring) {
-      Animation.CreateAndStartAnimation(`Ring_rotation`, ring_main, "rotation.x", 60, 30, 0, Math.PI/4, 0)
-      Animation.CreateAndStartAnimation(`Ring_back`, ring_back, "visibility", 60, 10, 1, 0, 0)
-      setTimeout(() => {
-        setOutfitIcons();
-        Animation.CreateAndStartAnimation(`Ring_rotation`, ring_main, "rotation.x", 60, 30, Math.PI/4, 0, 0)
-        Animation.CreateAndStartAnimation(`Ring_back`, ring_back, "visibility", 60, 10, 0, 1, 0)
-      }, 500);
     }
-  }
+  })
 
 }
 
@@ -116,7 +85,6 @@ interface Trait {
   flavour: string
   name: string
 }
-
 
 function getBasics(lemon: SuiMoveObject): string[] {
   const traits: { flavour: string, name: string }[] = lemon.fields.traits.map((trait: Record<string, string>) => trait.fields)
