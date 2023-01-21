@@ -51,8 +51,7 @@ export const outfits: OutfitListType = {
   face: [
     { name: 'Face_Sunglasses_RA01', type: 'face' },
     { name: 'Face_Visor_VR_VR01', type: 'face' },
-    { name: 'Face_Cowboy_Scarf_CA01', type: 'face' },
-    { name: 'Empty', type: 'face' }
+    { name: 'Face_Cowboy_Scarf_CA01', type: 'face' }
   ],
   fire_arms: [
     { name: 'FireArms_Revolver_CA01', type: 'fire_arms' },
@@ -62,6 +61,15 @@ export const outfits: OutfitListType = {
     { name: 'FireArms_Assault_Rifle_AA02', type: 'fire_arms' },
     { name: 'FireArms_Sniper_Rifle_AA05', type: 'fire_arms' }
   ],
+  shoes: [
+    { name: 'Shoes_Kicks_SA01', type: 'shoes' },
+    { name: 'Shoes_Armored_Shoes_AA01', type: 'shoes' },
+    { name: 'Shoes_Military_Shoes_MA01', type: 'shoes' },
+    { name: 'Shoes_Kicks_SA02', type: 'shoes' }
+  ]
+}
+
+export const basics: OutfitListType = {
   teeth: [
     { name: 'Teeth_Grga_AA02', type: 'teeth' },
     { name: 'Teeth_Hollywood_AA01', type: 'teeth' },
@@ -84,12 +92,6 @@ export const outfits: OutfitListType = {
     { name: 'Head_Zombie_ZA01', type: 'head' },
     { name: 'Head_Clementine_AA02', type: 'head' },
     { name: 'Head_Lime_AA03', type: 'head' }
-  ],
-  shoes: [
-    { name: 'Shoes_Kicks_SA01', type: 'shoes' },
-    { name: 'Shoes_Armored_Shoes_AA01', type: 'shoes' },
-    { name: 'Shoes_Military_Shoes_MA01', type: 'shoes' },
-    { name: 'Shoes_Kicks_SA02', type: 'shoes' }
   ]
 }
 
@@ -110,21 +112,21 @@ export const dummyLemon = (): SuiMoveObject => {
         {
           type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
           fields: {
-            flavour: random(outfits.exo).name,
+            flavour: random(basics.exo).name,
             name: "exo"
           }
         },
         {
           type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
           fields: {
-            flavour: random(outfits.eyes).name,
+            flavour: random(basics.eyes).name,
             name: "eyes"
           }
         },
         {
           type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
           fields: {
-            flavour: random(outfits.head).name,
+            flavour: random(basics.head).name,
             name: "head"
           }
         },
@@ -138,7 +140,7 @@ export const dummyLemon = (): SuiMoveObject => {
         {
           type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
           fields: {
-            flavour: random(outfits.teeth).name,
+            flavour: random(basics.teeth).name,
             name: "teeth"
           }
         },

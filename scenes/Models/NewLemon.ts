@@ -1,4 +1,4 @@
-import { Scene, SceneLoader, Animation, TransformNode, ExecuteCodeAction, ActionManager, Vector3, Mesh, AssetContainer } from "@babylonjs/core";
+import { Scene, SceneLoader, Animation, TransformNode, ExecuteCodeAction, ActionManager, Vector3, Mesh, AssetContainer, Nullable } from "@babylonjs/core";
 import type { SuiMoveObject } from "@mysten/sui.js";
 import { lemonStore } from "../../helpers/lemonStore";
 
@@ -71,11 +71,27 @@ export const NewLemon = async (scene: Scene): Promise<void> => {
   lemonStore.subscribe((state, prevState) => {
     if (state.changeOutfit != prevState.changeOutfit) {
       let placeholderName = `placeholder_${state.changeOutfit?.type}`
-      //if (state.changeOutfit?.type == 'shoes') placeholderName += '_l'
-      const placeholder = scene.getNodeById(`${placeholderName}_${state.activePlatform}`)
-      if (placeholder) {
-        placeholder.dispose();
+      let placeholders: Mesh[] = [];
+      if (state.changeOutfit?.type == 'shoes') {
+        placeholders = [
+          scene.getNodeById(`${placeholderName}_l_${state.activePlatform}`) as Mesh,
+          scene.getNodeById(`${placeholderName}_r_${state.activePlatform}`) as Mesh
+        ]
+      } else {
+        placeholders = [ scene.getNodeById(`${placeholderName}_${state.activePlatform}`) as Mesh ]
       }
+      
+      const { type, name } = state.changeOutfit!
+
+      placeholders.forEach(placeholder => {
+        placeholder?.getChildren().forEach(mesh => {
+          mesh.dispose();
+        })
+        containers[type].meshes.forEach(mesh => {
+          if (!mesh.name.includes(name)) return;
+          mesh.clone(`outift_${type}_${state.activePlatform}`, placeholder)
+        })
+      })
     }
   })
 
