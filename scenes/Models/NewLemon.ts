@@ -68,34 +68,35 @@ export const NewLemon = async (scene: Scene): Promise<void> => {
     });
   }
 
+  const changeMesh = (name: string, type: string, placeholder: Mesh): void => {
+    placeholder?.getChildren().forEach(mesh => {
+      mesh.dispose();
+    })
+    containers[type].meshes.forEach(mesh => {
+      if (!mesh.name.includes(name)) return;
+      mesh.clone(`outift_${type}`, placeholder)
+    })
+  } 
+
   lemonStore.subscribe((state, prevState) => {
     if (state.changeOutfit != prevState.changeOutfit) {
       let placeholderName = `placeholder_${state.changeOutfit?.type}`
-      let placeholders: Mesh[] = [];
-      if (state.changeOutfit?.type == 'shoes') {
-        placeholders = [
-          scene.getNodeById(`${placeholderName}_l_${state.activePlatform}`) as Mesh,
-          scene.getNodeById(`${placeholderName}_r_${state.activePlatform}`) as Mesh
-        ]
-      } else {
-        placeholders = [ scene.getNodeById(`${placeholderName}_${state.activePlatform}`) as Mesh ]
-      }
-      
       const { type, name } = state.changeOutfit!
-
-      placeholders.forEach(placeholder => {
-        placeholder?.getChildren().forEach(mesh => {
-          mesh.dispose();
-        })
-        containers[type].meshes.forEach(mesh => {
-          if (!mesh.name.includes(name)) return;
-          mesh.clone(`outift_${type}_${state.activePlatform}`, placeholder)
-        })
-      })
+      if (state.changeOutfit?.type == 'shoes') {
+        const placeholder_l = scene.getNodeById(`${placeholderName}_l_${state.activePlatform}`) as Mesh
+        const placeholder_r = scene.getNodeById(`${placeholderName}_r_${state.activePlatform}`) as Mesh
+        changeMesh(name + '_L', type, placeholder_l);
+        changeMesh(name + '_R', type, placeholder_r);
+      } else {
+        if (state.changeOutfit?.type == 'weapon') placeholderName = 'placeholder_weapon_r'
+        let placeholder = scene.getNodeById(`${placeholderName}_${state.activePlatform}`) as Mesh
+        changeMesh(name, type, placeholder);
+      }
     }
   })
 
 }
+
 
 interface Trait {
   flavour: string

@@ -9,7 +9,7 @@ export type OutfitListType = {
   [key: string]: OutfitType[]
 }
 
-export const outfits: OutfitListType = {
+const nft_outfits: OutfitListType = {
   back: [
     { name: 'Back_Insecticide_Bottle_ZA01', type: 'back' },
     { name: 'Back_Bomb_Barrel_PA02', type: 'back' },
@@ -95,6 +95,21 @@ export const basics: OutfitListType = {
   ]
 }
 
+export const outfits: OutfitListType = {
+  ...nft_outfits,
+  weapon: [
+    ...nft_outfits.cold_arms,
+    ...nft_outfits.fire_arms
+  ].map(outfit => {
+    outfit.type = 'weapon';
+    return outfit
+  })
+}
+delete outfits.cold_arms
+delete outfits.fire_arms
+
+
+
 function random(array: OutfitType[]): OutfitType {
   return array[Math.floor(Math.random()*array.length)];
 }
@@ -168,7 +183,7 @@ export const dummyLemon = (): SuiMoveObject => {
         {
           type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
           fields: {
-            flavour: random([...outfits.cold_arms, ...outfits.fire_arms]).name,
+            flavour: random(outfits.weapon).name,
             name: "weapon"
           }
         },
