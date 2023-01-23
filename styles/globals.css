@@ -99,6 +99,11 @@ html.mountings body {
   color:#fff
 }
 
+
+.hubbg {
+  background: linear-gradient(180deg,#035161 0,#010024 100%)
+}
+
 html.mountings h1,html.mountings h2 {
   font-weight:700;
 }

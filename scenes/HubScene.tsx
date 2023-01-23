@@ -66,23 +66,24 @@ export default function HubScene(
       var hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("/glb/environmentSpecular.env", scene);
       scene.environmentTexture = hdrTexture;
       scene.environmentTexture.level = 1;
+      scene.clearColor = new BABYLON.Color4(0,0,0,0.0000000000000001);
 
       //skybox
-      const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:4000}, scene);
-      const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-      skyboxMaterial.backFaceCulling = false;
-      skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("/assets/hub/", scene, undefined, true, [
-        '/assets/hub/px.png',
-        '/assets/hub/py.png',
-        '/assets/hub/pz.png',
-        '/assets/hub/nx.png',
-        '/assets/hub/ny.png',
-        '/assets/hub/nz.png'
-      ]);
-      skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-      skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-      skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-      skybox.material = skyboxMaterial;
+      // const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:4000}, scene);
+      // const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+      // skyboxMaterial.backFaceCulling = false;
+      // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("/assets/hub/", scene, undefined, true, [
+      //   '/assets/hub/px.png',
+      //   '/assets/hub/py.png',
+      //   '/assets/hub/pz.png',
+      //   '/assets/hub/nx.png',
+      //   '/assets/hub/ny.png',
+      //   '/assets/hub/nz.png'
+      // ]);
+      // skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+      // skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+      // skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+      // skybox.material = skyboxMaterial;
       
       Platforms({
         scene, 
@@ -131,7 +132,7 @@ export default function HubScene(
 
   return (
     <> 
-      <canvas className="vh-100 w-100 position-absolute top-0" id="renderCanvas" />
+      <canvas className="vh-100 w-100 position-absolute top-0 hubbg" id="renderCanvas" />
       <div className="container position-relative">
         {step > 0 && <button className="btn btn-lg btn-outline-light mb-3 position-absolute pt-0 pb-1 px-4" style={{top: '80px'}} onClick={toggleBack}>
           <span style={{fontSize: '26px', lineHeight: '32px'}}>&larr; </span> 
