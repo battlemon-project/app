@@ -82,7 +82,7 @@ const Hub = () => {
 
   return (
     <>
-      { true && hasMounted && address && 
+      { process.env.NEXT_PUBLIC_PRODUCTION != 'true' && hasMounted && address && 
         <div className="sticky-top text-center d-inline-block position-absolute" style={{ zIndex: 1080, left: '50%', top: '75px', transform: 'translateX(-50%)' }}>
           <button className="btn btn-lg btn-light px-4" onClick={handleMintLemon}>Mint NFT (Testnet)</button> 
         </div>
