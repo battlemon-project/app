@@ -3,15 +3,15 @@ import { useRouter } from "next/router";
 import { useWallet } from "@suiet/wallet-kit";
 import LayoutSui from '../components/LayoutSui';
 
-function arrayBufferToBase64( buffer: Uint8Array ) {
-  var binary = '';
-  var bytes = new Uint8Array( buffer );
-  var len = bytes.byteLength;
-  for (var i = 0; i < len; i++) {
-    binary += String.fromCharCode( bytes[ i ] );
-  }
-  return window.btoa( binary );
-}
+// function arrayBufferToBase64( buffer: Uint8Array ) {
+//   var binary = '';
+//   var bytes = new Uint8Array( buffer );
+//   var len = bytes.byteLength;
+//   for (var i = 0; i < len; i++) {
+//     binary += String.fromCharCode( bytes[ i ] );
+//   }
+//   return window.btoa( binary );
+// }
 
 const Game = () => {
   const { query } = useRouter();
@@ -25,11 +25,10 @@ const Game = () => {
           message: new TextEncoder().encode(clientMessage)
         })
         if (!sign) return;
-        debugger;
         const data = {
           signedMessage: sign.messageBytes,
           signature: sign.signature,
-          publicKey: arrayBufferToBase64(wallet.account?.publicKey as Uint8Array),
+          publicKey: wallet.account?.publicKey, //arrayBufferToBase64(wallet.account?.publicKey as Uint8Array),
           sui_wallet_address: wallet?.account?.address,
           client_id: clientMessage
         }
