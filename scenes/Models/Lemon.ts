@@ -3,21 +3,14 @@ import data from "./data.json"
 
 export const Lemon = async (scene: Scene): Promise<void> => {
   const container = await SceneLoader.LoadAssetContainerAsync(
-    "/glb/",
+    `${process.env.NEXT_PUBLIC_STATIC}/glb/`,
     "BTLMN_Outfits_Tier_MP_20.glb",
     scene
   );
 
-  // container.materials.forEach((material, index) => {
-  //   console.log(material.name)
-  //   if (material.name == "MAT_Outfit_Glossy" || material.name == "MAT_Outfit_AA") {
-  //     material.bind
-  //   }
-  // })
-
   const outfits: string[][] = data.map(({ model }) => {
     return Object.values(model).map((value: any) => {
-      if (value && typeof value === 'object' && value.flavour) return value.flavour
+      if (value && typeof value === 'object' && value.name) return value.name
       return value
     })
   })

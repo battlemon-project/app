@@ -1,0 +1,388 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v3.3.27",
+        "version" : "2.0"
+    },
+    "extensionsUsed" : [
+        "KHR_materials_specular",
+        "KHR_materials_ior",
+        "KHR_texture_transform",
+        "KHR_materials_emissive_strength"
+    ],
+    "extensionsRequired" : [
+        "KHR_texture_transform"
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Glasses_Visor_AR"
+        }
+    ],
+    "materials" : [
+        {
+            "alphaMode" : "BLEND",
+            "doubleSided" : true,
+            "extensions" : {
+                "KHR_materials_specular" : {
+                    "specularColorFactor" : [
+                        2.371357614441398,
+                        2.371357614441398,
+                        2.371357614441398
+                    ]
+                },
+                "KHR_materials_ior" : {
+                    "ior" : 1.4500000476837158
+                }
+            },
+            "name" : "MAT_Outfit_Glass_B",
+            "normalTexture" : {
+                "index" : 0,
+                "texCoord" : 1
+            },
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    1,
+                    1,
+                    1,
+                    0.6000000238418579
+                ],
+                "baseColorTexture" : {
+                    "index" : 1
+                },
+                "metallicFactor" : 0,
+                "metallicRoughnessTexture" : {
+                    "extensions" : {
+                        "KHR_texture_transform" : {
+                            "offset" : [
+                                0,
+                                -2
+                            ],
+                            "scale" : [
+                                3,
+                                3
+                            ]
+                        }
+                    },
+                    "index" : 2,
+                    "texCoord" : 1
+                },
+                "roughnessFactor" : 0.30000001192092896
+            }
+        },
+        {
+            "alphaMode" : "BLEND",
+            "doubleSided" : true,
+            "emissiveFactor" : [
+                0,
+                1,
+                0.6813228130340576
+            ],
+            "extensions" : {
+                "KHR_materials_emissive_strength" : {
+                    "emissiveStrength" : 5
+                },
+                "KHR_materials_specular" : {
+                    "specularColorFactor" : [
+                        2.371357614441398,
+                        2.371357614441398,
+                        2.371357614441398
+                    ]
+                },
+                "KHR_materials_ior" : {
+                    "ior" : 1.4500000476837158
+                }
+            },
+            "name" : "MAT_Outfit_emissive",
+            "normalTexture" : {
+                "index" : 3,
+                "texCoord" : 1
+            },
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "index" : 4
+                },
+                "metallicFactor" : 0,
+                "metallicRoughnessTexture" : {
+                    "extensions" : {
+                        "KHR_texture_transform" : {
+                            "offset" : [
+                                0,
+                                -2
+                            ],
+                            "scale" : [
+                                3,
+                                3
+                            ]
+                        }
+                    },
+                    "index" : 5,
+                    "texCoord" : 1
+                },
+                "roughnessFactor" : 0.5
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Cube.035",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TEXCOORD_0" : 2,
+                        "TEXCOORD_1" : 3,
+                        "COLOR_0" : 4
+                    },
+                    "indices" : 5,
+                    "material" : 0
+                },
+                {
+                    "attributes" : {
+                        "POSITION" : 6,
+                        "NORMAL" : 7,
+                        "TEXCOORD_0" : 8,
+                        "TEXCOORD_1" : 9,
+                        "COLOR_0" : 10
+                    },
+                    "indices" : 11,
+                    "material" : 1
+                }
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 2
+        },
+        {
+            "sampler" : 0,
+            "source" : 0
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 2
+        }
+    ],
+    "images" : [
+        {
+            "mimeType" : "image/png",
+            "name" : "TEX_Trim_A_N",
+            "uri" : "TEX_Trim_A_N.png"
+        },
+        {
+            "mimeType" : "image/png",
+            "name" : "BTLN_TrimColor_B",
+            "uri" : "BTLN_TrimColor_B.png"
+        },
+        {
+            "mimeType" : "image/png",
+            "name" : "TEX_MP_Roughness_A",
+            "uri" : "TEX_MP_Roughness_A.png"
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 220,
+            "max" : [
+                0.4829619824886322,
+                0.1701955646276474,
+                0.5828139185905457
+            ],
+            "min" : [
+                -0.4804467260837555,
+                -0.06504600495100021,
+                0.0638410672545433
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 220,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 220,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5126,
+            "count" : 220,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5123,
+            "count" : 220,
+            "normalized" : true,
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 5,
+            "componentType" : 5123,
+            "count" : 624,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 6,
+            "componentType" : 5126,
+            "count" : 511,
+            "max" : [
+                0.4523947536945343,
+                0.15448491275310516,
+                0.5894611477851868
+            ],
+            "min" : [
+                -0.45107442140579224,
+                -0.04114721715450287,
+                0.27913331985473633
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 7,
+            "componentType" : 5126,
+            "count" : 511,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 8,
+            "componentType" : 5126,
+            "count" : 511,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 9,
+            "componentType" : 5126,
+            "count" : 511,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 10,
+            "componentType" : 5123,
+            "count" : 511,
+            "normalized" : true,
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 11,
+            "componentType" : 5123,
+            "count" : 1239,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 2640,
+            "byteOffset" : 0,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 2640,
+            "byteOffset" : 2640,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 1760,
+            "byteOffset" : 5280,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 1760,
+            "byteOffset" : 7040,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 1760,
+            "byteOffset" : 8800,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 1248,
+            "byteOffset" : 10560,
+            "target" : 34963
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 6132,
+            "byteOffset" : 11808,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 6132,
+            "byteOffset" : 17940,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 4088,
+            "byteOffset" : 24072,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 4088,
+            "byteOffset" : 28160,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 4088,
+            "byteOffset" : 32248,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 2478,
+            "byteOffset" : 36336,
+            "target" : 34963
+        }
+    ],
+    "samplers" : [
+        {
+            "magFilter" : 9729,
+            "minFilter" : 9987
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 38816,
+            "uri" : "Glasses_Visor_AR.bin"
+        }
+    ]
+}

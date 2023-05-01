@@ -18,7 +18,7 @@ export const Ring = async (scene: Scene): Promise<RingType> => {
 
   const container = await SceneLoader.ImportMeshAsync(
     "",
-    "/glb/",
+    `${process.env.NEXT_PUBLIC_STATIC}/glb/`,
     "BTLMN_InterfaceRing.glb",
     scene
   );

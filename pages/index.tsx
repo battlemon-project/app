@@ -1,42 +1,28 @@
-import Head from 'next/head'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-import Loader from '../components/Loader'
+import BabylonLoader from '../components/BabylonLoader'
 import dynamic from 'next/dynamic'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
+import Layout from '../components/Layout'
 
 const HomeScene = dynamic(() => import('../scenes/HomeScene'), {
   suspense: true,
 })
 
-export default function Home() {
-  return (
-    <>
-      <Head>
-        <title>Battlemon GameFi Hub</title>
-        <meta name="description" content="Battlemon - To the last drop of juice" />
-        <link rel="icon" href="/favicon.ico" />
-        <meta property="og:site_name" content="Battlemon"/>
-    		<meta property="og:title" content="Battlemon GameFi Hub"/>
-    		<meta property="og:description" content="To the last drop of juice"/>
-    		<meta property="og:image" content="https://promo.battlemon.com/battlemon.jpg"/>
-    		<meta property="og:url" content="https://promo.battlemon.com/battlemon.jpg"/>
-    		<meta property="og:type" content="website"/>
-    		<meta name="twitter:card" content="summary_large_image"/>
-    		<meta name="twitter:site" content="@BATTLEM0N"/>
-    		<meta name="twitter:creator" content="@BATTLEM0N"/>
-    		<meta name="twitter:title" content="Battlemon GameFi Hub"/>
-    		<meta name="twitter:description" content="To the last drop of juice"/>
-    		<meta name="twitter:image" content="https://promo.battlemon.com/battlemon.jpg"/>
-      </Head>
+const Index = () => {
 
-      <Header />
-      
-      <Suspense fallback={<Loader status="" />}>
-        <HomeScene />
-      </Suspense>
-      
-      <Footer />
-    </>
+  useEffect(() => {
+    document?.body.classList.add('babylon-page');
+  
+    return function cleanup() {
+      document?.body.classList.remove('babylon-page');
+    };
+  }, []);
+
+  return (
+    <Suspense fallback={<BabylonLoader isConnected={true} />}>
+      <HomeScene />
+    </Suspense>
   )
 }
+
+Index.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>
+export default Index

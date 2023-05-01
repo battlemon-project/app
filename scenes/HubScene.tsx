@@ -2,23 +2,24 @@ import { useEffect, Dispatch, SetStateAction, useState } from "react";
 import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
 import { Platforms } from './Models/Platforms'
-import { NewLemon } from './Models/NewLemon'
-import type { Loader } from "../pages/hub";
-import { lemonStore } from "../helpers/lemonStore";
-import Inventory from "../components/Inventory";
+import { LemonGenerator } from './Models/LemonGenerator'
+import type { BabylonLoaderType } from "../components/BabylonLoader";
+import { useLemonStore } from "../helpers/lemonStore";
+import Inventory from "../components/HubLemon/Inventory";
 
 
 
 let destroyPlatforms: () => void;
 let backPlatforms: () => void;
+let newLemonUnsubscribe: () => void;
 
 export default function HubScene(
   {
     setLoader,
-    handleMint
+    handleMintLemon
   }:{
-    setLoader: Dispatch<SetStateAction<Loader>> ,
-    handleMint: () => Promise<void>
+    setLoader: Dispatch<SetStateAction<BabylonLoaderType>> ,
+    handleMintLemon: () => Promise<void | undefined>
   }) {
 
   const FpsElement = document.getElementById("fps");
@@ -63,7 +64,7 @@ export default function HubScene(
       const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 1), scene);
       light.intensity = 1
     
-      var hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("/glb/environmentSpecular.env", scene);
+      var hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData(`${process.env.NEXT_PUBLIC_STATIC}/glb/environmentSpecular.env`, scene);
       scene.environmentTexture = hdrTexture;
       scene.environmentTexture.level = 1;
       scene.clearColor = new BABYLON.Color4(0,0,0,0.0000000000000001);
@@ -72,13 +73,13 @@ export default function HubScene(
       // const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:4000}, scene);
       // const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
       // skyboxMaterial.backFaceCulling = false;
-      // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("/assets/hub/", scene, undefined, true, [
-      //   '/assets/hub/px.png',
-      //   '/assets/hub/py.png',
-      //   '/assets/hub/pz.png',
-      //   '/assets/hub/nx.png',
-      //   '/assets/hub/ny.png',
-      //   '/assets/hub/nz.png'
+      // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(`${process.env.NEXT_PUBLIC_STATIC}/assets/hub/`, scene, undefined, true, [
+      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/px.png`,
+      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/py.png`,
+      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/pz.png`,
+      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/nx.png`,
+      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/ny.png`,
+      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/nz.png`
       // ]);
       // skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
       // skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
@@ -88,15 +89,15 @@ export default function HubScene(
       Platforms({
         scene, 
         canvas,
-        mintEvent: handleMint,
+        mintEvent: handleMintLemon,
         changeStep: changeStep
       }).then(Platforms => {
         destroyPlatforms = Platforms.destroy
         backPlatforms = Platforms.back
-        NewLemon(scene)
+        LemonGenerator(scene).then(({ unsubscribe }) => {
+          newLemonUnsubscribe = unsubscribe
+        })
       });
-      
-      //LoadBackpack(scene)
     
       return scene;
     };
@@ -117,6 +118,7 @@ export default function HubScene(
 
     return () => {
       if (destroyPlatforms) destroyPlatforms();
+      if (newLemonUnsubscribe) newLemonUnsubscribe();
       setLoader((loader) => ({ ...loader, babylon: false }));
       engine.dispose();
     }
@@ -125,7 +127,7 @@ export default function HubScene(
   const toggleBack = () => {
     if (backPlatforms) {
       changeStep(0);
-      lemonStore.setState((store) => ({ ...store, inventoryIsOpened: false }))
+      useLemonStore.setState({ inventoryIsOpened: false })
       backPlatforms();
     }
   }

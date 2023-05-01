@@ -7,6 +7,7 @@ import { Vector3 } from "@babylonjs/core";
 import { useRouter } from 'next/router'
 
 export default function HomeScene() {
+  const FpsElement = typeof document !== 'undefined' && document.getElementById("fps");
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const router = useRouter();
   
@@ -52,14 +53,12 @@ export default function HomeScene() {
           camera.rotation.y = Math.PI - angle;
         }
       };
-
-      console.log(camera.inputs)
       
       camera.attachControl(canvasRef.current, true);
       const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(10,10,-10), scene);
       light.intensity = 0.5
       
-      var hdrTexture = new BABYLON.HDRCubeTexture("/glb/clarens_midday_1k.hdr", scene, 23);
+      var hdrTexture = new BABYLON.HDRCubeTexture(`${process.env.NEXT_PUBLIC_STATIC}/glb/clarens_midday_1k.hdr`, scene, 23);
       scene.environmentTexture = hdrTexture;
       scene.environmentTexture.level = 0.7;
 
@@ -73,6 +72,7 @@ export default function HomeScene() {
 
     engine.runRenderLoop(function () {
       scene.render();
+      if (FpsElement) FpsElement.innerHTML = engine.getFps().toFixed(2)
     });
     
     window.addEventListener("resize", function () {

@@ -1,117 +1,98 @@
-import Head from 'next/head'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-import Loader from '../components/Loader'
+import BabylonLoader, { BabylonLoaderType } from '../components/BabylonLoader'
 import dynamic from 'next/dynamic'
-import { Suspense, useEffect, useState } from 'react';
-import { useWallet, useSuiProvider } from '@suiet/wallet-kit';
-import type { JsonRpcProvider, SuiObject, SuiMoveObject } from "@mysten/sui.js";
+import Layout from '../components/Layout';
+import { useEffect, useState } from 'react';
+import { useLemonStore } from '../helpers/lemonStore'
+import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi'
+import alchemy, { getLemons, mintLemonData } from '../helpers/alchemy'
+import { useAlert } from 'react-alert'
 
-export interface Loader {
-  babylon: boolean
-  data: boolean
-}
 
 const HubScene = dynamic(() => import('../scenes/HubScene'), {
   suspense: true,
 })
 
-export default function Hub() {
-  const [ loader, setLoader ] = useState<Loader>({ babylon: true, data: true });
-  const [ lemons, setLemons ] = useState<SuiMoveObject[]>([]);
-  const wallet = useWallet();
-  const provider = useSuiProvider('https://fullnode.devnet.sui.io/');
+const Hub = () => {
+  const [ loader, setLoader ] = useState<BabylonLoaderType>({ babylon: true, data: true });
+  const alert = useAlert();
+  const { address, isConnected } = useAccount()
+  const [hasMounted, setHasMounted] = useState(false);
+
+  const { config } = usePrepareContractWrite(mintLemonData(address))
+  const { write } = useContractWrite(config)
 
   useEffect(() => {
-    console.log(loader)
+    //console.log(loader)
   }, [loader])
 
+
   const refreshLemons = async () => {
-    if (!wallet?.address) return;
-    let list: SuiMoveObject [] = [];
-
-
-
-    const objects = await provider.getObjectsOwnedByAddress(wallet.address);
-    for (const object of objects.filter(object => object.type.includes('lemon'))) {
-      let fullObject = await provider.getObject(object.objectId);
-      let { data } = fullObject.details as SuiObject
-      list.push(data as SuiMoveObject)
+    if (process.env.NEXT_PUBLIC_PRODUCTION == 'true') {
+      setLoader((loader) => ({ ...loader, data: false }));
+      return;
     }
-    list = list.sort((a,b) => (b.fields.created || 0) - a.fields.created);
-    setLemons(list);
+    if (!address) return;
+    const lemonOwnedNfts = await getLemons(address)
+    useLemonStore.setState({ lemons: lemonOwnedNfts, activePlatform: 1, inventoryIsOpened: false });
     setLoader((loader) => ({ ...loader, data: false }));
   }
 
   useEffect(() => {
-    if (wallet?.status == 'disconnected') {
+    if (!isConnected) {
       setLoader((loader) => ({ ...loader, data: true }));
-    }
-    if (wallet?.status) {
+    } else {
       refreshLemons();
-    } 
-  }, [wallet?.status])
-
-  const handleMint = async () => {
-    if (!wallet) return;
-    const signableTransaction = {
-      kind: 'moveCall' as const,
-      data: {
-        packageObjectId: '0x23927035def9135e986804e58e2b7fbf1a685a70',
-        module: 'lemon',
-        function: 'create_lemon',
-        typeArguments: [],
-        arguments: [
-          '0xd5ea481cabbf915dfb8586da5cd342cd97105b76',
-        ],
-        gasBudget: 10000,
-      },
+      alchemy.ws.on(
+        {
+          address: "0xeae26aa7aD3E54C208a22a78bd9E5d2D7ccFC18D",
+          topics: [
+            "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+            "0x0000000000000000000000000000000000000000000000000000000000000000"
+          ]
+        },
+        (tx) => {
+          setLoader((loader) => ({ ...loader, data: true }));
+          refreshLemons();
+        }
+      );
     }
+  }, [isConnected])
 
+  const handleMintLemon = async () => {
+    if (process.env.NEXT_PUBLIC_PRODUCTION == 'true') {
+      return;
+    }
     setLoader((loader) => ({ ...loader, data: true }));
     try {
-      await wallet.signAndExecuteTransaction({
-        transaction: signableTransaction 
-      });
+      await write?.();
     } catch (e) {
+      const { message } = e as Error
+      alert.show(message, { type: 'error' })
       setLoader((loader) => ({ ...loader, data: false }));
     }
-    await refreshLemons();
   }
 
+  useEffect(() => {
+    setHasMounted(true)
+    document.body.classList.add('babylon-page');
+    return function cleanup() {
+      document.body.classList.remove('babylon-page');
+    };
+  }, []);
 
   return (
     <>
-      <Head>
-        <title>Battlemon GameFi Hub</title>
-        <meta name="description" content="Battlemon - To the last drop of juice" />
-        <link rel="icon" href="/favicon.ico" />
-        <meta property="og:site_name" content="Battlemon"/>
-    		<meta property="og:title" content="Battlemon GameFi Hub"/>
-    		<meta property="og:description" content="To the last drop of juice"/>
-    		<meta property="og:image" content="https://promo.battlemon.com/battlemon.jpg"/>
-    		<meta property="og:url" content="https://promo.battlemon.com/battlemon.jpg"/>
-    		<meta property="og:type" content="website"/>
-    		<meta name="twitter:card" content="summary_large_image"/>
-    		<meta name="twitter:site" content="@BATTLEM0N"/>
-    		<meta name="twitter:creator" content="@BATTLEM0N"/>
-    		<meta name="twitter:title" content="Battlemon GameFi Hub"/>
-    		<meta name="twitter:description" content="To the last drop of juice"/>
-    		<meta name="twitter:image" content="https://promo.battlemon.com/battlemon.jpg"/>
-      </Head>
-
-      <Header fps={true} />
-      
-      {/* { wallet?.address && 
-        <div className="sticky-top text-center d-inline-block position-absolute" style={{ zIndex: 1080, left: '50%', top: '15px', transform: 'translateX(-50%)' }}>
-          <button className="btn btn-lg btn-light px-4" onClick={handleMint}>Mint NFT (Devnet)</button> 
+      { true && hasMounted && address && 
+        <div className="sticky-top text-center d-inline-block position-absolute" style={{ zIndex: 1080, left: '50%', top: '75px', transform: 'translateX(-50%)' }}>
+          <button className="btn btn-lg btn-light px-4" onClick={handleMintLemon}>Mint NFT (Testnet)</button> 
         </div>
-      } */}
+      }
 
-      { !loader.data && <HubScene setLoader={setLoader} handleMint={handleMint} /> }
-      { (loader.babylon || loader.data) && <Loader status={wallet?.status} />}
-      
-      <Footer />
+      { !loader.data && <HubScene setLoader={setLoader} handleMintLemon={handleMintLemon} /> }
+      { (loader.babylon || loader.data) && <BabylonLoader isConnected={isConnected && hasMounted} />}
     </>
   )
 }
+
+Hub.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>
+export default Hub

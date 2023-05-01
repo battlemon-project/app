@@ -1,202 +1,236 @@
-import type { SuiMoveObject } from "@mysten/sui.js";
+import { ItemType, LemonType } from './lemonStore'
 
-export type OutfitType = { 
-  name: string, 
-  type: string 
+export const items_type_placeholders: {[key: string]: string} = {
+  back: 'placeholder_back',
+  cap: 'placeholder_cap',
+  belt: 'placeholder_belt',
+  cloth: 'placeholder_cloth',
+  glasses: 'placeholder_glasses',
+  mask: 'placeholder_mask',
+  fire_arms: 'placeholder_fire_arms',
+  cold_arms: 'placeholder_cold_arms',
+  shoes: 'placeholder_shoes',
 }
 
-export type OutfitListType = {
-  [key: string]: OutfitType[]
-}
+export const allItems: ItemType[] = [
+  { name: 'Back_Insecticide_Bottle', type: 'back', attachedTo: null, description: "Large Insecticide bottle" },
+  { name: 'Back_Bomb_Barrel', type: 'back', attachedTo: null, description: "Wooden backpack full of bombs" },
+  { name: 'Back_Tactical_Backpack', type: 'back', attachedTo: null, description: "Tactical backpack with walkie-talkie" },
+  { name: 'Back_Adventurer_Backpack', type: 'back', attachedTo: null, description: "Adventurer's backpack" },
+  { name: 'Cap_Baseball_Cap_Red', type: 'cap', attachedTo: null, description: "Red baseball cap with headphones" },
+  { name: 'Cap_Ladle', type: 'cap', attachedTo: null, description: "Old cracked ladle" },
+  { name: 'Cap_Cheef_Hat', type: 'cap', attachedTo: null, description: "White cook's hat" },
+  { name: 'Cap_Cone_Armored_Hat', type: 'cap', attachedTo: null, description: "Eastern armored cone hat" },
+  { name: 'Cap_Cowboy_Hat', type: 'cap', attachedTo: null, description: "Cowboy's hat" },
+  { name: 'Cap_Sheriff_Hat', type: 'cap', attachedTo: null, description: "Sheriff's hat" },
+  { name: 'Cap_Military_Cap', type: 'cap', attachedTo: null, description: "Military kepi" },
+  { name: 'Cap_Special_Forces_Beret', type: 'cap', attachedTo: null, description: "Special forces beret" },
+  { name: 'Cap_Tank_Helmet', type: 'cap', attachedTo: null, description: "Helmet with protective glasses" },
+  { name: 'Cap_Military_Helmet', type: 'cap', attachedTo: null, description: "Old-style military helmet" },
+  { name: 'Cap_Metallic_Cone_Hat', type: 'cap', attachedTo: null, description: "Metallic cone hat" },
+  { name: 'Cap_Assault_Helmet', type: 'cap', attachedTo: null, description: "Assault Helmet" },
+  { name: 'Cap_Cane_Cone_Hat', type: 'cap', attachedTo: null, description: "Cane cone hat" },
+  { name: 'Cap_Cocked_Hat', type: 'cap', attachedTo: null, description: "Cocked hat" },
+  { name: 'Cap_Pirate_Bandana', type: 'cap', attachedTo: null, description: "Pirate bandana" },
+  { name: 'Belt_Chain_Gold', type: 'belt', attachedTo: null, description: "Gold chain with $ pendant" },
+  { name: 'Belt_Cheef_Sash', type: 'belt', attachedTo: null, description: "White cook's sash" },
+  { name: 'Belt_Eastern_Armor_Belt', type: 'belt', attachedTo: null, description: "Metal belt made of plates" },
+  { name: 'Belt_Ninja_Waistband', type: 'belt', attachedTo: null, description: "Ninja waist with shurikens" },
+  { name: 'Belt_Bandolier', type: 'belt', attachedTo: null, description: "Belt with shotgun shells" },
+  { name: 'Belt_Skull_Belt', type: 'belt', attachedTo: null, description: "Pirate belt with a skull buckle" },
+  { name: 'Cloth_Poncho', type: 'cloth', attachedTo: null, description: "Gunman's poncho" },
+  { name: 'Glasses_Sunglasses', type: 'glasses', attachedTo: null, description: 'Standard black sunglasses' },
+  { name: 'Glasses_Visor_VR', type: 'glasses', attachedTo: null, description: 'VR Visor' },
+  { name: 'Glasses_Cheezee_Squeeze', type: 'glasses', attachedTo: null, description: 'Glasses Cheezee Squeeze' },
+  { name: 'Glasses_Deep_Blue', type: 'glasses', attachedTo: null, description: 'Glasses Deep Blue' },
+  { name: 'Glasses_Dev_Dream', type: 'glasses', attachedTo: null, description: 'Glasses Dev Dream' },
+  { name: 'Glasses_Fizz_Visor_Pro', type: 'glasses', attachedTo: null, description: 'Glasses Fizz Visor Pro' },
+  { name: 'Glasses_Flamingo_Blink', type: 'glasses', attachedTo: null, description: 'Glasses Flamingo Blink' },
+  { name: 'Glasses_Green_Five', type: 'glasses', attachedTo: null, description: 'Glasses Green Five' },
+  { name: 'Glasses_Spiky_Punky', type: 'glasses', attachedTo: null, description: 'Glasses Spiky Punky' },
+  { name: 'Glasses_Techno_A', type: 'glasses', attachedTo: null, description: 'Glasses Techno A' },
+  { name: 'Glasses_Visor_AR', type: 'glasses', attachedTo: null, description: 'Glasses Visor AR' },
+  { name: 'Mask_Cowboy_Scarf', type: 'mask', attachedTo: null, description: "Red cowboy's scarf" },
+  { name: 'FireArms_Sniper_Rifle', type: 'fire_arms', attachedTo: null, description: 'Sniper Rifle' },
+  { name: 'FireArms_Revolver', type: 'fire_arms', attachedTo: null, description: "Cowboy's best choice" },
+  { name: 'FireArms_Grenade_Launcher', type: 'fire_arms', attachedTo: null, description: 'Revolver grenade launcher' },
+  { name: 'FireArms_Handgun_SMG', type: 'fire_arms', attachedTo: null, description: 'SMG handgun' },
+  { name: 'FireArms_Assault_Rifle_A', type: 'fire_arms', attachedTo: null, description: 'Assault rifle' },
+  { name: 'FireArms_Assault_Rifle_M', type: 'fire_arms', attachedTo: null, description: 'Assault rifle' },
+  { name: 'ColdArms_Bottle_Rose', type: 'cold_arms', attachedTo: null, description: 'The most common bar weapon' },
+  { name: 'ColdArms_Grappling_Hook', type: 'cold_arms', attachedTo: null, description: 'Grappling hook' },
+  { name: 'ColdArms_Chopper_Knife', type: 'cold_arms', attachedTo: null, description: 'Chopper knife' },
+  { name: 'ColdArms_Katana', type: 'cold_arms', attachedTo: null, description: 'Classic Katana' },
+  { name: 'Shoes_Kicks_Red', type: 'shoes', attachedTo: null, description: 'Kicks' },
+  { name: 'Shoes_Kicks_Green', type: 'shoes', attachedTo: null, description: 'Kicks' }
+]
 
-const nft_outfits: OutfitListType = {
-  back: [
-    { name: 'Back_Insecticide_Bottle_ZA01', type: 'back' },
-    { name: 'Back_Bomb_Barrel_PA02', type: 'back' },
-    { name: 'Back_Tactical_Backpack_MA01', type: 'back' },
-    { name: 'Back_Adventurer_Backpack_PA01', type: 'back' }
-  ],
-  cap: [
-    { name: 'Cap_Baseball_Cap_Red_RA01', type: 'cap' },
-    { name: 'Cap_Ladle_ZA01', type: 'cap' },
-    { name: 'Cap_Cheef_Hat_KA01', type: 'cap' },
-    { name: 'Cap_Cone_Armored_Hat_NA03', type: 'cap' },
-    { name: 'Cap_Cowboy_Hat_CA01', type: 'cap' },
-    { name: 'Cap_Sheriff_Hat_CA02', type: 'cap' },
-    { name: 'Cap_Military_Cap_MA05', type: 'cap' },
-    { name: 'Cap_Special_Forces_Beret_MA02', type: 'cap' },
-    { name: 'Cap_Tank_Helmet_MA03', type: 'cap' },
-    { name: 'Cap_Military_Helmet_MA04', type: 'cap' },
-    { name: 'Cap_Metallic_Cone_Hat_NA04', type: 'cap' },
-    { name: 'Cap_Assault_Helmet_MA01', type: 'cap' },
-    { name: 'Cap_Cane_Cone_Hat_NA02', type: 'cap' },
-    { name: 'Cap_Cocked_Hat_PA01', type: 'cap' },
-    { name: 'Cap_Pirate_Bandana_PA02', type: 'cap' }
-  ],
-  cloth: [
-    { name: 'Cloth_Chain_Gold_RA01', type: 'cloth' },
-    { name: 'Cloth_Cheef_Sash_KA01', type: 'cloth' },
-    { name: 'Cloth_Eastern_Armor_Belt_NA02', type: 'cloth' },
-    { name: 'Cloth_Ninja_Waistband_NA01', type: 'cloth' },
-    { name: 'Cloth_Poncho_CA01', type: 'cloth' },
-    { name: 'Cloth_Bandolier_MA02', type: 'cloth' },
-    { name: 'Cloth_Skull_Belt_PA01', type: 'cloth' }   
-  ],
-  cold_arms: [
-    { name: 'ColdArms_Bottle_Rose_RA01', type: 'cold_arms' },
-    { name: 'ColdArms_Grappling_Hook_PA01', type: 'cold_arms' },
-    { name: 'ColdArms_Chopper_Knife_KA01', type: 'cold_arms' },
-    { name: 'ColdArms_Katana_NA01', type: 'cold_arms' },
-  ],
-  face: [
-    { name: 'Face_Sunglasses_RA01', type: 'face' },
-    { name: 'Face_Visor_VR_VR01', type: 'face' },
-    { name: 'Face_Cowboy_Scarf_CA01', type: 'face' }
-  ],
-  fire_arms: [
-    { name: 'FireArms_Revolver_CA01', type: 'fire_arms' },
-    { name: 'FireArms_Grenade_Launcher_AA03', type: 'fire_arms' },
-    { name: 'FireArms_Handgun_SMG_AA04', type: 'fire_arms' },
-    { name: 'FireArms_Assault_Rifle_AA01', type: 'fire_arms' },
-    { name: 'FireArms_Assault_Rifle_AA02', type: 'fire_arms' },
-    { name: 'FireArms_Sniper_Rifle_AA05', type: 'fire_arms' }
-  ],
-  shoes: [
-    { name: 'Shoes_Kicks_SA01', type: 'shoes' },
-    { name: 'Shoes_Armored_Shoes_AA01', type: 'shoes' },
-    { name: 'Shoes_Military_Shoes_MA01', type: 'shoes' },
-    { name: 'Shoes_Kicks_SA02', type: 'shoes' }
-  ]
-}
+export const allProperties: ItemType[] = [
+  { name: 'Teeth_Grga', type: 'teeth', attachedTo: null },
+  { name: 'Teeth_Hollywood', type: 'teeth', attachedTo: null },
+  { name: 'Teeth_Oldstyle', type: 'teeth', attachedTo: null },
+  { name: 'Teeth_Sharp', type: 'teeth', attachedTo: null },
+  { name: 'Teeth_Grillz_Silver', type: 'teeth', attachedTo: null },
+  { name: 'Eyes_Blue', type: 'eyes', attachedTo: null },
+  { name: 'Eyes_Green', type: 'eyes', attachedTo: null },
+  { name: 'Eyes_Alien', type: 'eyes', attachedTo: null },
+  { name: 'Eyes_Zombie', type: 'eyes', attachedTo: null },
+  { name: 'ExoTop_Snowwhite', type: 'exo_top', attachedTo: null },
+  { name: 'ExoTop_Steel', type: 'exo_top', attachedTo: null },
+  { name: 'ExoTop_Hacky', type: 'exo_top', attachedTo: null },
+  { name: 'ExoTop_Golden', type: 'exo_top', attachedTo: null },
+  { name: 'ExoBot_Snowwhite', type: 'exo_bot', attachedTo: null },
+  { name: 'ExoBot_Steel', type: 'exo_bot', attachedTo: null },
+  { name: 'ExoBot_Hacky', type: 'exo_bot', attachedTo: null },
+  { name: 'ExoBot_Golden', type: 'exo_bot', attachedTo: null },
+  { name: 'Feet_Snowwhite', type: 'feet', attachedTo: null },
+  { name: 'Feet_Steel', type: 'feet', attachedTo: null },
+  { name: 'Feet_Military', type: 'feet', attachedTo: null },
+  { name: 'Feet_Golden', type: 'feet', attachedTo: null },
+  { name: 'Hands_Snowwhite', type: 'hands', attachedTo: null },
+  { name: 'Hands_Steel', type: 'hands', attachedTo: null },
+  { name: 'Hands_Yellow_Plastic', type: 'hands', attachedTo: null },
+  { name: 'Hands_Golden', type: 'hands', attachedTo: null },
+  { name: 'Head_Fresh_Lemon', type: 'head', attachedTo: null },
+  { name: 'Head_Zombie', type: 'head', attachedTo: null },
+  { name: 'Head_Clementine', type: 'head', attachedTo: null },
+  { name: 'Head_Lime', type: 'head', attachedTo: null },
+  { name: 'Hair_Dragon_Short_Orange', type: 'hair', attachedTo: null },
+  { name: 'Hair_Dragon_Red', type: 'hair', attachedTo: null },
+  { name: 'Hair_Hedgehog_Neon_Red', type: 'hair', attachedTo: null },
+  { name: 'Hair_Dreadlocks_Brown', type: 'hair', attachedTo: null },
+  { name: 'Hair_Ponytail_Gray', type: 'hair', attachedTo: null },
+  { name: 'Hair_Curly_Gray', type: 'hair', attachedTo: null },
+  { name: 'Hair_Mohawk_Purple', type: 'hair', attachedTo: null },
+  { name: 'Hair_Fitness_Blue', type: 'hair', attachedTo: null },
+  { name: 'Hair_Box_Gray', type: 'hair', attachedTo: null },
+  { name: 'Hair_Topknot_Blue', type: 'hair', attachedTo: null },
+  { name: 'Hair_Mizura_Marine', type: 'hair', attachedTo: null },
+  { name: 'Hair_Sakayaki_Gray', type: 'hair', attachedTo: null },
+  { name: 'Hair_Leftover_Blue', type: 'hair', attachedTo: null },
+  { name: 'Hair_Disco_Iroquois_Lime', type: 'hair', attachedTo: null },
+  { name: 'Hair_Fauxhawk_Green_Orange', type: 'hair', attachedTo: null },
+  { name: 'Hair_Spikes_Gray', type: 'hair', attachedTo: null },
+  { name: 'Scar_Spartan_R', type: 'scar', attachedTo: null },
+  { name: 'Scar_Gaul_R', type: 'scar', attachedTo: null },
+  { name: 'Scar_Barbarian_R', type: 'scar', attachedTo: null },
+  { name: 'Scar_Samurai_R', type: 'scar', attachedTo: null },
+  { name: 'Scar_Macedonian_R', type: 'scar', attachedTo: null }
+]
 
-export const basics: OutfitListType = {
-  teeth: [
-    { name: 'Teeth_Grga_AA02', type: 'teeth' },
-    { name: 'Teeth_Hollywood_AA01', type: 'teeth' },
-    { name: 'Teeth_Oldstyle_AA04', type: 'teeth' },
-    { name: 'Teeth_Sharp_AA03', type: 'teeth' },
-    { name: 'Teeth_Grillz_Silver_RA01', type: 'teeth' }   
-  ],
-  eyes: [
-    { name: 'Eyes_Blue_AA01', type: 'eyes' },
-    { name: 'Eyes_Green_AA02', type: 'eyes' },
-    { name: 'Eyes_Zombie_ZA01', type: 'eyes' }
-  ],
-  exo: [
-    { name: 'Exo_Snowwhite_Exoskeleton_AA02', type: 'exo' },
-    { name: 'Exo_Steel_Exoskeleton_AA01', type: 'exo' },
-    { name: 'Exo_Military_Exoskeleton_MA01', type: 'exo' }   
-  ],
-  head: [
-    { name: 'Head_Fresh_Lemon_AA01', type: 'head' },
-    { name: 'Head_Zombie_ZA01', type: 'head' },
-    { name: 'Head_Clementine_AA02', type: 'head' },
-    { name: 'Head_Lime_AA03', type: 'head' }
-  ]
-}
-
-export const outfits: OutfitListType = {
-  ...nft_outfits,
-  weapon: [
-    ...nft_outfits.cold_arms,
-    ...nft_outfits.fire_arms
-  ].map(outfit => {
-    outfit.type = 'weapon';
-    return outfit
-  })
-}
-delete outfits.cold_arms
-delete outfits.fire_arms
-
-
-
-function random(array: OutfitType[]): OutfitType {
+function random(array: ItemType[], type: string): ItemType {
+  array = array.filter(item => item.type == type);
   return array[Math.floor(Math.random()*array.length)];
 }
 
-export const dummyLemon = (): SuiMoveObject => {
-  const lemon = {
-    type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::lemon::Lemon",
-    has_public_transfer: false,
-    fields: {
-      created: "45",
-      id: {
-        id: "0xf7c4e107a8b299fdb116a852d66d8bcf908a7727"
+export const dummyLemon = (withoutItems?: boolean): LemonType => {
+  const hairOrCap = 1//Math.round(Math.random());
+
+  const items: ItemType[] =  [
+    {
+      name: random(allItems, 'back').name,
+      type: "back",
+      attachedTo: null
+    },
+    {
+      name: random(allItems, 'glasses').name,
+      type: "glasses",
+      attachedTo: null
+    },
+    {
+      name: !hairOrCap ? random(allItems, 'cap').name : null,
+      type: "cap",
+      attachedTo: null
+    },
+    {
+      name: random(allItems, 'belt').name,
+      type: "belt",
+      attachedTo: null
+    },
+    // {
+    //   name: random(allItems, 'cloth').name,
+    //   type: "cloth",
+    //   attachedTo: null
+    // },
+    {
+      name: random(allItems, 'cold_arms').name,
+      type: "cold_arms",
+      attachedTo: null
+    },
+    {
+      name: random(allItems, 'fire_arms').name,
+      type: "fire_arms",
+      attachedTo: null
+    },
+    {
+      name: random(allItems, 'shoes').name,
+      type: "shoes",
+      attachedTo: null
+    }        
+  ]
+
+  const lemon: LemonType = {
+    id: "",
+    owner: "",
+    properties: [
+      {
+        name: random(allProperties, 'exo_top').name,
+        type: "exo_top",
+        title: "Exoskeleton Top",
+        attachedTo: null
       },
-      traits: [
-        {
-          type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
-          fields: {
-            flavour: random(basics.exo).name,
-            name: "exo"
-          }
-        },
-        {
-          type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
-          fields: {
-            flavour: random(basics.eyes).name,
-            name: "eyes"
-          }
-        },
-        {
-          type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
-          fields: {
-            flavour: random(basics.head).name,
-            name: "head"
-          }
-        },
-        {
-          type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
-          fields: {
-            flavour: random(outfits.face).name,
-            name: "face"
-          }
-        },
-        {
-          type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
-          fields: {
-            flavour: random(basics.teeth).name,
-            name: "teeth"
-          }
-        },
-        {
-          type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
-          fields: {
-            flavour: random(outfits.back).name,
-            name: "back"
-          }
-        },
-        {
-          type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
-          fields: {
-            flavour: random(outfits.cap).name,
-            name: "cap"
-          }
-        },
-        {
-          type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
-          fields: {
-            flavour: random(outfits.cloth).name,
-            name: "cloth"
-          }
-        },
-        {
-          type: "0xd0b290b77ab543171422cffd7968d0ad749f29bf::trait::Trait<0x1::string::String, 0x1::string::String>",
-          fields: {
-            flavour: random(outfits.weapon).name,
-            name: "weapon"
-          }
-        },
-        {
-          type: "0xd0b290b77ab543171422cffd7968d0ad749f22ff::trait::Trait<0x1::string::String, 0x1::string::String>",
-          fields: {
-            flavour: random(outfits.shoes).name,
-            name: "shoes"
-          }
-        }        
-      ],
-      url: "https://promo.battlemon.com/assets/default-lemon.png"
-    }
+      {
+        name: random(allProperties, 'exo_bot').name,
+        type: "exo_bot",
+        title: "Exoskeleton Bottom",
+        attachedTo: null
+      },
+      {
+        name: random(allProperties, 'eyes').name,
+        type: "eyes",
+        title: "Eyes",
+        attachedTo: null
+      },
+      {
+        name: random(allProperties, 'feet').name,
+        type: "feet",
+        title: "Feet",
+        attachedTo: null
+      },
+      {
+        name: random(allProperties, 'head').name,
+        type: "head",
+        title: "Head",
+        attachedTo: null
+      },
+      {
+        name: random(allProperties, 'hands').name,
+        type: "hands",
+        title: "Hands",
+        attachedTo: null
+      },
+      {
+        name: random(allProperties, 'teeth').name,
+        type: "teeth",
+        title: "Teeth",
+        attachedTo: null
+      },
+      {
+        name: hairOrCap ? random(allProperties, 'hair').name : null,
+        type: "hair",
+        title: "Hair",
+        attachedTo: null
+      },
+      {
+        name: random(allProperties, 'scar').name,
+        type: "scar",
+        title: "Scar",
+        attachedTo: null
+      }
+    ],
+    items: withoutItems ? [] : items,
+    type: "lemon",
+    url: "https://promo.battlemon.com/assets/default-lemon.png"
   }
 
   return lemon;

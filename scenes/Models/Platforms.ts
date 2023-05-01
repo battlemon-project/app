@@ -1,6 +1,6 @@
 import { Scene, SceneLoader, ActionManager, ExecuteCodeAction, Vector3, TransformNode, AnimationGroup, Animation, Mesh, ArcRotateCamera, AssetContainer } from "@babylonjs/core"
 import { Dispatch, SetStateAction } from "react"
-import { lemonStore } from "../../helpers/lemonStore";
+import { useLemonStore } from "../../helpers/lemonStore";
 
 interface PlatformType {
   destroy: () => void
@@ -15,8 +15,7 @@ interface PlatformParams {
 }
 
 export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: PlatformParams): Promise<PlatformType> => {
-  
-  const { lemons } = lemonStore.getState()
+  const { lemons } = useLemonStore.getState()
   const containers: { [key: string]: AssetContainer } = {}
   let step = 0;
   let activePlatform: number = 1;
@@ -33,7 +32,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
 
   for (const [key, link] of Object.entries(models)) {
     containers[key] = await SceneLoader.LoadAssetContainerAsync(
-      "/glb/", link, scene
+      `${process.env.NEXT_PUBLIC_STATIC}/glb/`, link, scene
     )
   }
   
@@ -154,7 +153,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
         if (step != 1) {
           const operator_FocusLemon_f = scene.getAnimationGroupByName('operator_FocusLemon_f');
           operator_FocusLemon_f?.start(false, 1);
-          lemonStore.setState((store) => ({ ...store, inventoryIsOpened: true }))
+          useLemonStore.setState({ inventoryIsOpened: true })
           lemonPositions.forEach((position, index) => {
             if (activePlatform != index + 1) {
               Animation.CreateAndStartAnimation(`Lemon_scale`, position, "scaling", 60, 80, new Vector3(1,1,1), new Vector3(0,0,0), 0);
@@ -175,7 +174,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
       })
 
       activePlatform = index + 1;
-      lemonStore.setState((store) => ({ ...store, activePlatform }))
+      useLemonStore.setState({ activePlatform })
     }));
     
   });
@@ -219,6 +218,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
         }
       })
       step = 0;
+      useLemonStore.setState({ wearingItem: undefined })
     },
     destroy: () => {
       canvas.removeEventListener("pointerdown", pointerDown, false);

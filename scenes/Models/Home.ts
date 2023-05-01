@@ -5,7 +5,7 @@ import type { NextRouter } from 'next/router'
 export const Home = async (scene: Scene, router: NextRouter): Promise<void> => {
   await SceneLoader.ImportMeshAsync(
     "",
-    "/glb/",
+    `${process.env.NEXT_PUBLIC_STATIC}/glb/`,
     "MainMenu_Stripes_Export.glb",
     scene
   );
@@ -13,23 +13,26 @@ export const Home = async (scene: Scene, router: NextRouter): Promise<void> => {
   const buildingStrokes: { [key: string]: { stroke: string[], page?: string } } = {
     factory: {
       stroke: ['factory_stroke'],
+      page: '/city/defi'
     },
     craft: {
-      stroke: ['craft_stroke', 'craft_manipulator_stroke', 'craft_manipulator7_stroke', 'craft_manipulator8_stroke']
+      stroke: ['craft_stroke', 'craft_manipulator_stroke', 'craft_manipulator7_stroke', 'craft_manipulator8_stroke'],
+      page: '/city/labs'
     },
     stake: {
-      stroke: ['stake_stroke', 'stake_coin_stroke']
+      stroke: ['stake_stroke', 'stake_coin_stroke'],
+      page: '/city/vault'
     },
     shop: {
-      stroke: ['shop_stroke', 'windmill_stroke_01', 'windmill_stroke_02']
+      stroke: ['shop_stroke', 'windmill_stroke_01', 'windmill_stroke_02'],
+      page: '/city/stickers'
     },
     arena: {
       stroke: ['arena_stroke', 'arena_rotator_a_stroke'],
       page: '/hub'
     },
     download: {
-      stroke: ['download_client_car_stroke', 'download_client_car_adv_stroke'],
-      page: clientLink()
+      stroke: ['download_client_car_stroke', 'download_client_car_adv_stroke']
     },
     lemterprise: {
       stroke: ['lemterprise_stroke']

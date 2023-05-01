@@ -1,34 +1,28 @@
 import Head from 'next/head'
-import Loader from '../../components/Loader'
+import BabylonLoader, { BabylonLoaderType } from '../../components/BabylonLoader'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react';
-import type { SuiMoveObject } from "@mysten/sui.js";
 import { dummyLemon } from '../../helpers/dummyLemon';
-import { lemonStore } from "../../helpers/lemonStore";
-
-export interface Loader {
-  babylon: boolean
-  data: boolean
-}
+import { useLemonStore, LemonType } from "../../helpers/lemonStore";
 
 const HubScene = dynamic(() => import('../../scenes/HubScene'), {
   suspense: true,
 })
 
 export default function Hub() {
-  const [ loader, setLoader ] = useState<Loader>({ babylon: true, data: true });
+  const [ loader, setLoader ] = useState<BabylonLoaderType>({ babylon: true, data: true });
 
   useEffect(() => {
   }, [loader])
 
   const refreshLemons = async () => {
-    let list: SuiMoveObject[] = [
+    let list: LemonType[] = [
       dummyLemon(),
       dummyLemon(),
       dummyLemon()
     ];
 
-    lemonStore.setState((store) => ({...store, lemons: list}));
+    //useLemonStore.setState({ lemons: list });
     setLoader((loader) => ({ ...loader, data: false }));
   }
 
@@ -36,7 +30,7 @@ export default function Hub() {
     refreshLemons();
   }, [])
 
-  const handleMint = async () => {
+  const handleMintLemon = async () => {
     
   }
 
@@ -49,9 +43,8 @@ export default function Hub() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      { !loader.data && <HubScene setLoader={setLoader} handleMint={handleMint} /> }
-      { (loader.babylon || loader.data) && <Loader status="connected" />}
-
+      { !loader.data && <HubScene setLoader={setLoader} handleMintLemon={handleMintLemon} /> }
+      { (loader.babylon || loader.data) && <BabylonLoader isConnected={true} />}
     </>
   )
 }

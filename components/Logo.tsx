@@ -39,6 +39,9 @@ export default function Logo() {
         </g>
         </svg>
       </Link>
+      <div className="nav-link text-center" style={{color: 'white', fontSize: '18px', lineHeight: '26px'}}>
+        &nbsp;<span className="fps-container"><span id="fps">0</span> FPS</span>&nbsp;
+      </div>
     </div>
   )
 }

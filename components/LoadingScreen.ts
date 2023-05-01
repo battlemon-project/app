@@ -32,10 +32,10 @@ export default class DefaultLoadingScreen implements ILoadingScreen {
     private _style!: Nullable<HTMLStyleElement>;
 
     /** Gets or sets the logo url to use for the default loading screen */
-    public static DefaultLogoUrl = "assets/btlmn_logo_inner_256.png";
+    public static DefaultLogoUrl = `${process.env.NEXT_PUBLIC_STATIC}/assets/btlmn_logo_inner_256.png`;
 
     /** Gets or sets the spinner url to use for the default loading screen */
-    public static DefaultSpinnerUrl = "assets/btlmn_logo_outer_256.png";
+    public static DefaultSpinnerUrl = `${process.env.NEXT_PUBLIC_STATIC}/assets/btlmn_logo_outer_256.png`;
 
     /**
      * Creates a new default loading screen

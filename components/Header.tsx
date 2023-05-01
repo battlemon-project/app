@@ -1,9 +1,12 @@
-import { useWallet, ConnectButton } from '@suiet/wallet-kit';
 import Logo from './Logo'
+import Link from 'next/link'
+import { useRouter } from "next/router";
+import ConnectSui from './ConnectSui'
+import ConnectEth from './ConnectEth'
 
-function Header({ fps }: { fps?: boolean }) {
-  const wallet = useWallet();
-  
+function Header({ network }: {network: 'sui' | 'eth'}) {
+  const router = useRouter();
+
   return (
     <nav className="navbar navbar-expand-lg sticky-top navbar-dark">
       <div className="container">
@@ -12,33 +15,46 @@ function Header({ fps }: { fps?: boolean }) {
           <span className="navbar-toggler-icon"></span>
         </button> 
         <div className="collapse navbar-collapse" id="navbarMain">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0 fs-5">
-            {fps && <li className="nav-item">
-              <span className="nav-link" style={{color: 'white'}}>
-                <span id="fps">0</span> FPS
-              </span>
-            </li> }
+          <ul className="navbar-nav mx-auto mb-2 mb-lg-0 fs-5 nav-main" style={{position: 'relative', top: '-12px'}}>
+            {router.pathname !== "/" && <>
+              <li className="nav-item">
+                <Link className={`nav-link ${router.pathname == "/hub" ? "active" : ""}`} href="/hub">NFT Hub</Link>
+              </li>
+              <li className="nav-item">
+                <Link className={`nav-link ${router.pathname == "/city/defi" ? "active" : ""}`} href="/city/defi">DeFi</Link>
+                <ul className="dropdown-menu">
+          			  <li><Link className={`dropdown-item ${router.pathname == "/city/defi" ? "active" : ""}`} href="/city/defi">Swap</Link></li>
+          			  <li style={{pointerEvents: 'none'}}><Link className="dropdown-item" href="/">Pools</Link></li>
+          			  <li style={{pointerEvents: 'none'}}><Link className="dropdown-item" href="/">Rent</Link></li>
+          			  <li style={{pointerEvents: 'none'}}><Link className="dropdown-item" href="/">Bridge</Link></li>
+          		  </ul>
+              </li>
+              <li className="nav-item">
+                <Link className={`nav-link ${router.pathname == "/city/labs" ? "active" : ""}`} href="/city/labs">Labs</Link>
+                <ul className="dropdown-menu">
+          			  <li><Link className={`dropdown-item ${router.pathname == "/city/labs" ? "active" : ""}`} href="/city/labs">Crafting</Link></li>
+          			  <li style={{pointerEvents: 'none'}}><Link className="dropdown-item" href="/">Grading</Link></li>
+          			  <li style={{pointerEvents: 'none'}}><Link className="dropdown-item" href="/">Mixing</Link></li>
+          		  </ul>
+              </li>
+              <li className="nav-item">
+                <Link className={`nav-link ${router.pathname == "/city/vault" ? "active" : ""}`} href="/city/vault">Vault</Link>
+                <ul className="dropdown-menu">
+          			  <li><Link className={`dropdown-item ${router.pathname == "/city/vault" ? "active" : ""}`} href="/city/vault">NFT Pool</Link></li>
+          			  <li style={{pointerEvents: 'none'}}><Link className="dropdown-item" href="/">LJC Pool</Link></li>
+          		  </ul>
+              </li>
+              <li className="nav-item dropdown">
+                <Link className={`nav-link ${router.pathname == "/city/stickers" ? "active" : ""}`} href="/city/stickers">Shop</Link>
+                <ul className="dropdown-menu">
+          			  <li><Link className={`dropdown-item ${router.pathname == "/city/stickers" ? "active" : ""}`} href="/city/stickers">Mint stickers</Link></li>
+          			  <li style={{pointerEvents: 'none'}}><Link className="dropdown-item" href="/">Launchpad</Link></li>
+          			  <li style={{pointerEvents: 'none'}}><Link className="dropdown-item" href="/">Marketplace</Link></li>
+          		  </ul>
+              </li>
+            </>}
           </ul>
-          <ul className="navbar-nav mb-2 mb-lg-0 fs-5">
-            <li className="nav-item dropdown">
-              {wallet?.address ?
-                <>
-                  <button className="btn btn-lg btn-outline-light dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span className="short_address">
-                      <span className="ellipsis">{wallet?.address}</span>
-                      <span className="indent">{wallet?.address}</span>
-                    </span>
-                  </button>
-                  <ul className="dropdown-menu w-100" aria-labelledby="navbarDropdown">
-                    <li><a className="dropdown-item" href={"#"} onClick={() => {wallet.disconnect()}}>Sign Out</a></li>
-                  </ul>
-                </>
-                :
-                // <button onClick={ethos.showSignInModal} className="btn btn-lg btn-outline-light">Sign In</button>
-                <ConnectButton />
-              }
-            </li>
-          </ul>
+          {network == 'sui' ? <ConnectSui /> : <ConnectEth />}
         </div>
       </div>
     </nav>
