@@ -131,7 +131,7 @@ const Labs = () => {
 
       
       <div className='text-center'>
-        <button className="btn btn-primary btn-lg px-5 pb-3 pt-3 position-relative" style={{fontSize: '27px', lineHeight: '36px', top: '66vh'}}>Craft</button>
+        <button className={`btn btn-lg px-5 pb-3 pt-3 position-relative ${selectedGems.includes(null) ? 'disabled btn-dark' : 'btn-primary'}`} style={{fontSize: '27px', lineHeight: '36px', top: '66vh'}}>Craft</button>
       </div>
     </div>
   )
