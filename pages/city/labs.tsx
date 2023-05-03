@@ -109,7 +109,7 @@ const Labs = () => {
               ):(
                 !userGems.length ? (
                   <div className="col text-center" style={{fontSize: '19px'}}>
-                    You haven't gems yet
+                    You have not gems yet
                     {/* Click to PLUS for add sticker to Crafting */}
                   </div> 
                 ):(
