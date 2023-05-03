@@ -9,6 +9,7 @@ import ColdArms_SOL from "./contracts/ColdArms.sol/ColdArms.json"
 import FireArms_SOL from "./contracts/FireArms.sol/FireArms.json"
 import Belt_SOL from "./contracts/Belt.sol/Belt.json"
 import Shoes_SOL from "./contracts/Shoes.sol/Shoes.json"
+import Gem_SOL from "./contracts/Gem.sol/Gem.json"
 import { BigNumber } from 'ethers'
 
 const Lemons: `0x${string}` = '0xeae26aa7aD3E54C208a22a78bd9E5d2D7ccFC18D'
@@ -19,6 +20,7 @@ const LemonsBack: `0x${string}` = '0x833dd7c42A7aC9ADDB18cdDEf8B8b127Ca5b3b6b'
 const LemonsGlasses: `0x${string}` = '0x0858DDc9E69a1040b9201C3aa43242FB94E88042'
 const LemonsBelt: `0x${string}` = '0x6351414109528ADaB871d4496Fe5a35c4dD207b7'
 const LemonsShoes: `0x${string}` = '0xA1E82098eaeB0722Ea3e8751A1eFDC0F8cec3bA5'
+export const Gem_CONTRACT: `0x${string}` = '0x37ae2EE40E883185870E90F3e1483cE743c27221'
 
 const alchemyConfig = {
   apiKey: "t98BM1vZ3jmENv6alKMurcwObFAjMn1g",
@@ -68,6 +70,10 @@ export async function getItems(address: string): Promise<ItemOwnedNftsResponse> 
   ]}) as ItemOwnedNftsResponse;
 }
 
+export async function getGems(address: string): Promise<OwnedNftsResponse> {
+  const result = await alchemy.nft.getNftsForOwner(address, { contractAddresses: [Gem_CONTRACT] });
+  return result
+}
 
 export const mintLemonData = (address: `0x${string}` | undefined) => ({
   address: Lemons,
@@ -103,3 +109,11 @@ export const mintItemData = (address: `0x${string}` | undefined, length: number 
     return { address: LemonsShoes, abi: Shoes_SOL.abi, ...mint }
   }
 }
+
+
+export const mintGem = (address: `0x${string}` | undefined) => ({
+  address: Gem_CONTRACT,
+  abi: Gem_SOL.abi,
+  functionName: 'mint',
+  args: [address, 1]
+})
