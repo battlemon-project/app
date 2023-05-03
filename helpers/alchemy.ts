@@ -117,3 +117,19 @@ export const mintGem = (address: `0x${string}` | undefined) => ({
   functionName: 'mint',
   args: [address, 1]
 })
+
+
+export const craftGems = (id1: string | null, id2: string | null) => {
+  id1 = id1 || '1'
+  id2 = id2 || '2'
+  return {
+    address: Gem_CONTRACT,
+    abi: Gem_SOL.abi,
+    functionName: 'merge',
+    args: [id1, id2],
+    overrides: {
+      //value: BigNumber.from(1000000000)
+      gasLimit: BigNumber.from(1000000)
+    }
+  }
+}

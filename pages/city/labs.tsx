@@ -1,17 +1,25 @@
 import Layout from '../../components/Layout'
 import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi'
-import alchemy, { Gem_CONTRACT, getGems, mintGem } from '../../helpers/alchemy'
+import alchemy, { Gem_CONTRACT, getGems, mintGem, craftGems } from '../../helpers/alchemy'
 import { useAlert } from 'react-alert'
 import { useEffect, useState } from 'react'
 import CssLoader from '../../components/CssLoader'
 
+interface INft {
+  id: string,
+  image: string,
+  grade: number
+}
+
 const Labs = () => {
   const { address } = useAccount()
-  const { config } = usePrepareContractWrite(mintGem(address))
-  const { write: sendMintGem } = useContractWrite(config)
   const [ loader, setLoader ] = useState<boolean>(true);
-  const [ userGems, setUserGems ] = useState<string[]>([]);
-  const [ selectedGems, setSelectedGems ] = useState<[number | null, number | null]>([null, null]);
+  const [ userGems, setUserGems ] = useState<INft[]>([]);
+  const [ selectedGems, setSelectedGems ] = useState<[string | null, string | null]>([null, null]);
+  const { config: configMint } = usePrepareContractWrite(mintGem(address))
+  const { write: sendMintGem } = useContractWrite(configMint)
+  const { config: configCraft } = usePrepareContractWrite(craftGems(selectedGems[0], selectedGems[1]))
+  const { write: sendCraftGems } = useContractWrite(configCraft)
   const alert = useAlert();
 
 
@@ -21,8 +29,8 @@ const Labs = () => {
     }
     if (!address) return;
     const gems = await getGems(address);
-    let nfts = gems.ownedNfts.map(nft => (nft.tokenUri?.gateway || "https://example.com/nft/0").split('/').at(-1) as string)
-    const gemImages: {[key: string]: string }= {
+    
+    const gemImages: {[key: number]: string }= {
       0: 'BTLN_Gem_Green_A_128.png',
       1: 'BTLN_Gem_Blue_A_128.png',
       2: 'BTLN_Gem_Yellow_A_128.png',
@@ -31,7 +39,15 @@ const Labs = () => {
       5: 'BTLN_Gem_Red_A_128.png',
       6: 'BTLN_Gem_Sky_A_128.png',
     }
-    nfts = nfts.map(num => gemImages[num])
+
+    let nfts: INft[] = gems.ownedNfts.map(nft => {
+      const grade = parseInt((nft.tokenUri?.gateway || "https://example.com/nft/0").split('/').at(-1) as string)
+      return {
+        id: nft.tokenId,
+        grade: grade,
+        image: gemImages[grade]
+      }
+    })
     console.log(nfts)
     setUserGems(nfts);
     setLoader(false);
@@ -52,17 +68,29 @@ const Labs = () => {
     }
   }
 
-  const handleSelectGem = (idx: number) => () => {
-    if (selectedGems[0] == idx) {
+  const handleSelectGem = (id: string) => () => {
+    if (selectedGems[0] == id) {
       selectedGems[0] = null
-    } else if (selectedGems[1] == idx) {
+    } else if (selectedGems[1] == id) {
       selectedGems[1] = null
     } else if (selectedGems[0] == null) {
-      selectedGems[0] = idx
+      selectedGems[0] = id
     } else if (selectedGems[0] != null) {
-      selectedGems[1] = idx
+      selectedGems[1] = id
     }
     setSelectedGems([selectedGems[0], selectedGems[1]])
+  }
+
+  const handleCraft = async () => {
+    setSelectedGems([null, null])
+    setLoader(true)
+    try {
+      await sendCraftGems?.();
+    } catch (e) {
+      const { message } = e as Error
+      alert.show(message, { type: 'error' })
+      setLoader(false)
+    }
   }
 
   useEffect(() => {
@@ -89,14 +117,14 @@ const Labs = () => {
         
             <div className="d-flex py-1 mt-5 mb-2 d-flex justify-content-center me-3" style={{ border: '1px solid #fff', borderRadius: '12px', minHeight: '135px'}}>
               { selectedGems[0] != null ? (
-                <img src={`/resources/assets/gems/${userGems[selectedGems[0]]}`} alt='gem1' className="img-fluid" />
+                <img src={`/resources/assets/gems/${userGems.find(g => g.id == selectedGems[0])?.image}`} alt='gem1' className="img-fluid" />
               ):(
                 <div style={{fontSize: '75px'}} className='text-white'>+</div>
               )}
             </div>   
             <div className="d-flex py-1 mt-2 mb-4 d-flex justify-content-center me-3" style={{ border: '1px solid #fff', borderRadius: '12px', minHeight: '135px'}}>
               { selectedGems[1] != null ? (
-                <img src={`/resources/assets/gems/${userGems[selectedGems[1]]}`} alt='gem1' className="img-fluid" />
+                <img src={`/resources/assets/gems/${userGems.find(u => u.id == selectedGems[1])?.image}`} alt='gem1' className="img-fluid" />
               ):(
                 <div style={{fontSize: '75px'}} className='text-white'>+</div>
               )}
@@ -114,10 +142,10 @@ const Labs = () => {
                   </div> 
                 ):(
                   <>
-                    {userGems.map((gem, idx) => 
-                      <div className={`col col-3 col-xl-2 border px-1 px-1 ${ selectedGems.includes(idx) && 'selected' }`} key={`${gem}${idx}`}>
-                        <div className="link text-center py-2" onClick={handleSelectGem(idx)}  style={{cursor: 'pointer'}}>
-                          <img src={`/resources/assets/gems/${gem}`} alt={gem} className="img-fluid" />
+                    {userGems.map((gem) => 
+                      <div className={`col col-3 col-xl-2 border px-1 px-1 ${ selectedGems.includes(gem.id) && 'selected' }`} key={gem.id}>
+                        <div className="link text-center py-2" onClick={handleSelectGem(gem.id)}  style={{cursor: 'pointer'}}>
+                          <img src={`/resources/assets/gems/${gem.image}`} alt={gem.id} className="img-fluid" />
                         </div>
                       </div>
                     )}
@@ -131,7 +159,7 @@ const Labs = () => {
 
       
       <div className='text-center'>
-        <button className={`btn btn-lg px-5 pb-3 pt-3 position-relative ${selectedGems.includes(null) ? 'disabled btn-dark' : 'btn-primary'}`} style={{fontSize: '27px', lineHeight: '36px', top: '66vh'}}>Craft</button>
+        <button className={`btn btn-lg px-5 pb-3 pt-3 position-relative ${selectedGems.includes(null) ? 'disabled btn-dark' : 'btn-primary'}`} style={{fontSize: '27px', lineHeight: '36px', top: '66vh'}} onClick={handleCraft}>Craft</button>
       </div>
     </div>
   )
