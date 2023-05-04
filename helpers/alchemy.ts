@@ -1,4 +1,4 @@
-import { Alchemy, Network } from "alchemy-sdk";
+import { Alchemy, Network, Utils } from "alchemy-sdk";
 import  type { OwnedNftsResponse, OwnedNft, NftMetadata } from "alchemy-sdk";
 import { ItemType } from "./lemonStore";
 import Lemon_SOL from "./contracts/Lemon.sol/Lemon.json"
@@ -128,8 +128,7 @@ export const craftGems = (id1: string | null, id2: string | null) => {
     functionName: 'merge',
     args: [id1, id2],
     overrides: {
-      //value: BigNumber.from(1000000000)
-      gasLimit: BigNumber.from(1000000)
+      value: Utils.parseEther('0.01')
     }
   }
 }

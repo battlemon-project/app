@@ -107,10 +107,6 @@ const Labs = () => {
   return (
     <div className="container">
       
-      <div className='text-center'>
-        <button className="btn btn-success position-relative" onClick={handleMintGem}>Get Gems (Testnet)</button>
-      </div>
-
       <div className="inventory-container d-flex opened" style={{top: '30vh', height: '30vw', left: '32%'}}>
         <div className="inventory" style={{height: '36%'}}>
           <div className="inventory-left-buttons d-flex flex-column" style={{width: '150px', left: '-160px'}}>
@@ -158,8 +154,9 @@ const Labs = () => {
       </div>
 
       
-      <div className='text-center'>
-        <button className={`btn btn-lg px-5 pb-3 pt-3 position-relative ${selectedGems.includes(null) ? 'disabled btn-dark' : 'btn-primary'}`} style={{fontSize: '27px', lineHeight: '36px', top: '66vh'}} onClick={handleCraft}>Craft</button>
+      <div className='text-center position-relative' style={{top: '66vh'}}>
+        <button className="btn btn-secondary btn-lg px-3 pb-2 pt-2 me-3" style={{fontSize: '19px', lineHeight: '36px', opacity: 0.9}} onClick={handleMintGem}>Get Gems (Testnet)</button>
+        <button className={`btn btn-lg px-5 pb-3 pt-3 ${!selectedGems.includes(null) && userGems.find( g=> g.id == selectedGems[0])?.image == userGems.find( g=> g.id == selectedGems[1])?.image ? 'btn-primary' : 'disabled btn-dark'}`} style={{fontSize: '27px', lineHeight: '36px'}} onClick={handleCraft}>Craft</button>
       </div>
     </div>
   )
