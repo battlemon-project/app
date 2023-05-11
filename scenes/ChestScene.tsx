@@ -66,6 +66,6 @@ export default function HomeScene() {
   }, []);
 
   return (
-    <canvas ref={canvasRef} style={{width: '100%', height: '500px', background: 'transparent'}} id="chestCanvas" />
+      <canvas ref={canvasRef} style={{width: '100%', height: '500px', background: 'transparent'}} id="chestCanvas" />
   )
 }
