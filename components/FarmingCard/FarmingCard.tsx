@@ -4,8 +4,8 @@ import styles from './FarmingCard.module.css'
 
 export type FarmingCardType = {
     title: string;
-    pickURL: StaticImageData;
     gemURL: StaticImageData;
+    pickURL?: StaticImageData;
 }
 type FarmingCardProps = FarmingCardType
 
@@ -15,8 +15,15 @@ function FarmingCard({title, gemURL, pickURL}: FarmingCardProps)  {
           <div className="fs-3 fw-bold mb-2">Farming</div>
           <div>Stake</div>
           <div className="d-flex justify-content-center align-items-center gap-3 mb-3">
-            <Image src={pickURL} width={70} height={85} alt="Pick"/>
-              <div className="fs-4 fw-semibold">+</div>
+              {
+                  pickURL ? (
+                    <>
+                      <Image src={pickURL} width={70} height={85} alt="Pick"/>
+                      <div className="fs-4 fw-semibold">+</div>
+                    </>
+                  ) : null
+              }
+
             <Image src={gemURL} width={70} height={85} alt="Gem"/>
           </div>
           <div className="fw-semibold fs-5">{title}</div>
