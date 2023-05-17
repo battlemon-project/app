@@ -124,8 +124,8 @@ const Labs = () => {
   }
 
   useEffect(() => {
-    if (!address) return
     setHasMounted(true)
+    if (!address) return
     refreshGems()
   }, [address])
 
