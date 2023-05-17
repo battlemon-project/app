@@ -6,7 +6,7 @@ const Vault = () => {
       <div className="row">
         <div className="col-5">
           <video loop autoPlay playsInline muted className='w-100' style={{ borderRadius: '15px', border: '1px solid #fff' }}>
-            <source src="/resources/video/keycard.mp4" type="video/mp4" />
+            <source src={`${process.env.NEXT_PUBLIC_STATIC}/video/keycard.mp4`} type="video/mp4" />
           </video>
         </div>
         <div className="col-7">
