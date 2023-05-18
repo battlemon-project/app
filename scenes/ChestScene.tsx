@@ -44,6 +44,10 @@ export default function HomeScene() {
       scene.environmentTexture.level = 1;
       scene.clearColor = new BABYLON.Color4(0,0,0,0.0000000000000001);
 
+      BABYLON.SceneLoader.OnPluginActivatedObservable.add((loader) => {
+        (loader as GLTFFileLoader).animationStartMode = GLTFLoaderAnimationStartMode.NONE;
+      })
+
       Chests(scene, router);
 
       return scene;
@@ -69,9 +73,18 @@ export default function HomeScene() {
   return (
       <div className="position-relative">
         <div className={`position-absolute w-100 d-flex ${styles.amount}`}>
-          <div className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--1']}`}>0 / 2000</div>
-          <div className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--2']}`}>0 / 1000</div>
-          <div className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--3']}`}>0 / 500</div>
+          <div className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--1']}`}>
+            <div>0 / 2000</div>
+            <button className="btn btn-lg btn-light px-4 mt-3">0.2ETH</button>
+          </div>
+          <div className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--2']}`}>
+            <div>0 / 1000</div>
+            <button className="btn btn-lg btn-light px-4 mt-3">0.5ETH</button>
+          </div>
+          <div className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--3']}`}>
+            <div>0 / 500</div>
+            <button className="btn btn-lg btn-light px-4 mt-3">1ETH</button>
+          </div>
         </div>
         <canvas ref={canvasRef} style={{width: '100%', height: '500px', background: 'transparent'}} id="chestCanvas" />
       </div>
