@@ -45,7 +45,7 @@ function Header({ network }: {network: 'sui' | 'eth'}) {
               <li className="nav-item dropdown">
                 <Link className={`nav-link ${router.pathname == "/city/marketplace" ? "active" : ""}`} href="/city/marketplace">Shop</Link>
                 <ul className="dropdown-menu">
-                    <li style={{pointerEvents: 'none'}}><Link className="dropdown-item" href="/">Launchpad</Link></li>
+                    <li><Link className={`dropdown-item ${router.pathname == "/city/launchpad" ? "active" : ""}`} href="/city/launchpad">Launchpad</Link></li>
                     <li><Link className={`dropdown-item ${router.pathname == "/city/marketplace" ? "active" : ""}`} href="/city/marketplace">Marketplace</Link></li>
                 </ul>
               </li>
