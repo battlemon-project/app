@@ -83,7 +83,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
   })
 
   lemonPositions.forEach((position, index) => {
-    position.rotate(new Vector3(0,1,0), Math.PI) // This is becouse new lemon rotated by default  
+    position.rotate(new Vector3(0,1,0), Math.PI) // This is becouse new lemon rotated by default
     const plus = scene.getMeshByName(`Plus_${index + 1}`)
     const plusStroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`)
     if (plus) {
@@ -116,7 +116,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
     collider.actionManager = new ActionManager(scene);
     collider.visibility = 0;
 
-    let stroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`)	
+    let stroke = scene.getMeshByName(`Plus_${index + 1}_Stroke`)
     collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPointerOverTrigger, async function(){
       if (stroke) stroke.visibility = 1;
       scene.hoverCursor = "pointer";
@@ -125,7 +125,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
       if (stroke) stroke.visibility = 0;
       scene.hoverCursor = "default";
     }));
-    
+
     collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, async function(){
       let rotationAngle = 0;
       let platformAnimation: AnimationGroup | null = null;
@@ -147,7 +147,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
 
       if (platformAnimation) {
         platformAnimation.start(false, 1);
-      } 
+      }
       else {
         const position = lemonPositions[index];
         if (step != 1) {
@@ -176,7 +176,7 @@ export const Platforms = async ({ scene, canvas, mintEvent, changeStep }: Platfo
       activePlatform = index + 1;
       useLemonStore.setState({ activePlatform })
     }));
-    
+
   });
 
   const currentPosition = { x: 0, y: 0 };
