@@ -1,10 +1,11 @@
 import { useRef, useEffect } from "react";
 import * as BABYLON from '@babylonjs/core';
 import { GLTFFileLoader, GLTFLoaderAnimationStartMode } from "@babylonjs/loaders";
-import LoadingScreen from '../components/LoadingScreen'
-import { Chest } from './Models/Chest'
+import LoadingScreen from '../components/LoadingScreen';
 import { Vector3 } from "@babylonjs/core";
 import { useRouter } from 'next/router'
+import { Chests } from "./Models/Chests";
+import styles from './../styles/Shop.module.css';
 
 export default function HomeScene() {
   const FpsElement = typeof document !== 'undefined' && document.getElementById("fps");
@@ -26,7 +27,7 @@ export default function HomeScene() {
 
       const camera = new BABYLON.FreeCamera(
         "camera",
-        new BABYLON.Vector3(125,24,-90),
+        new BABYLON.Vector3(0,24,-220),
         scene
       )
 
@@ -43,8 +44,8 @@ export default function HomeScene() {
       scene.environmentTexture.level = 1;
       scene.clearColor = new BABYLON.Color4(0,0,0,0.0000000000000001);
 
-      Chest(scene, router);
-    
+      Chests(scene, router);
+
       return scene;
     };
     
@@ -66,6 +67,13 @@ export default function HomeScene() {
   }, []);
 
   return (
-      <canvas ref={canvasRef} style={{width: '100%', height: '500px', background: 'transparent'}} id="chestCanvas" />
+      <div className="position-relative">
+        <div className={`position-absolute w-100 d-flex ${styles.amount}`}>
+          <div className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--1']}`}>0 / 2000</div>
+          <div className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--2']}`}>0 / 1000</div>
+          <div className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--3']}`}>0 / 500</div>
+        </div>
+        <canvas ref={canvasRef} style={{width: '100%', height: '500px', background: 'transparent'}} id="chestCanvas" />
+      </div>
   )
 }
