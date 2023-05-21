@@ -1,4 +1,6 @@
-function Footer() {  
+import React from 'react';
+
+function Footer() {
   return (
     <div className="container w-100 fixed-bottom footer">
       <div className="float-end d-flex">
@@ -16,7 +18,7 @@ function Footer() {
             >
               <g>
                 <path
-                  style={{fill: 'currentColor'}}
+                  style={{ fill: 'currentColor' }}
                   d="M4.95,17.46c0.01-0.12,0.02-0.22,0.03-0.34c0.07,0,0.13-0.01,0.19-0.01c0.25-0.01,0.37-0.1,0.37-0.35
           c0.01-0.56,0-1.11,0-1.65c-0.55,0-1.07,0.06-1.57-0.01c-1.02-0.14-1.77-0.69-2.17-1.66c-0.28-0.7-0.68-1.29-1.35-1.69
           c-0.11-0.07-0.21-0.16-0.3-0.26c-0.26-0.27-0.2-0.47,0.16-0.56c0.37-0.09,0.74-0.06,1.09,0.08c0.51,0.2,0.89,0.55,1.19,1
@@ -35,8 +37,8 @@ function Footer() {
           </a>
         </div>
         <div className="col">
-          <a className="svg-wrap" href="https://twitter.com/BATTLEM0N"
-            ><svg
+          <a className="svg-wrap" href="https://twitter.com/BATTLEM0N">
+            <svg
               fill="none"
               height="22"
               viewBox="0 0 26 22"
@@ -53,8 +55,8 @@ function Footer() {
           </a>
         </div>
         <div className="col">
-          <a className="svg-wrap" href="https://dsc.gg/battlemon"
-            ><svg
+          <a className="svg-wrap" href="https://dsc.gg/battlemon">
+            <svg
               fill="none"
               height="26"
               viewBox="0 0 24 26"
@@ -77,8 +79,8 @@ function Footer() {
           </a>
         </div>
         <div className="col">
-          <a className="svg-wrap" href="https://medium.com/@Battlemon"
-            ><svg
+          <a className="svg-wrap" href="https://medium.com/@Battlemon">
+            <svg
               fill="none"
               height="22"
               viewBox="0 0 28 22"

@@ -1,8 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-type Data = {
-  result: number
+interface Data {
+  result: number;
 }
 
 export default async function handler(
@@ -12,8 +12,8 @@ export default async function handler(
   const result = await fetch('https://game.battlemon.com/sui', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(req.body)
+    body: JSON.stringify(req.body),
   });
 
-  res.status(200).json({ result: result.status })
+  res.status(200).json({ result: result.status });
 }

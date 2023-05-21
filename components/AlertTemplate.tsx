@@ -1,5 +1,5 @@
-import { CSSProperties } from 'react'
-import { AlertTemplateProps } from 'react-alert'
+import React, { type CSSProperties } from 'react';
+import { type AlertTemplateProps } from 'react-alert';
 
 const alertStyle: CSSProperties = {
   backgroundColor: '#151515',
@@ -13,23 +13,27 @@ const alertStyle: CSSProperties = {
   boxShadow: '0px 2px 2px 2px rgba(0, 0, 0, 0.03)',
   fontFamily: 'Arial',
   width: '300px',
-  boxSizing: 'border-box'
-}
+  boxSizing: 'border-box',
+};
 
 const buttonStyle: CSSProperties = {
   marginLeft: '20px',
   border: 'none',
   backgroundColor: 'transparent',
   cursor: 'pointer',
-  color: '#FFFFFF'
-}
+  color: '#FFFFFF',
+};
 
-const AlertTemplate = ({ message, options, style, close }: AlertTemplateProps) => {
-
-  const optionalStyle: CSSProperties= {};
+const AlertTemplate = ({
+  message,
+  options,
+  style,
+  close,
+}: AlertTemplateProps) => {
+  const optionalStyle: CSSProperties = {};
 
   if (options.type === 'error') {
-    optionalStyle.backgroundColor = "#c00"
+    optionalStyle.backgroundColor = '#c00';
   }
 
   return (
@@ -39,7 +43,7 @@ const AlertTemplate = ({ message, options, style, close }: AlertTemplateProps) =
         X
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default AlertTemplate
+export default AlertTemplate;

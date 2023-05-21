@@ -1,5 +1,8 @@
-import Layout from '../../components/Layout'
-import VaultCard, {VaultCardType} from "../../components/VaultCard/VaultCard";
+import React from 'react';
+import Layout from '../../components/Layout';
+import VaultCard, {
+  type VaultCardType,
+} from '../../components/VaultCard/VaultCard';
 
 const cards: VaultCardType[] = [
   {
@@ -7,9 +10,9 @@ const cards: VaultCardType[] = [
   },
   {
     title: 'LJC',
-    subtitle: 'TOKEN'
-  }
-]
+    subtitle: 'TOKEN',
+  },
+];
 
 const Vault = () => {
   return (
@@ -17,13 +20,13 @@ const Vault = () => {
       <div className="row justify-content-center mt-5 gy-4">
         {cards.map((card, i) => (
           <div className="col-sm-12 col-md-6 col-lg-4" key={i}>
-            <VaultCard title={card.title} subtitle={card.subtitle}/>
+            <VaultCard title={card.title} subtitle={card.subtitle} />
           </div>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-Vault.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>
-export default Vault
+Vault.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>;
+export default Vault;
