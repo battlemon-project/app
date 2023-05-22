@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Footer() {
+export const Footer: React.FC = () => {
   return (
     <div className="container w-100 fixed-bottom footer">
       <div className="float-end d-flex">
@@ -97,6 +97,6 @@ function Footer() {
       </div>
     </div>
   );
-}
+};
 
 export default Footer;

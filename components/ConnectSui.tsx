@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ConnectButton, useWallet } from '@suiet/wallet-kit';
 
-function ConnectSui() {
+export const ConnectSui: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const wallet = useWallet();
 
@@ -52,6 +52,6 @@ function ConnectSui() {
       </li>
     </ul>
   );
-}
+};
 
 export default ConnectSui;

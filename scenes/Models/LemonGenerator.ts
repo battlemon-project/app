@@ -139,14 +139,12 @@ export const LemonGenerator = async (
         const basicHair = scene.getNodeById(`Hair_${activePlatform}`) as Mesh;
         if (basicHair) {
           basicHair.scaling = new Vector3(1, 1, 1);
-          // basicHair.visibility = 1;
         }
       }
       if (item.type == 'shoes') {
         const basicFeet = scene.getNodeById(`Feet_${activePlatform}`) as Mesh;
         if (basicFeet) {
           basicFeet.scaling = new Vector3(1, 1, 1);
-          // basicFeet.visibility = 1;
         }
       }
       return;
@@ -174,11 +172,6 @@ export const LemonGenerator = async (
     placeholder: Mesh,
     activePlatform: number
   ): Promise<void> {
-    // placeholder?.getChildren().forEach(mesh => {
-    //   placeholder.scaling = new Vector3(0,0,0);
-    //   mesh.dispose();
-    // })
-
     if (!name) return;
     placeholder.scaling = new Vector3(1, 1, 1);
     const meshOutfit = await loadItem(name);
@@ -261,11 +254,6 @@ export const LemonGenerator = async (
       items.forEach((item) => {
         wearItem(item, state.activePlatform);
       });
-
-      // if (state.wearingItem) {
-      //   wearItem(state.wearingItem, state.activePlatform)
-      // } else {
-      // }
     }
   });
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '../../components/Layout';
-import VaultCard, {
+import {
+  VaultCard,
   type VaultCardType,
 } from '../../components/VaultCard/VaultCard';
 

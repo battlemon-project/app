@@ -13,7 +13,7 @@ import { Platforms } from './Models/Platforms';
 import { LemonGenerator } from './Models/LemonGenerator';
 import type { BabylonLoaderType } from '../components/BabylonLoader';
 import { useLemonStore } from '../helpers/lemonStore';
-import Inventory from '../components/HubLemon/Inventory';
+import { Inventory } from '../components/HubLemon/Inventory';
 
 let destroyPlatforms: () => void;
 let backPlatforms: () => void;
@@ -77,23 +77,6 @@ export default function HubScene({
       scene.environmentTexture = hdrTexture;
       scene.environmentTexture.level = 1;
       scene.clearColor = new BABYLON.Color4(0, 0, 0, 0.0000000000000001);
-
-      // skybox
-      // const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:4000}, scene);
-      // const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-      // skyboxMaterial.backFaceCulling = false;
-      // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(`${process.env.NEXT_PUBLIC_STATIC}/assets/hub/`, scene, undefined, true, [
-      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/px.png`,
-      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/py.png`,
-      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/pz.png`,
-      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/nx.png`,
-      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/ny.png`,
-      //   `${process.env.NEXT_PUBLIC_STATIC}/assets/hub/nz.png`
-      // ]);
-      // skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-      // skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-      // skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-      // skybox.material = skyboxMaterial;
 
       Platforms({
         scene,

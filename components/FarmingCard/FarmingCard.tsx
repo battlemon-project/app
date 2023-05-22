@@ -7,11 +7,16 @@ export interface FarmingCardType {
   gemURL: StaticImageData;
   pickURL?: StaticImageData;
 }
+
 type FarmingCardProps = FarmingCardType;
 
-function FarmingCard({ title, gemURL, pickURL }: FarmingCardProps) {
+export const FarmingCard: React.FC<FarmingCardProps> = ({
+  pickURL,
+  gemURL,
+  title,
+}) => {
   return (
-    <div className="d-flex flex-column p-4 text-center text-white gap-1 border border-white rounded-4">
+    <div className="flex flex-col p-4 text-center text-white gap-1 border border-white rounded-4">
       <div className="fs-3 fw-bold mb-2">Farming</div>
       <div>Stake</div>
       <div className="d-flex justify-content-center align-items-center gap-3 mb-3">
@@ -36,6 +41,4 @@ function FarmingCard({ title, gemURL, pickURL }: FarmingCardProps) {
       </button>
     </div>
   );
-}
-
-export default FarmingCard;
+};

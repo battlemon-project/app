@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useLemonStore } from '../../helpers/lemonStore';
 import { shallow } from 'zustand/shallow';
-import LemonInfo from './LemonInfo';
-import LemonItems from './LemonItems';
+import { LemonInfo } from './LemonInfo';
+import { LemonItems } from './LemonItems';
 
-function Inventory() {
+export const Inventory: React.FC = () => {
   const { inventoryIsOpened, lemons, activePlatform } = useLemonStore(
     ({ inventoryIsOpened, lemons, activePlatform }) => ({
       inventoryIsOpened,
@@ -162,6 +162,4 @@ function Inventory() {
       </div>
     </div>
   );
-}
-
-export default Inventory;
+};

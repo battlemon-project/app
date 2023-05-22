@@ -8,8 +8,8 @@ import {
 } from 'wagmi';
 import { craftGems, getGems, mintGem } from '../../helpers/alchemy';
 import { useAlert } from 'react-alert';
-import CssLoader from '../../components/CssLoader';
-import BabylonLoader from '../../components/BabylonLoader';
+import { CssLoader } from '../../components/CssLoader';
+import { BabylonLoader } from '../../components/BabylonLoader';
 
 interface INft {
   id: string;

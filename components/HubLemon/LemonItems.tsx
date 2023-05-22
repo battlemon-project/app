@@ -4,9 +4,9 @@ import { shallow } from 'zustand/shallow';
 import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import alchemy, { getItems, mintItemData } from '../../helpers/alchemy';
 import { useAlert } from 'react-alert';
-import CssLoader from '../CssLoader';
+import { CssLoader } from '../CssLoader';
 
-export default function LemonItems() {
+export const LemonItems: React.FC = () => {
   const { lemons, activePlatform } = useLemonStore(
     ({ lemons, activePlatform, wearingItem }) => ({
       lemons,
@@ -44,22 +44,6 @@ export default function LemonItems() {
       }
     };
 
-  const takeoffItem = async (item: ItemType) => {
-    // const { tokenId } = lemons.ownedNfts[activePlatform - 1]
-    // setInventoryLoader(true);
-    // try {
-    //   await confirmTakeoffItem(wallet, tokenId, item.type);
-    //   lemons.ownedNfts[activePlatform - 1].rawMetadata.items = lemons.ownedNfts[activePlatform - 1].rawMetadata.items.filter(_item => _item.type != item.type)
-    //   useLemonStore.setState({ lemons: lemons, wearingItem: undefined, unwearingItem: item })
-    //   await refreshItemsWithTimeout();
-    //   setSelectedItem(undefined)
-    // } catch(e) {
-    //   const { message } = e as Error
-    //   alert.show(message, { type: 'error' })
-    //   setInventoryLoader(false);
-    // }
-  };
-
   const refreshItems = async () => {
     if (process.env.NEXT_PUBLIC_PRODUCTION == 'true') {
       return;
@@ -71,39 +55,6 @@ export default function LemonItems() {
       .filter((x) => x);
     setLemonItems(items);
     setInventoryLoader(false);
-  };
-
-  const confirmWearing = async () => {
-    // const { id: itemId, type: itemType } = wearingItem!
-    // const { tokenId } = lemons.ownedNfts[activePlatform - 1]
-    // console.log('itemId: ', itemId)
-    // console.log('lemonId: ', tokenId)
-    // if (tokenId && itemId) {
-    //   setInventoryLoader(true);
-    //   try {
-    //     await confirmAddItem(wallet, tokenId, itemId);
-    //     lemons.ownedNfts[activePlatform - 1].rawMetadata.items = lemons.ownedNfts[activePlatform - 1].rawMetadata.items.filter(item => !itemType || itemType != item.type)
-    //     if (wearingItem) {
-    //       lemons.ownedNfts[activePlatform - 1].rawMetadata.items.push(wearingItem)
-    //       useLemonStore.setState({ lemons: lemons, wearingItem: undefined })
-    //     }
-    //     await refreshItemsWithTimeout();
-    //     setSelectedItem(undefined)
-    //   } catch(e) {
-    //     const { message } = e as Error
-    //     alert.show(message, { type: 'error' })
-    //     setInventoryLoader(false);
-    //   }
-    //   //setInventoryLoader(false);
-    // }
-  };
-
-  const handleWearItem = () => {
-    if (currentItemsFilter == 'dressed') {
-      if (selectedItem) takeoffItem(selectedItem);
-    } else {
-      confirmWearing();
-    }
   };
 
   const handleDressedMode = () => {
@@ -187,7 +138,6 @@ export default function LemonItems() {
             className={`button justify-content-center w-100 d-flex ${
               selectedItem ? '' : 'disabled'
             }`}
-            onClick={handleWearItem}
           >
             <span className="justify-content-center align-self-center text-center w-100">
               {currentItemsFilter == 'dressed' ? 'Take Off' : 'Confirm'}
@@ -447,4 +397,4 @@ export default function LemonItems() {
       </div>
     </>
   );
-}
+};

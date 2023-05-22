@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '../../components/Layout';
-import FarmingCard, {
+import {
+  FarmingCard,
   type FarmingCardType,
 } from '../../components/FarmingCard/FarmingCard';
 import Pick1 from '../../public/resources/assets/256/IcePick-1.png';

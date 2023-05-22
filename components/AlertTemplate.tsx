@@ -24,12 +24,12 @@ const buttonStyle: CSSProperties = {
   color: '#FFFFFF',
 };
 
-const AlertTemplate = ({
+export const AlertTemplate: React.FC<AlertTemplateProps> = ({
   message,
   options,
   style,
   close,
-}: AlertTemplateProps) => {
+}) => {
   const optionalStyle: CSSProperties = {};
 
   if (options.type === 'error') {
@@ -45,5 +45,3 @@ const AlertTemplate = ({
     </div>
   );
 };
-
-export default AlertTemplate;

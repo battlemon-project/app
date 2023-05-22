@@ -2,7 +2,7 @@ import React from 'react';
 import { useLemonStore } from '../../helpers/lemonStore';
 import { shallow } from 'zustand/shallow';
 
-export default function LemonInfo() {
+export const LemonInfo: React.FC = () => {
   const { lemons, activePlatform } = useLemonStore(
     ({ lemons, activePlatform }) => ({
       lemons,
@@ -33,4 +33,4 @@ export default function LemonInfo() {
       </div>
     </>
   );
-}
+};

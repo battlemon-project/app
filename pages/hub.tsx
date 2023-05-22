@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import BabylonLoader, {
+import {
+  BabylonLoader,
   type BabylonLoaderType,
 } from '../components/BabylonLoader';
 import dynamic from 'next/dynamic';

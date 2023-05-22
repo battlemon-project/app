@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect } from 'react';
 import Layout from '../../components/Layout';
-import BabylonLoader from '../../components/BabylonLoader';
+import { BabylonLoader } from '../../components/BabylonLoader';
 import HomeScene from '../../scenes/ChestScene';
 
 const MarketPlace = () => {

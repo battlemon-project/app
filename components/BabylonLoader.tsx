@@ -6,11 +6,15 @@ export interface BabylonLoaderType {
   data: boolean;
 }
 
-export default function BabylonLoader({
+interface BabylonLoaderProps {
+  isConnected: boolean;
+}
+
+export const BabylonLoader: React.FC<BabylonLoaderProps> = ({
   isConnected,
 }: {
   isConnected: boolean;
-}) {
+}) => {
   return (
     <div
       style={{ background: '#000000' }}
@@ -45,4 +49,4 @@ export default function BabylonLoader({
       </div>
     </div>
   );
-}
+};

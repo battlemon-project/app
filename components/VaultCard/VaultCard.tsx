@@ -5,9 +5,10 @@ export interface VaultCardType {
   title: string;
   subtitle?: string;
 }
-type VaultCardProps = VaultCardType;
 
-function VaultCard({ title, subtitle }: VaultCardProps) {
+interface VaultCardProps extends VaultCardType {}
+
+export const VaultCard: React.FC<VaultCardProps> = ({ title, subtitle }) => {
   return (
     <div className="d-flex flex-column justify-content-between p-4 gap-3 text-center text-white gap-1 border border-white rounded-4 h-100">
       <div className="fs-3 fw-bold">Pool</div>
@@ -37,6 +38,6 @@ function VaultCard({ title, subtitle }: VaultCardProps) {
       </div>
     </div>
   );
-}
+};
 
 export default VaultCard;

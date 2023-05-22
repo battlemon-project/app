@@ -2,14 +2,18 @@ import React from 'react';
 import Logo from './Logo';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import ConnectSui from './ConnectSui';
-import ConnectEth from './ConnectEth';
+import { ConnectSui } from './ConnectSui';
+import { ConnectEth } from './ConnectEth';
 
-function Header({ network }: { network: 'sui' | 'eth' }) {
+interface HeaderProps {
+  network: 'sui' | 'eth';
+}
+
+export const Header: React.FC<HeaderProps> = ({ network }) => {
   const router = useRouter();
 
   return (
-    <nav className="navbar navbar-expand-lg sticky-top navbar-dark">
+    <header className="navbar navbar-expand-lg sticky-top navbar-dark">
       <div className="container">
         <Logo />
         <button
@@ -169,8 +173,8 @@ function Header({ network }: { network: 'sui' | 'eth' }) {
           {network == 'sui' ? <ConnectSui /> : <ConnectEth />}
         </div>
       </div>
-    </nav>
+    </header>
   );
-}
+};
 
 export default Header;

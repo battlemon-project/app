@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
-function ConnectEth() {
+export const ConnectEth: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const { address, isConnected } = useAccount();
   const { connect } = useConnect({
@@ -64,6 +64,6 @@ function ConnectEth() {
       </li>
     </ul>
   );
-}
+};
 
 export default ConnectEth;

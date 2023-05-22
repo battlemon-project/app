@@ -3,11 +3,11 @@ import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { mainnet, sepolia } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { InjectedConnector } from 'wagmi/connectors/injected';
-import AlertTemplate from './AlertTemplate';
+import { AlertTemplate } from './AlertTemplate';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import Head from 'next/head';
-import Header from './Header';
-import Footer from './Footer';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 const { chains, provider } = configureChains(
   [sepolia, mainnet],
@@ -25,11 +25,9 @@ interface Props {
 }
 
 const options = {
-  // you can also just use 'bottom center'
   position: positions.TOP_CENTER,
   timeout: 5000,
   offset: '30px',
-  // you can also just use 'scale'
   transition: transitions.SCALE,
 };
 
