@@ -39,5 +39,3 @@ export const VaultCard: React.FC<VaultCardProps> = ({ title, subtitle }) => {
     </div>
   );
 };
-
-export default VaultCard;

@@ -284,9 +284,6 @@ export const LemonItems: React.FC = () => {
                 src={`${process.env.NEXT_PUBLIC_STATIC}/assets/tiny/icon_belt_64.png`}
               />
             </a>
-            {/* <a className={`col col-auto ${lemonItems.find(item => item.type == 'hand' && !item.attachedTo) ? 'enabled' : 'disabled' } ${ currentItemsFilter == 'hand' ? 'active' : '' }`} href={'#'} onClick={filterOutifts('hand')}>
-          <img src={`${process.env.NEXT_PUBLIC_STATIC}/assets/tiny/icon_hand_l_64.png`} />
-        </a> */}
             <a
               className={`col col-auto ${
                 lemonItems.find(

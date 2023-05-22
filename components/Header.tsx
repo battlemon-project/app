@@ -176,5 +176,3 @@ export const Header: React.FC<HeaderProps> = ({ network }) => {
     </header>
   );
 };
-
-export default Header;

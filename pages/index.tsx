@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect } from 'react';
-import BabylonLoader from '../components/BabylonLoader';
+import { BabylonLoader } from '../components/BabylonLoader';
 import dynamic from 'next/dynamic';
 import Layout from '../components/Layout';
 

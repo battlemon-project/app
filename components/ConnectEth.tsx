@@ -65,5 +65,3 @@ export const ConnectEth: React.FC = () => {
     </ul>
   );
 };
-
-export default ConnectEth;

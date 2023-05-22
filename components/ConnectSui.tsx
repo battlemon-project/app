@@ -53,5 +53,3 @@ export const ConnectSui: React.FC = () => {
     </ul>
   );
 };
-
-export default ConnectSui;
