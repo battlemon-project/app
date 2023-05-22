@@ -1,0 +1,8 @@
+.next
+**/*.glft
+**/*.css
+**/*.yml
+**/*.json
+**/*.md
+public
+next.config.js
