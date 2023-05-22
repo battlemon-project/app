@@ -1,7 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
+import { useCookies } from 'react-cookie';
+import styles from '../../styles/Shop.module.css';
 
 const Vault = () => {
+
+  const [hasMounted, setHasMounted] = useState(false);
+  const [cookies, setCookie] = useCookies(['check_follow', 'check_retwit', 'check_discord'])
+
+  const checkTwitterFollow = () => {
+    setTimeout(() => {
+      setCookie('check_follow', 'true')
+    }, 3000)
+  }
+
+  const checkTwitterRetwit = () => {
+    setTimeout(() => {
+      setCookie('check_retwit', 'true')
+    }, 3000)
+  }
+
+  const checkDiscordJoin = () => {
+    setTimeout(() => {
+      setCookie('check_discord', 'true')
+    }, 3000)
+  }
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) return <></>
   return (
     <div className="container mt-5">
       <div className="row">
@@ -19,11 +48,17 @@ const Vault = () => {
               type="video/mp4"
             />
           </video>
+
+          
+          <div className={`mt-3 ${styles.mint_container}`}>
+            <button className={`btn btn-success btn-lg px-4 py-3 w-100 ${styles.mint_btn} ${!cookies.check_discord ? styles.bg_card_disabled : ''}`}>
+              MINT
+            </button>
+          </div>
         </div>
         <div className="col-7">
           <div
-            className="shadow p-3 mb-3 rounded d-flex"
-            style={{ background: '#fff' }}
+            className={`shadow p-3 mb-3 rounded d-flex ${styles.bg_card} ${cookies.check_follow ? styles.bg_card_done : ''}`}
           >
             <div className="col col-auto d-flex justify-content-center px-2">
               <svg
@@ -35,7 +70,7 @@ const Vault = () => {
                 <path
                   clipRule="evenodd"
                   d="M23.3382 5.66804C23.348 5.89575 23.3545 6.12347 23.3545 6.35441C23.3545 13.3587 17.9887 21.437 8.177 21.437C5.16425 21.437 2.36112 20.5601 0 19.0565C0.417625 19.1049 0.84175 19.1292 1.27238 19.1292C3.77163 19.1292 6.071 18.2829 7.8975 16.8601C5.56237 16.8181 3.59288 15.2854 2.91363 13.1795C3.24025 13.2408 3.57337 13.2731 3.91788 13.2731C4.40375 13.2731 4.875 13.2085 5.3235 13.0874C2.88275 12.6013 1.04487 10.4582 1.04487 7.89029V7.82246C1.76312 8.21976 2.587 8.45878 3.46125 8.48623C2.02963 7.53499 1.08712 5.9119 1.08712 4.07402C1.08712 3.10178 1.35037 2.19091 1.81025 1.40763C4.44112 4.61505 8.372 6.72587 12.805 6.94713C12.714 6.55952 12.6669 6.15415 12.6669 5.7391C12.6669 2.81108 15.0556 0.437012 18.0001 0.437012C19.5357 0.437012 20.9219 1.0814 21.8936 2.11178C23.1091 1.87437 24.2515 1.43347 25.2817 0.826229C24.8836 2.06333 24.037 3.10178 22.9369 3.75909C24.0159 3.62989 25.0429 3.34565 26 2.92413C25.285 3.98681 24.3799 4.92028 23.3382 5.66804Z"
-                  fill="#1d9bf0"
+                  fill="#fff"
                   fillRule="evenodd"
                 />
               </svg>
@@ -44,19 +79,14 @@ const Vault = () => {
               <p className="m-0">
                 <b>Follow us on Twitter</b>
               </p>
-              <p className="m-0">Disconnected</p>
+              <p className="m-0">{cookies.check_follow ? 'Connected' : 'Disconnected'}</p>
             </div>
             <div className="col text-end">
-              <button className="btn btn-primary btn-lg">Follow</button>
+              <a target="_blank" className={`btn btn-lg ${styles.bg_card_btn}`} onClick={checkTwitterFollow} href="https://twitter.com/BATTLEM0N">{cookies.check_follow ? 'Done' : 'Follow'}</a>
             </div>
           </div>
           <div
-            className="shadow p-3 mb-3 rounded d-flex"
-            style={{
-              background: 'rgba(255,255,255,0.6)',
-              opacity: 0.6,
-              pointerEvents: 'none',
-            }}
+            className={`shadow p-3 mb-3 rounded d-flex ${styles.bg_card} ${!cookies.check_follow ? styles.bg_card_disabled : ''}  ${cookies.check_retwit ? styles.bg_card_done : ''}`}
           >
             <div className="col col-auto d-flex justify-content-center px-2">
               <svg
@@ -68,7 +98,7 @@ const Vault = () => {
                 <path
                   clipRule="evenodd"
                   d="M23.3382 5.66804C23.348 5.89575 23.3545 6.12347 23.3545 6.35441C23.3545 13.3587 17.9887 21.437 8.177 21.437C5.16425 21.437 2.36112 20.5601 0 19.0565C0.417625 19.1049 0.84175 19.1292 1.27238 19.1292C3.77163 19.1292 6.071 18.2829 7.8975 16.8601C5.56237 16.8181 3.59288 15.2854 2.91363 13.1795C3.24025 13.2408 3.57337 13.2731 3.91788 13.2731C4.40375 13.2731 4.875 13.2085 5.3235 13.0874C2.88275 12.6013 1.04487 10.4582 1.04487 7.89029V7.82246C1.76312 8.21976 2.587 8.45878 3.46125 8.48623C2.02963 7.53499 1.08712 5.9119 1.08712 4.07402C1.08712 3.10178 1.35037 2.19091 1.81025 1.40763C4.44112 4.61505 8.372 6.72587 12.805 6.94713C12.714 6.55952 12.6669 6.15415 12.6669 5.7391C12.6669 2.81108 15.0556 0.437012 18.0001 0.437012C19.5357 0.437012 20.9219 1.0814 21.8936 2.11178C23.1091 1.87437 24.2515 1.43347 25.2817 0.826229C24.8836 2.06333 24.037 3.10178 22.9369 3.75909C24.0159 3.62989 25.0429 3.34565 26 2.92413C25.285 3.98681 24.3799 4.92028 23.3382 5.66804Z"
-                  fill="#1d9bf0"
+                  fill="#fff"
                   fillRule="evenodd"
                 />
               </svg>
@@ -77,19 +107,14 @@ const Vault = () => {
               <p className="m-0">
                 <b>Retwit something from us</b>
               </p>
-              <p className="m-0">Retwit not found</p>
+              <p className="m-0">{cookies.check_follow ? 'Success' : 'Retwit not found'}</p>
             </div>
             <div className="col text-end">
-              <button className="btn btn-primary btn-lg">Retwit</button>
+              <a target="_blank" className={`btn btn-lg ${styles.bg_card_btn}`} onClick={checkTwitterRetwit} href="https://twitter.com/BATTLEM0N">{cookies.check_retwit ? 'Done' : 'Retwit'}</a>
             </div>
           </div>
           <div
-            className="shadow p-3 mb-3 rounded d-flex"
-            style={{
-              background: 'rgba(255,255,255,0.6)',
-              opacity: 0.6,
-              pointerEvents: 'none',
-            }}
+            className={`shadow p-3 mb-3 rounded d-flex ${styles.bg_card} ${!cookies.check_retwit ? styles.bg_card_disabled : ''}`}
           >
             <div className="col col-auto d-flex justify-content-center px-2">
               <svg
@@ -114,22 +139,33 @@ const Vault = () => {
             </div>
             <div className="col px-2">
               <p className="m-0">
-                <b>Join out Discord Server</b>
+                <b>Join Battlemon Discord Server</b>
               </p>
-              <p className="m-0">Your are not joined yet</p>
+              <p className="m-0">
+                Enter command to our discord channel<br />
+                {cookies.check_retwit ? <kbd>/code 123123</kbd> : ''}
+              </p>
             </div>
-            <div className="col text-end">
-              <button className="btn btn-primary btn-lg">Join</button>
+            <div className="col-auto text-end">
+              <a href="https://dsc.gg/battlemon" target="_blank" className={`btn btn-lg ${styles.bg_card_btn}`} onClick={checkDiscordJoin}>Join</a>
             </div>
           </div>
-          <div style={{ borderTop: '1px solid rgba(255,255,255,0.7)' }}>
-            <div className="d-flex justify-content-center pt-4">
-              <div className="text-white pt-4 h5 text-end pe-4">OR</div>
-              <div className="pt-2">
-                <button className="btn btn-primary btn-lg px-4 py-3">
-                  PAYABLE MINT
-                </button>
-              </div>
+          <div className={styles.bg_card_description}>
+            <p>Unique Key-card that gives access to the incredible game world of Lemoland, full of adventures and NFT treasures. </p>
+
+            <p>Unique NFT key-pass will be available in Testnet and also transferred to Mainnet.</p>
+
+            <div className="d-flex justify-content-between">
+              <b>Contract Address</b>
+              <div>0x60efdg33a...434iq357c6</div>
+            </div>
+            <div className="d-flex justify-content-between">
+              <b>Token Standard</b>
+              <div>ERC721</div>
+            </div>
+            <div className="d-flex justify-content-between">
+              <b>Royalty</b>
+              <div>2.5%</div>
             </div>
           </div>
         </div>

@@ -5,7 +5,15 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  output: 'standalone'
+  output: 'standalone',
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://api.battlemon.com/api/:path*",
+      },
+    ];
+  },
 }
 
 module.exports = nextConfig
