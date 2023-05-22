@@ -1,14 +1,25 @@
-import Link from 'next/link'
+import React from 'react';
+import Link from 'next/link';
 
 export default function Logo() {
   return (
     <div className="navbar-brand">
       <Link href="/">
-        <svg height={23} version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-          viewBox="0 0 146.68 26.68">
-        <g>
+        <svg
+          height={23}
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          x="0px"
+          y="0px"
+          viewBox="0 0 146.68 26.68"
+        >
           <g>
-            <path fill="currentColor" style={{fillRule: 'evenodd', clipRule: 'evenodd'}} d="M108.23,4.29c0-1.44,0.31-2.48,0.95-3.11c0.63-0.63,1.49-0.95,2.57-0.95h1.9v2.9l0,0.1l0.01,16.11v0.06
+            <g>
+              <path
+                fill="currentColor"
+                style={{ fillRule: 'evenodd', clipRule: 'evenodd' }}
+                d="M108.23,4.29c0-1.44,0.31-2.48,0.95-3.11c0.63-0.63,1.49-0.95,2.57-0.95h1.9v2.9l0,0.1l0.01,16.11v0.06
               c0,0.5,0.09,0.79,0.26,0.88c0.18,0.09,0.45,0.15,0.81,0.15l1.27-0.01v1.91h-4.25c-1.08,0-1.94-0.31-2.57-0.94
               c-0.63-0.63-0.95-1.66-0.95-3.11V4.29L108.23,4.29z M115.47,0.23h4.01c1.24,0,2.18,0.32,2.81,0.95c0.63,0.63,0.95,1.67,0.95,3.11
               v13.97c0,1.45-0.32,2.49-0.95,3.12c-0.63,0.63-1.58,0.94-2.84,0.94h-1.62v-2.96v-0.02V18.3V3.23c0-0.54-0.09-0.86-0.28-0.95
@@ -34,14 +45,22 @@ export default function Logo() {
               h-4.61h-5.46v1.91v14.97v1.91h5.46h4.61v-1.91h-4.61V10.53L76.84,10.53z M45.87,0.18h7.06h3.72h3.26v5.17h-4.24l-1.72-3.26h-8.07
               v24.59H40.4V2.09h-7.44l-1.72,3.26H27V0.18h3.26h3.72h6.43h1.62h2.85H45.87L45.87,0.18z M131.23,7.56l7.45,19.05v0.07h5.46V2.76
               l2.54-1.34V0.18h-2.54h-2.63h-2.84v19.05l-7.45-19.05h-5.46v24.59h-17.54v1.91h17.54h1.37h4.09V7.56L131.23,7.56z M68.05,26.68
-              h6.43h3.72h3.26v-5.17h-4.24l-1.72,3.26h-7.44V0.18h-5.46v26.5h3.84H68.05L68.05,26.68z"/>
+              h6.43h3.72h3.26v-5.17h-4.24l-1.72,3.26h-7.44V0.18h-5.46v26.5h3.84H68.05L68.05,26.68z"
+              />
+            </g>
           </g>
-        </g>
         </svg>
       </Link>
-      <div className="nav-link text-center" style={{color: 'white', fontSize: '18px', lineHeight: '26px'}}>
-        &nbsp;<span className="fps-container"><span id="fps">0</span> FPS</span>&nbsp;
+      <div
+        className="nav-link text-center"
+        style={{ color: 'white', fontSize: '18px', lineHeight: '26px' }}
+      >
+        &nbsp;
+        <span className="fps-container">
+          <span id="fps">0</span> FPS
+        </span>
+        &nbsp;
       </div>
     </div>
-  )
+  );
 }
