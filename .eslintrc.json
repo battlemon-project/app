@@ -35,7 +35,9 @@
     "@typescript-eslint/triple-slash-reference": "off",
     "eqeqeq": "off",
     "@typescript-eslint/await-thenable": "off",
-    "prettier/prettier": "error"
+    "prettier/prettier": ["error", {
+      "endOfLine": "auto"
+    }]
   },
   "ignorePatterns": [
     "**/*.gltf",

@@ -10,7 +10,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://api.battlemon.com/api/:path*",
+        destination: "https://api.battlemon.com/:path*",
       },
     ];
   },

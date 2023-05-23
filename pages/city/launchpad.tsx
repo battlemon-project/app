@@ -4,33 +4,36 @@ import { useCookies } from 'react-cookie';
 import styles from '../../styles/Shop.module.css';
 
 const Vault = () => {
-
   const [hasMounted, setHasMounted] = useState(false);
-  const [cookies, setCookie] = useCookies(['check_follow', 'check_retwit', 'check_discord'])
+  const [cookies, setCookie] = useCookies([
+    'check_follow',
+    'check_retwit',
+    'check_discord',
+  ]);
 
   const checkTwitterFollow = () => {
     setTimeout(() => {
-      setCookie('check_follow', 'true')
-    }, 3000)
-  }
+      setCookie('check_follow', 'true');
+    }, 3000);
+  };
 
   const checkTwitterRetwit = () => {
     setTimeout(() => {
-      setCookie('check_retwit', 'true')
-    }, 3000)
-  }
+      setCookie('check_retwit', 'true');
+    }, 3000);
+  };
 
   const checkDiscordJoin = () => {
     setTimeout(() => {
-      setCookie('check_discord', 'true')
-    }, 3000)
-  }
+      setCookie('check_discord', 'true');
+    }, 3000);
+  };
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
-  if (!hasMounted) return <></>
+  if (!hasMounted) return <></>;
   return (
     <div className="container mt-5">
       <div className="row">
@@ -49,16 +52,21 @@ const Vault = () => {
             />
           </video>
 
-          
           <div className={`mt-3 ${styles.mint_container}`}>
-            <button className={`btn btn-success btn-lg px-4 py-3 w-100 ${styles.mint_btn} ${!cookies.check_discord ? styles.bg_card_disabled : ''}`}>
+            <button
+              className={`btn btn-success btn-lg px-4 py-3 w-100 ${
+                styles.mint_btn
+              } ${!cookies.check_discord ? styles.bg_card_disabled : ''}`}
+            >
               MINT
             </button>
           </div>
         </div>
         <div className="col-7">
           <div
-            className={`shadow p-3 mb-3 rounded d-flex ${styles.bg_card} ${cookies.check_follow ? styles.bg_card_done : ''}`}
+            className={`shadow p-3 mb-3 rounded d-flex ${styles.bg_card} ${
+              cookies.check_follow ? styles.bg_card_done : ''
+            }`}
           >
             <div className="col col-auto d-flex justify-content-center px-2">
               <svg
@@ -79,14 +87,26 @@ const Vault = () => {
               <p className="m-0">
                 <b>Follow us on Twitter</b>
               </p>
-              <p className="m-0">{cookies.check_follow ? 'Connected' : 'Disconnected'}</p>
+              <p className="m-0">
+                {cookies.check_follow ? 'Connected' : 'Disconnected'}
+              </p>
             </div>
             <div className="col text-end">
-              <a target="_blank" className={`btn btn-lg ${styles.bg_card_btn}`} onClick={checkTwitterFollow} href="https://twitter.com/BATTLEM0N">{cookies.check_follow ? 'Done' : 'Follow'}</a>
+              <a
+                target="_blank"
+                rel="noreferrer"
+                className={`btn btn-lg ${styles.bg_card_btn}`}
+                onClick={checkTwitterFollow}
+                href="https://twitter.com/BATTLEM0N"
+              >
+                {cookies.check_follow ? 'Done' : 'Follow'}
+              </a>
             </div>
           </div>
           <div
-            className={`shadow p-3 mb-3 rounded d-flex ${styles.bg_card} ${!cookies.check_follow ? styles.bg_card_disabled : ''}  ${cookies.check_retwit ? styles.bg_card_done : ''}`}
+            className={`shadow p-3 mb-3 rounded d-flex ${styles.bg_card} ${
+              !cookies.check_follow ? styles.bg_card_disabled : ''
+            }  ${cookies.check_retwit ? styles.bg_card_done : ''}`}
           >
             <div className="col col-auto d-flex justify-content-center px-2">
               <svg
@@ -107,14 +127,26 @@ const Vault = () => {
               <p className="m-0">
                 <b>Retwit something from us</b>
               </p>
-              <p className="m-0">{cookies.check_follow ? 'Success' : 'Retwit not found'}</p>
+              <p className="m-0">
+                {cookies.check_follow ? 'Success' : 'Retwit not found'}
+              </p>
             </div>
             <div className="col text-end">
-              <a target="_blank" className={`btn btn-lg ${styles.bg_card_btn}`} onClick={checkTwitterRetwit} href="https://twitter.com/BATTLEM0N">{cookies.check_retwit ? 'Done' : 'Retwit'}</a>
+              <a
+                target="_blank"
+                rel="noreferrer"
+                className={`btn btn-lg ${styles.bg_card_btn}`}
+                onClick={checkTwitterRetwit}
+                href="https://twitter.com/BATTLEM0N"
+              >
+                {cookies.check_retwit ? 'Done' : 'Retwit'}
+              </a>
             </div>
           </div>
           <div
-            className={`shadow p-3 mb-3 rounded d-flex ${styles.bg_card} ${!cookies.check_retwit ? styles.bg_card_disabled : ''}`}
+            className={`shadow p-3 mb-3 rounded d-flex ${styles.bg_card} ${
+              !cookies.check_retwit ? styles.bg_card_disabled : ''
+            }`}
           >
             <div className="col col-auto d-flex justify-content-center px-2">
               <svg
@@ -142,18 +174,33 @@ const Vault = () => {
                 <b>Join Battlemon Discord Server</b>
               </p>
               <p className="m-0">
-                Enter command to our discord channel<br />
+                Enter command to our discord channel
+                <br />
                 {cookies.check_retwit ? <kbd>/code 123123</kbd> : ''}
               </p>
             </div>
             <div className="col-auto text-end">
-              <a href="https://dsc.gg/battlemon" target="_blank" className={`btn btn-lg ${styles.bg_card_btn}`} onClick={checkDiscordJoin}>Join</a>
+              <a
+                href="https://dsc.gg/battlemon"
+                target="_blank"
+                rel="noreferrer"
+                className={`btn btn-lg ${styles.bg_card_btn}`}
+                onClick={checkDiscordJoin}
+              >
+                Join
+              </a>
             </div>
           </div>
           <div className={styles.bg_card_description}>
-            <p>Unique Key-card that gives access to the incredible game world of Lemoland, full of adventures and NFT treasures. </p>
+            <p>
+              Unique Key-card that gives access to the incredible game world of
+              Lemoland, full of adventures and NFT treasures.{' '}
+            </p>
 
-            <p>Unique NFT key-pass will be available in Testnet and also transferred to Mainnet.</p>
+            <p>
+              Unique NFT key-pass will be available in Testnet and also
+              transferred to Mainnet.
+            </p>
 
             <div className="d-flex justify-content-between">
               <b>Contract Address</b>
