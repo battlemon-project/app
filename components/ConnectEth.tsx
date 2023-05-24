@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { signMessage } from '@wagmi/core';
+import { useCookies } from 'react-cookie';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
 export const ConnectEth: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
+  const [cookies, setCookie] = useCookies(['auth_token']);
   const { address, isConnected } = useAccount();
   const { connect } = useConnect({
     connector: new InjectedConnector(),
@@ -27,7 +29,10 @@ export const ConnectEth: React.FC = () => {
 
   const getNonce = async (token: string) => {
     const data = await fetch('/api/auth/nonce', {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     });
     const result = await data.json();
     return result as { nonce: string };
@@ -40,7 +45,10 @@ export const ConnectEth: React.FC = () => {
   ) => {
     const data = await fetch('/api/auth/wallet', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ address, signature }),
     });
     const result = await data.json();
@@ -50,24 +58,25 @@ export const ConnectEth: React.FC = () => {
   const connectAuthServer = async () => {
     const { token: guestToken } = await fetchGuest();
     const { nonce } = await getNonce(guestToken);
-    console.log(nonce);
     let signature: `0x${string}` | null = null;
     try {
       signature = await signMessage({
         message: `Signing nonce: ${nonce}`,
       });
-      const { token, userId } = await authWallet(
-        guestToken,
-        address,
-        signature
-      );
-      console.log(token, userId);
+      const { token } = await authWallet(guestToken, address, signature);
+      const date = new Date();
+      date.setDate(date.getDate() + 90);
+      setCookie('auth_token', token, {
+        expires: date,
+      });
     } catch (e) {}
   };
 
   useEffect(() => {
     if (!address) return;
-    connectAuthServer();
+    if (!cookies.auth_token) {
+      connectAuthServer();
+    }
   }, [address]);
 
   useEffect(() => {
