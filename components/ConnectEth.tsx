@@ -6,7 +6,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected';
 
 export const ConnectEth: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
-  const [cookies, setCookie] = useCookies(['auth_token']);
+  const [cookies, setCookie, removeCookie] = useCookies(['auth_token']);
   const { address, isConnected } = useAccount();
   const { connect } = useConnect({
     connector: new InjectedConnector(),
@@ -14,6 +14,7 @@ export const ConnectEth: React.FC = () => {
   const { disconnect } = useDisconnect();
 
   const signOut = () => {
+    removeCookie('auth_token');
     disconnect();
   };
 
@@ -64,10 +65,8 @@ export const ConnectEth: React.FC = () => {
         message: `Signing nonce: ${nonce}`,
       });
       const { token } = await authWallet(guestToken, address, signature);
-      const date = new Date();
-      date.setDate(date.getDate() + 90);
       setCookie('auth_token', token, {
-        expires: date,
+        expires: new Date(((d) => d.setDate(d.getDate() + 365))(new Date())),
       });
     } catch (e) {}
   };

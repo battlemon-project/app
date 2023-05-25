@@ -55,7 +55,7 @@ export const Footer: React.FC = () => {
           </a>
         </div>
         <div className="col">
-          <a className="svg-wrap" href="https://dsc.gg/battlemon">
+          <a className="svg-wrap" href="https://discord.gg/battlemon">
             <svg
               fill="none"
               height="26"
