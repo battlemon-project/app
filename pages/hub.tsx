@@ -96,7 +96,7 @@ const Hub = () => {
           <div
             className="sticky-top text-center d-inline-block position-absolute"
             style={{
-              zIndex: 1080,
+              zIndex: 1010,
               left: '50%',
               top: '75px',
               transform: 'translateX(-50%)',
