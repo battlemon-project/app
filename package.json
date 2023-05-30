@@ -36,6 +36,7 @@
     "react-alert": "^7.0.3",
     "react-dom": "18.2.0",
     "react-cookie": "^4.1.1",
+    "swr": "^2.1.5",
     "typescript": "*",
     "wagmi": "^0.12.10",
     "zustand": "^4.3.2"
@@ -51,7 +52,6 @@
     "eslint-plugin-react": "^7.32.2",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
-    "prettier": "^2.8.8",
-    "swr": "^2.1.5"
+    "prettier": "^2.8.8"
   }
 }

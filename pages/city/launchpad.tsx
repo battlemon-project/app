@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import { useCookies } from 'react-cookie';
 import styles from '../../styles/Shop.module.css';
+import useSWR from 'swr';
 
 const Vault = () => {
   const [hasMounted, setHasMounted] = useState(false);
@@ -46,24 +47,29 @@ const Vault = () => {
     });
   };
 
-  const getVouchers = async (token: string) => {
-    const data = await fetch('/api/vouchers/access-keys', {
+
+  const getVouchers = async (url: string) => {
+    const data = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${cookies.auth_token}`,
         'Content-Type': 'application/json',
       },
     });
     const { voucher }: { voucher: string } = await data.json();
     console.log(voucher);
   };
+  
+  const { data } = useSWR('/api/vouchers/access-keys', getVouchers)
 
   useEffect(() => {
-    if (!cookies.check_follow || !cookies.check_retwit || !cookies.auth_token)
-      return;
-    if (cookies.discord_code) {
-      getVouchers(cookies.auth_token);
-    } else {
-      getDiscordCode(cookies.auth_token);
+    console.log(data)
+  }, [data]);
+
+  useEffect(() => {
+    if (cookies.check_follow && cookies.check_retwit && cookies.auth_token) {
+      if (!cookies.discord_code) {
+        getDiscordCode(cookies.auth_token);
+      }
     }
   }, [cookies]);
 
