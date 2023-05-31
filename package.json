@@ -36,8 +36,8 @@
     "react": "18.2.0",
     "react-alert": "^7.0.3",
     "react-cookie": "^4.1.1",
-    "swr": "^2.1.5",
     "react-dom": "18.2.0",
+    "swr": "^2.1.5",
     "typescript": "*",
     "wagmi": "^0.12.10",
     "zustand": "^4.3.2"
