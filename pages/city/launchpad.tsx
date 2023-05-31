@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
+import { useAccount } from 'wagmi';
 import { useCookies } from 'react-cookie';
 import styles from '../../styles/Shop.module.css';
 import useSWR from 'swr';
 
 const Vault = () => {
   const [hasMounted, setHasMounted] = useState(false);
+  const { address, isConnected } = useAccount();
+  const [checkFollow, setCheckFollow] = useState(false);
+  const [checkRetwit, setCheckRetwit] = useState(false);
+  const [checkDiscord, setCheckDiscord] = useState(false);
   const [cookies, setCookie] = useCookies([
     'check_follow',
     'check_retwit',
@@ -47,7 +52,6 @@ const Vault = () => {
     });
   };
 
-
   const getVouchers = async (url: string) => {
     const data = await fetch(url, {
       headers: {
@@ -58,20 +62,30 @@ const Vault = () => {
     const { voucher }: { voucher: string } = await data.json();
     console.log(voucher);
   };
-  
-  const { data } = useSWR('/api/vouchers/access-keys', getVouchers)
+
+  const { data } = useSWR('/api/vouchers/access-keys', getVouchers);
 
   useEffect(() => {
-    console.log(data)
+    console.log(data);
   }, [data]);
 
   useEffect(() => {
-    if (cookies.check_follow && cookies.check_retwit && cookies.auth_token) {
-      if (!cookies.discord_code) {
-        getDiscordCode(cookies.auth_token);
+    if (cookies.check_follow && cookies.auth_token && isConnected) {
+      setCheckFollow(true);
+      if (cookies.check_retwit) {
+        setCheckRetwit(true);
+        if (cookies.discord_code) {
+          setCheckDiscord(true);
+        } else {
+          getDiscordCode(cookies.auth_token);
+        }
       }
+    } else {
+      setCheckFollow(false);
+      setCheckRetwit(false);
+      setCheckDiscord(false);
     }
-  }, [cookies]);
+  }, [cookies, address]);
 
   useEffect(() => {
     setHasMounted(true);
@@ -109,7 +123,7 @@ const Vault = () => {
         <div className="col-7">
           <div
             className={`shadow p-3 mb-3 rounded d-flex ${styles.bg_card} ${
-              cookies.check_follow ? styles.bg_card_done : ''
+              checkFollow ? styles.bg_card_done : ''
             }`}
           >
             <div className="col col-auto d-flex justify-content-center px-2">
@@ -132,7 +146,7 @@ const Vault = () => {
                 <b>Follow us on Twitter</b>
               </p>
               <p className="m-0">
-                {cookies.check_follow ? 'Connected' : 'Disconnected'}
+                {checkFollow ? 'Connected' : 'Disconnected'}
               </p>
             </div>
             <div className="col text-end">
@@ -143,14 +157,14 @@ const Vault = () => {
                 onClick={checkTwitterFollow}
                 href="https://twitter.com/BATTLEM0N"
               >
-                {cookies.check_follow ? 'Done' : 'Follow'}
+                {checkFollow ? 'Done' : 'Follow'}
               </a>
             </div>
           </div>
           <div
             className={`shadow p-3 mb-3 rounded d-flex ${styles.bg_card} ${
-              !cookies.check_follow ? styles.bg_card_disabled : ''
-            }  ${cookies.check_retwit ? styles.bg_card_done : ''}`}
+              !checkFollow ? styles.bg_card_disabled : ''
+            }  ${checkRetwit ? styles.bg_card_done : ''}`}
           >
             <div className="col col-auto d-flex justify-content-center px-2">
               <svg
@@ -172,7 +186,7 @@ const Vault = () => {
                 <b>Retwit something from us</b>
               </p>
               <p className="m-0">
-                {cookies.check_follow ? 'Success' : 'Retwit not found'}
+                {checkRetwit ? 'Success' : 'Retwit not found'}
               </p>
             </div>
             <div className="col text-end">
@@ -183,13 +197,13 @@ const Vault = () => {
                 onClick={checkTwitterRetwit}
                 href="https://twitter.com/BATTLEM0N"
               >
-                {cookies.check_retwit ? 'Done' : 'Retwit'}
+                {checkRetwit ? 'Done' : 'Retwit'}
               </a>
             </div>
           </div>
           <div
             className={`shadow p-3 mb-3 rounded ${styles.bg_card} ${
-              !cookies.check_retwit ? styles.bg_card_disabled : ''
+              !checkRetwit ? styles.bg_card_disabled : ''
             }`}
           >
             <div className="d-flex">
@@ -231,7 +245,7 @@ const Vault = () => {
                 </a>
               </div>
             </div>
-            {cookies.auth_token && cookies.discord_code && (
+            {checkDiscord && (
               <div style={{ paddingLeft: '65px' }}>
                 <p className="my-0">
                   Go to{' '}
