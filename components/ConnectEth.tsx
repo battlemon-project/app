@@ -6,7 +6,10 @@ import { InjectedConnector } from 'wagmi/connectors/injected';
 
 export const ConnectEth: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(['auth_token']);
+  const [cookies, setCookie, removeCookie] = useCookies([
+    'auth_token',
+    'current_address',
+  ]);
   const { address, isConnected } = useAccount();
   const { connect } = useConnect({
     connector: new InjectedConnector(),
@@ -14,7 +17,7 @@ export const ConnectEth: React.FC = () => {
   const { disconnect } = useDisconnect();
 
   const signOut = () => {
-    removeCookie('auth_token');
+    //removeCookie('auth_token');
     disconnect();
   };
 
@@ -73,6 +76,11 @@ export const ConnectEth: React.FC = () => {
 
   useEffect(() => {
     if (!address) return;
+    if (cookies.current_address !== address) {
+      setCookie('current_address', address);
+      removeCookie('auth_token');
+      setTimeout(() => connectAuthServer(), 5000);
+    }
     if (!cookies.auth_token) {
       connectAuthServer();
     }

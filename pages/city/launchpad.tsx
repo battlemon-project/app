@@ -10,22 +10,31 @@ const Vault = () => {
   const { address, isConnected } = useAccount();
   const [checkFollow, setCheckFollow] = useState(false);
   const [checkRetwit, setCheckRetwit] = useState(false);
-  const [checkDiscord, setCheckDiscord] = useState(false);
+  const [discordCode, setDiscordCode] = useState<string | boolean>(false);
   const [cookies, setCookie] = useCookies([
     'check_follow',
     'check_retwit',
     'check_discord',
-    'discord_code',
     'auth_token',
   ]);
 
-  const checkTwitterFollow = () => {
+  const checkTwitterFollow = (e: MouseEvent) => {
+    if (!isConnected) {
+      alert('You need to Sign In');
+      e.preventDefault();
+      return;
+    }
     setTimeout(() => {
       setCookie('check_follow', 'true');
     }, 3000);
   };
 
-  const checkTwitterRetwit = () => {
+  const checkTwitterRetwit = (e: MouseEvent) => {
+    if (!isConnected) {
+      alert('You need to Sign In');
+      e.preventDefault();
+      return;
+    }
     setTimeout(() => {
       setCookie('check_retwit', 'true');
     }, 3000);
@@ -37,22 +46,36 @@ const Vault = () => {
     }, 3000);
   };
 
-  const getDiscordCode = async (token: string) => {
-    const data = await fetch('/api/activation-codes', {
+  const getDiscordCode = async (url: string | null) => {
+    if (!url) return;
+    const data = await fetch(url, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${cookies.auth_token}`,
         'Content-Type': 'application/json',
       },
     });
-    const { code }: { code: string } = await data.json();
-    if (!code) return;
-    setCookie('discord_code', code, {
-      expires: new Date(((d) => d.setDate(d.getDate() + 365))(new Date())),
-    });
+    const {
+      code,
+      error,
+      message,
+    }: { code: string; error: string; message: string } = await data.json();
+    if (code) {
+      setDiscordCode(code);
+    }
+    if (error && message == 'User has already activated code') {
+      setDiscordCode(true);
+    }
   };
 
-  const getVouchers = async (url: string) => {
+  const { data: _discordCode } = useSWR(
+    ((address && cookies.auth_token) || checkFollow || checkRetwit) &&
+      '/api/activation-codes',
+    getDiscordCode
+  );
+
+  const getVouchers = async (url: string | null) => {
+    if (!url) return;
     const data = await fetch(url, {
       headers: {
         Authorization: `Bearer ${cookies.auth_token}`,
@@ -63,29 +86,32 @@ const Vault = () => {
     console.log(voucher);
   };
 
-  const { data } = useSWR('/api/vouchers/access-keys', getVouchers);
+  const { data: accessKeys } = useSWR(
+    discordCode ? '/api/vouchers/access-keys' : null,
+    getVouchers
+  );
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    console.log(accessKeys);
+  }, [accessKeys]);
 
   useEffect(() => {
-    if (cookies.check_follow && cookies.auth_token && isConnected) {
-      setCheckFollow(true);
+    if (!discordCode && cookies.auth_token && isConnected) {
+      if (cookies.check_follow) {
+        setCheckFollow(true);
+      }
       if (cookies.check_retwit) {
         setCheckRetwit(true);
-        if (cookies.discord_code) {
-          setCheckDiscord(true);
-        } else {
-          getDiscordCode(cookies.auth_token);
-        }
       }
+    } else if (discordCode && cookies.auth_token && isConnected) {
+      setCheckFollow(true);
+      setCheckRetwit(true);
     } else {
       setCheckFollow(false);
       setCheckRetwit(false);
-      setCheckDiscord(false);
+      setDiscordCode(false);
     }
-  }, [cookies, address]);
+  }, [cookies, address, discordCode]);
 
   useEffect(() => {
     setHasMounted(true);
@@ -114,7 +140,7 @@ const Vault = () => {
             <button
               className={`btn btn-success btn-lg px-4 py-3 w-100 ${
                 styles.mint_btn
-              } ${!cookies.check_discord ? styles.bg_card_disabled : ''}`}
+              } ${discordCode !== true ? styles.bg_card_disabled : ''}`}
             >
               MINT
             </button>
@@ -204,7 +230,7 @@ const Vault = () => {
           <div
             className={`shadow p-3 mb-3 rounded ${styles.bg_card} ${
               !checkRetwit ? styles.bg_card_disabled : ''
-            }`}
+            } ${discordCode === true ? styles.bg_card_done : ''}`}
           >
             <div className="d-flex">
               <div className="col col-auto d-flex justify-content-center px-2">
@@ -241,11 +267,11 @@ const Vault = () => {
                   className={`btn btn-lg ${styles.bg_card_btn}`}
                   onClick={checkDiscordJoin}
                 >
-                  Join
+                  {discordCode === true ? 'Done' : 'Join'}
                 </a>
               </div>
             </div>
-            {checkDiscord && (
+            {typeof discordCode == 'string' && (
               <div style={{ paddingLeft: '65px' }}>
                 <p className="my-0">
                   Go to{' '}
@@ -262,7 +288,7 @@ const Vault = () => {
                   Enter command:
                   <br />
                   <span>
-                    <kbd>/activate code: {cookies.discord_code}</kbd>
+                    <kbd>/activate code: {discordCode}</kbd>
                   </span>
                 </p>
               </div>
