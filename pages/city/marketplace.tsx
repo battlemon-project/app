@@ -13,7 +13,7 @@ const MarketPlace = () => {
   }, []);
 
   return (
-    <div className="container pt-5 mt-5">
+    <div className="container mx-auto px-4">
       <Suspense fallback={<BabylonLoader isConnected={true} />}>
         <HomeScene />
       </Suspense>
