@@ -56,6 +56,8 @@ const Vault = () => {
   const checkTwitterRetwit = (e: MouseEventHandler<HTMLAnchorElement>) => {
     if (!isConnected) {
       alert('You need to Sign In');
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       e.preventDefault();
       return;
     }
@@ -237,7 +239,7 @@ const Vault = () => {
                 target="_blank"
                 rel="noreferrer"
                 className="relative z-10 flex justify-center items-center p-3 xs:p-0 text-xl h-full text-white border-2 border-white border-opacity-20 rounded-2xl px-2.5 min-w-28"
-                onClick={checkTwitterRetwit}
+                onClick={(e) => checkTwitterRetwit(e as any)}
                 href="https://twitter.com/BATTLEM0N"
               >
                 {checkRetwit ? 'Done' : 'Retwit'}

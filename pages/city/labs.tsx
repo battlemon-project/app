@@ -7,23 +7,15 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
-<<<<<<< HEAD
 import FREE_GEMS_CONTRACT_SOL from '../../helpers/abi/FreeGem.json';
-import {
-  FREE_GEMS_CONTRACT_ADDRESS,
-  craftGems,
-  mintGem,
-} from '../../helpers/linea';
-=======
-import { craftGems, mintGem } from '../../helpers/linea';
-import { getBalance } from '../../helpers/covalent';
->>>>>>> b3de830 (migrate to tailwind css)
+import { FREE_GEMS_CONTRACT_ADDRESS, mintGem } from '../../helpers/linea';
 import { useAlert } from 'react-alert';
 import { BabylonLoader } from '../../components/BabylonLoader';
 import { CssLoader } from '../../components/CssLoader';
 import { GemItemCard } from '../../components/GemItemCard/GemItemCard';
 import Image from 'next/image';
 import classNames from 'classnames';
+import { getBalance } from '../../helpers/covalent';
 
 interface INft {
   id: string;
@@ -44,43 +36,17 @@ const gemImages: Record<number, string> = {
 const Labs = () => {
   const { address } = useAccount();
   const [loader, setLoader] = useState<boolean>(true);
-  const [animationForGem, setAnimationForGem] = useState<[boolean, number]>([
-    false,
-    0,
-  ]);
+  const [animationForGem] = useState<[boolean, number]>([false, 0]);
   const [userGems] = useState<INft[]>([]);
   const [selectedGems, setSelectedGems] = useState<
     [string | null, string | null]
   >([null, null]);
   const { config: configMint } = usePrepareContractWrite(mintGem(address));
-<<<<<<< HEAD
-  const {
-    data: dataMintGem,
-    write: sendMintGems,
-    isError: errorMintGem,
-  } = useContractWrite(configMint);
 
-  // const { config: configCraft } = usePrepareContractWrite(
-  //   craftGems(selectedGems[0], selectedGems[1])
-  // );
-  // const {
-  //   data: dataCraftGems,
-  //   write: sendCraftGems,
-  //   isError: errorCraftGems,
-  // } = useContractWrite(configCraft);
-
-=======
   const { data: dataMintGem, isError: errorMintGem } =
     useContractWrite(configMint);
-  const { config: configCraft } = usePrepareContractWrite(
-    craftGems(selectedGems[0], selectedGems[1])
-  );
->>>>>>> b3de830 (migrate to tailwind css)
-  const {
-    data: bigNumberBalance,
-    isError,
-    isLoading,
-  } = useContractRead({
+
+  const { data: bigNumberBalance } = useContractRead({
     address: FREE_GEMS_CONTRACT_ADDRESS,
     abi: FREE_GEMS_CONTRACT_SOL.abi,
     functionName: 'balanceOf',
@@ -98,15 +64,9 @@ const Labs = () => {
     hash: dataMintGem?.hash,
   });
 
-<<<<<<< HEAD
-  // const { data: craftedGem, isSuccess: successCraftGems } = useWaitForTransaction({
+  // const { isSuccess: successCraftGems } = useWaitForTransaction({
   //   hash: dataCraftGems?.hash,
   // });
-=======
-  const { isSuccess: successCraftGems } = useWaitForTransaction({
-    hash: dataCraftGems?.hash,
-  });
->>>>>>> b3de830 (migrate to tailwind css)
 
   useEffect(() => {
     if (errorMintGem || successMintGem) {
@@ -139,25 +99,7 @@ const Labs = () => {
       return;
     }
     if (!address) return;
-<<<<<<< HEAD
-    //await getBalance(address);
-
-    // const nfts: INft[] = gems.ownedNfts.map((nft) => {
-    //   const grade = parseInt(
-    //     (nft.tokenUri?.gateway ?? 'https://example.com/nft/0')
-    //       .split('/')
-    //       .at(-1) as string
-    //   );
-    //   return {
-    //     id: nft.tokenId,
-    //     grade,
-    //     image: gemImages[grade],
-    //   };
-    // });
-    // setUserGems(nfts);
-=======
     await getBalance(address);
->>>>>>> b3de830 (migrate to tailwind css)
     setLoader(false);
   };
 
@@ -177,7 +119,7 @@ const Labs = () => {
   const handleCraft = async () => {
     setLoader(true);
     try {
-      //await sendCraftGems?.();
+      // await sendCraftGems?.();
     } catch (e) {
       const { message } = e as Error;
       alert.show(message, { type: 'error' });
