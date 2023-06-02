@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import {
   useAccount,
+  useContractRead,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
-import { craftGems, mintGem } from '../../helpers/linea';
-import { getGems, getBalance } from '../../helpers/covalent';
+import FREE_GEMS_CONTRACT_SOL from '../../helpers/abi/FreeGem.json';
+import {
+  FREE_GEMS_CONTRACT_ADDRESS,
+  craftGems,
+  mintGem,
+} from '../../helpers/linea';
 import { useAlert } from 'react-alert';
 import { CssLoader } from '../../components/CssLoader';
 import { BabylonLoader } from '../../components/BabylonLoader';
@@ -47,14 +52,31 @@ const Labs = () => {
     write: sendMintGems,
     isError: errorMintGem,
   } = useContractWrite(configMint);
-  const { config: configCraft } = usePrepareContractWrite(
-    craftGems(selectedGems[0], selectedGems[1])
-  );
+
+  // const { config: configCraft } = usePrepareContractWrite(
+  //   craftGems(selectedGems[0], selectedGems[1])
+  // );
+  // const {
+  //   data: dataCraftGems,
+  //   write: sendCraftGems,
+  //   isError: errorCraftGems,
+  // } = useContractWrite(configCraft);
+
   const {
-    data: dataCraftGems,
-    write: sendCraftGems,
-    isError: errorCraftGems,
-  } = useContractWrite(configCraft);
+    data: bigNumberBalance,
+    isError,
+    isLoading,
+  } = useContractRead({
+    address: FREE_GEMS_CONTRACT_ADDRESS,
+    abi: FREE_GEMS_CONTRACT_SOL.abi,
+    functionName: 'balanceOf',
+    args: [address],
+  });
+
+  useEffect(() => {
+    console.log(parseFloat(bigNumberBalance as string));
+  }, [bigNumberBalance]);
+
   const [hasMounted, setHasMounted] = useState(false);
   const alert = useAlert();
 
@@ -62,10 +84,9 @@ const Labs = () => {
     hash: dataMintGem?.hash,
   });
 
-  const { data: craftedGem, isSuccess: successCraftGems } =
-    useWaitForTransaction({
-      hash: dataCraftGems?.hash,
-    });
+  // const { data: craftedGem, isSuccess: successCraftGems } = useWaitForTransaction({
+  //   hash: dataCraftGems?.hash,
+  // });
 
   useEffect(() => {
     if (errorMintGem || successMintGem) {
@@ -76,29 +97,29 @@ const Labs = () => {
     console.log(mintedGem);
   }, [successMintGem, errorMintGem]);
 
-  useEffect(() => {
-    if (successCraftGems || errorCraftGems) {
-      if (successCraftGems) {
-        setAnimationForGem([
-          true,
-          (userGems.find((g) => g.id === selectedGems[0])?.grade ?? 0) + 1,
-        ]);
-        setTimeout(() => {
-          setAnimationForGem([false, 0]);
-        }, 4000);
-      }
-      setSelectedGems([null, null]);
-      setLoader(true);
-      refreshGems();
-    }
-  }, [errorCraftGems, successCraftGems]);
+  // useEffect(() => {
+  //   if (successCraftGems || errorCraftGems) {
+  //     if (successCraftGems) {
+  //       setAnimationForGem([
+  //         true,
+  //         (userGems.find((g) => g.id === selectedGems[0])?.grade ?? 0) + 1,
+  //       ]);
+  //       setTimeout(() => {
+  //         setAnimationForGem([false, 0]);
+  //       }, 4000);
+  //     }
+  //     setSelectedGems([null, null]);
+  //     setLoader(true);
+  //     refreshGems();
+  //   }
+  // }, [errorCraftGems, successCraftGems]);
 
   const refreshGems = async () => {
     if (process.env.NEXT_PUBLIC_PRODUCTION == 'true') {
       return;
     }
     if (!address) return;
-    await getBalance(address);
+    //await getBalance(address);
 
     // const nfts: INft[] = gems.ownedNfts.map((nft) => {
     //   const grade = parseInt(
@@ -143,7 +164,7 @@ const Labs = () => {
   const handleCraft = async () => {
     setLoader(true);
     try {
-      await sendCraftGems?.();
+      //await sendCraftGems?.();
     } catch (e) {
       const { message } = e as Error;
       alert.show(message, { type: 'error' });

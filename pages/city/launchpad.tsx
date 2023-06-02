@@ -47,7 +47,7 @@ const Vault = () => {
     setBalance(parseFloat(bigNumberBalance as string));
   }, [bigNumberBalance]);
 
-  const checkTwitterFollow = (e: MouseEvent) => {
+  const checkTwitterFollow = (e: React.MouseEvent) => {
     if (!isConnected) {
       alert('You need to Sign In');
       e.preventDefault();
@@ -58,7 +58,7 @@ const Vault = () => {
     }, 3000);
   };
 
-  const checkTwitterRetwit = (e: MouseEvent) => {
+  const checkTwitterRetwit = (e: React.MouseEvent) => {
     if (!isConnected) {
       alert('You need to Sign In');
       e.preventDefault();
