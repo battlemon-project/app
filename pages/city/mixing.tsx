@@ -3,21 +3,8 @@ import Layout from '../../components/Layout';
 
 const Vault = () => {
   return (
-    <div className="container text-center">
-      <video
-        loop
-        autoPlay
-        playsInline
-        muted
-        className="position-absolute"
-        style={{
-          margin: ' 0 auto',
-          borderRadius: '15px',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
-      >
+    <div className="container px-4 text-center mx-auto flex justify-center pt-24">
+      <video className="rounded-xl" loop autoPlay playsInline muted>
         <source src="/resources/video/mixing.mp4" type="video/mp4" />
       </video>
     </div>

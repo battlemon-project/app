@@ -8,7 +8,7 @@ import {
 import LoadingScreen from '../components/LoadingScreen';
 import { useRouter } from 'next/router';
 import { Chests } from './Models/Chests';
-import styles from './../styles/Shop.module.css';
+import classNames from 'classnames';
 
 export default function HomeScene() {
   const FpsElement =
@@ -87,25 +87,25 @@ export default function HomeScene() {
   }, []);
 
   return (
-    <div className="position-relative">
-      <div className={`position-absolute w-100 d-flex ${styles.amount}`}>
-        <div
-          className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--1']}`}
-        >
+    <div className="relative">
+      <div className={classNames('absolute w-full flex bottom-4')}>
+        <div className="text-white text-center text-3xl font-semibold basis-1/3 pl-24">
           <div>0 / 2000</div>
-          <button className="btn btn-lg btn-light px-4 mt-3">0.2ETH</button>
+          <button className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all">
+            0.2ETH
+          </button>
         </div>
-        <div
-          className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--2']}`}
-        >
+        <div className="text-white text-center text-3xl font-semibold basis-1/3">
           <div>0 / 1000</div>
-          <button className="btn btn-lg btn-light px-4 mt-3">0.5ETH</button>
+          <button className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all">
+            0.5ETH
+          </button>
         </div>
-        <div
-          className={`text-white text-center fs-3 fw-semibold ${styles.amount__item} ${styles['amount__item--3']}`}
-        >
+        <div className="text-white text-center text-3xl font-semibold basis-1/3 pr-20">
           <div>0 / 500</div>
-          <button className="btn btn-lg btn-light px-4 mt-3">1ETH</button>
+          <button className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all">
+            1ETH
+          </button>
         </div>
       </div>
       <canvas

@@ -43,10 +43,10 @@ const farmingCards: FarmingCardType[] = [
 
 const Defi = () => {
   return (
-    <div className="container">
-      <div className="row justify-content-center gy-4 mt-5">
+    <div className="container mx-auto px-4 pt-14">
+      <div className="grid grid-cols-12 gap-6 mt-5">
         {farmingCards.map((card, i) => (
-          <div className="col-sm-12 col-md-6 col-lg-4" key={i}>
+          <div className="col-span-full md:col-span-6 xl:col-span-4" key={i}>
             <FarmingCard {...card} />
           </div>
         ))}
