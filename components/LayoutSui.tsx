@@ -3,7 +3,7 @@ import { WalletProvider } from '@suiet/wallet-kit';
 import { AlertTemplate } from './AlertTemplate';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import Head from 'next/head';
-import { Header } from './Header';
+import { Header } from './Header/Header';
 import { Footer } from './Footer';
 
 interface Props {

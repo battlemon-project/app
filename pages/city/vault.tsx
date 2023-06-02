@@ -17,10 +17,10 @@ const cards: VaultCardType[] = [
 
 const Vault = () => {
   return (
-    <div className="container">
-      <div className="row justify-content-center mt-5 gy-4">
+    <div className="container mx-auto px-4 py-20">
+      <div className="flex justify-center gap-6 max-w-4xl mx-auto flex-col sm:flex-row">
         {cards.map((card, i) => (
-          <div className="col-sm-12 col-md-6 col-lg-4" key={i}>
+          <div className="basis-1/2" key={i}>
             <VaultCard title={card.title} subtitle={card.subtitle} />
           </div>
         ))}
