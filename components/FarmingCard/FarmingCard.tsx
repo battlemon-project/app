@@ -1,6 +1,5 @@
 import React from 'react';
 import Image, { type StaticImageData } from 'next/image';
-import styles from './FarmingCard.module.css';
 
 export interface FarmingCardType {
   title: string;
@@ -16,27 +15,21 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
   title,
 }) => {
   return (
-    <div className="flex flex-col p-4 text-center text-white gap-1 border border-white rounded-4">
-      <div className="fs-3 fw-bold mb-2">Farming</div>
+    <div className="flex flex-col p-6 text-center text-white gap-1 border border-white rounded-2xl">
+      <div className="text-3xl font-bold mb-2">Farming</div>
       <div>Stake</div>
-      <div className="d-flex justify-content-center align-items-center gap-3 mb-3">
+      <div className="flex justify-center items-center gap-3 mb-3">
         {pickURL ? (
           <>
             <Image src={pickURL} width={70} height={85} alt="Pick" />
-            <div className="fs-4 fw-semibold">+</div>
+            <div className="text-4xl font-semibold">+</div>
           </>
         ) : null}
 
         <Image src={gemURL} width={70} height={85} alt="Gem" />
       </div>
-      <div className="fw-semibold fs-5">{title}</div>
-      <button
-        className={
-          'border border-white bg-transparent p-2 rounded-2 text-white' +
-          ' ' +
-          styles.button
-        }
-      >
+      <div className="font-semibold text-xl mb-2">{title}</div>
+      <button className="border border-white bg-transparent p-2 rounded-lg text-white hover:bg-white hover:text-black">
         Proceed
       </button>
     </div>

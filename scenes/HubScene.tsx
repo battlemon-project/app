@@ -26,6 +26,7 @@ export default function HubScene({
   setLoader: Dispatch<SetStateAction<BabylonLoaderType>>;
   handleMintLemon: () => Promise<void | undefined>;
 }) {
+  const { inventoryIsOpened } = useLemonStore();
   const FpsElement = document.getElementById('fps');
   const [step, changeStep] = useState<number>(0);
 
@@ -125,16 +126,12 @@ export default function HubScene({
   };
 
   return (
-    <>
-      <canvas
-        className="vh-100 w-100 position-absolute top-0 hubbg"
-        id="renderCanvas"
-      />
-      <div className="container position-relative">
+    <div className="relative">
+      <canvas className="h-full w-full" id="renderCanvas" />
+      <div className="container w-full absolute left-0 top-5">
         {step > 0 && (
           <button
-            className="btn btn-lg btn-outline-light mb-3 position-absolute pt-0 pb-1 px-4"
-            style={{ top: '80px' }}
+            className="border border-white rounded-md font-semibold flex items-center text-white leading-none text-xl mb-3 px-6 py-0.5 top-20 hover:text-black hover:bg-white transition-all"
             onClick={toggleBack}
           >
             <span style={{ fontSize: '26px', lineHeight: '32px' }}>
@@ -143,9 +140,13 @@ export default function HubScene({
             Back
           </button>
         )}
-
-        <Inventory />
       </div>
-    </>
+
+      {inventoryIsOpened ? (
+        <div className="absolute top-1/2 right-0 max-w-2xl w-full -translate-y-1/2">
+          <Inventory />
+        </div>
+      ) : null}
+    </div>
   );
 }

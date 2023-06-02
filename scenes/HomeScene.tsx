@@ -104,7 +104,7 @@ export default function HomeScene() {
   return (
     <canvas
       ref={canvasRef}
-      className="vh-100 w-100 position-absolute top-0"
+      className="h-screen w-screen fixed top-0"
       id="homeCanvas"
     />
   );

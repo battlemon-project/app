@@ -5,6 +5,8 @@ import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import alchemy, { getItems, mintItemData } from '../../helpers/alchemy';
 import { useAlert } from 'react-alert';
 import { CssLoader } from '../CssLoader';
+import classNames from 'classnames';
+import Image from 'next/image';
 
 export const LemonItems: React.FC = () => {
   const { lemons, activePlatform } = useLemonStore(
@@ -106,50 +108,52 @@ export const LemonItems: React.FC = () => {
   }, []);
 
   return (
-    <>
-      <div className="inventory-left-buttons d-flex flex-column">
-        <div className="col d-flex py-1" style={{ height: '33.33%' }}>
+    <div className="flex max-w-3xl w-full">
+      <div className="top-20 absolute w-28 -top-1 -bottom-1 -left-32 flex flex-col">
+        <div className="col flex py-1" style={{ height: '33.33%' }}>
           <a
             href={'#'}
-            className={`button justify-content-center w-100 d-flex`}
+            className="bg-white bg-opacity-60 text-center rounded-md text-xl justify-center w-full flex text-black border border-white border-opacity-80"
             onClick={handleMintItem}
           >
-            <span className="justify-content-center align-self-center text-center w-100">
+            <span className="justify-center self-center text-center w-full">
               Mint random item
             </span>
           </a>
         </div>
-        <div className="col d-flex py-1" style={{ height: '33.33%' }}>
+        <div className="flex py-1" style={{ height: '33.33%' }}>
           <a
             href={'#'}
-            className={`button justify-content-center w-100 d-flex`}
+            className="bg-white bg-opacity-60 text-center rounded-md text-xl justify-center w-full flex text-black border border-white border-opacity-80"
             onClick={handleDressedMode}
           >
-            <span
-              className={`justify-content-center align-self-center text-center w-100`}
-            >
+            <span className="justify-center self-center text-center w-full">
               {currentItemsFilter == 'dressed' ? 'Back' : 'Dressed items'}
             </span>
           </a>
         </div>
-        <div className="col d-flex py-1" style={{ height: '33.33%' }}>
+        <div className="flex py-1" style={{ height: '33.33%' }}>
           <a
             href={'#'}
-            className={`button justify-content-center w-100 d-flex ${
-              selectedItem ? '' : 'disabled'
-            }`}
+            className={classNames(
+              {
+                'bg-stone-400 bg-opacity-40': !selectedItem,
+                'bg-white bg-opacity-60': selectedItem,
+              },
+              'text-center rounded-md text-xl justify-center w-full flex text-black border border-white border-opacity-80'
+            )}
           >
-            <span className="justify-content-center align-self-center text-center w-100">
+            <span className="justify-center self-center text-center w-full">
               {currentItemsFilter == 'dressed' ? 'Take Off' : 'Confirm'}
             </span>
           </a>
         </div>
       </div>
-      <div className="inventory-scroll d-flex">
+      <div className="flex w-full items-center justify-center bg-white bg-opacity-50 min-h-50 h-90 overflow-y-auto rounded-md">
         {inventoryLoader ? (
           <CssLoader />
         ) : (
-          <div className="row align-self-start w-100">
+          <div className="grid grid-cols-12 self-start w-full">
             {currentItemsFilter == 'dressed' ? (
               <>
                 {lemonItems
@@ -160,13 +164,14 @@ export const LemonItems: React.FC = () => {
                   )
                   .map((item, idx) => (
                     <div
-                      className={`col col-3 border px-1 px-1 ${
-                        item.id == selectedItem?.id && 'selected'
-                      }`}
+                      className={classNames({
+                        'bg-white border-opacity-80 col-span-3 border px-1':
+                          item.id === selectedItem?.id,
+                      })}
                       key={`${item.type}${idx}`}
                     >
                       <div
-                        className="link text-center py-2"
+                        className="text-center py-2"
                         onClick={clickToItem(item)}
                         style={{ cursor: 'pointer' }}
                       >
@@ -183,11 +188,8 @@ export const LemonItems: React.FC = () => {
                     item.attachedTo ==
                     lemons.ownedNfts[activePlatform - 1].tokenId
                 ).length == 0 ? (
-                  <div className="w-100 d-flex align-items-center">
-                    <div
-                      className="w-100 text-center pt-4 mt-2"
-                      style={{ fontSize: '19px' }}
-                    >
+                  <div className="w-full flex align-items-center col-span-full">
+                    <div className="w-full text-center pt-4 mt-2 text-lg">
                       {"Lemon doesn't have dresset items"}
                     </div>
                   </div>
@@ -206,20 +208,24 @@ export const LemonItems: React.FC = () => {
                   )
                   .map((item, idx) => (
                     <div
-                      className={`col col-3 border px-1 px-1 ${
-                        item.id == selectedItem?.id && 'selected'
-                      }`}
+                      className={classNames(
+                        {
+                          'bg-white bg-opacity-80':
+                            item.id === selectedItem?.id,
+                        },
+                        'col-span-3 border px-1'
+                      )}
                       key={`${item.type}${idx}`}
                     >
                       <div
-                        className="link text-center py-2"
+                        className="text-center py-2 cursor-pointer"
                         onClick={clickToItem(item)}
-                        style={{ cursor: 'pointer' }}
                       >
-                        <img
+                        <Image
                           src={`${process.env.NEXT_PUBLIC_STATIC}/assets/128/Icon_${item.name}_128.png`}
                           alt={item.type}
-                          className="img-fluid"
+                          width={128}
+                          height={128}
                         />
                       </div>
                     </div>
@@ -230,39 +236,35 @@ export const LemonItems: React.FC = () => {
         )}
       </div>
 
-      <div className="position-absolute" style={{ bottom: '-70px' }}>
+      <div className="absolute -bottom-20">
         {currentItemsFilter != 'dressed' && (
-          <div className="d-flex mt-2 bottom-buttons">
+          <div className="flex shrink-0 mt-2 bottom-buttons">
             <a
-              className={`col col-auto position-relative ${
-                currentItemsFilter == undefined && 'active'
-              }`}
+              className={classNames(
+                {
+                  'bg-yellow-400 opacity-80': currentItemsFilter === undefined,
+                },
+                'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+              )}
               href={'#'}
               onClick={filterOutifts('all')}
             >
-              <b
-                className="position-absolute"
-                style={{
-                  color: '#4a5480',
-                  padding: '19px 15px 0 16px',
-                  fontSize: '17px',
-                }}
-              >
-                ALL
-              </b>
-              <img
+              <b className="relative z-10">ALL</b>
+              <Image
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                width={63}
+                height={63}
+                alt="icon"
                 src={`${process.env.NEXT_PUBLIC_STATIC}/assets/tiny/icon_hand_empty.png`}
               />
             </a>
             <a
-              className={`col col-auto ${
-                lemonItems.find(
-                  (item) => item.type == 'cap' && !item.attachedTo
-                )
-                  ? 'enabled'
-                  : 'disabled'
-              } ${currentItemsFilter == 'cap' ? 'active' : ''}`}
-              href={'#'}
+              className={classNames(
+                {
+                  'bg-yellow-400 opacity-80': currentItemsFilter === 'cap',
+                },
+                'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full cursor-pointer'
+              )}
               onClick={filterOutifts('cap')}
             >
               <img
@@ -270,13 +272,12 @@ export const LemonItems: React.FC = () => {
               />
             </a>
             <a
-              className={`col col-auto ${
-                lemonItems.find(
-                  (item) => item.type == 'belt' && !item.attachedTo
-                )
-                  ? 'enabled'
-                  : 'disabled'
-              } ${currentItemsFilter == 'belt' ? 'active' : ''}`}
+              className={classNames(
+                {
+                  'bg-yellow-400 opacity-80': currentItemsFilter === 'belt',
+                },
+                'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+              )}
               href={'#'}
               onClick={filterOutifts('belt')}
             >
@@ -285,13 +286,12 @@ export const LemonItems: React.FC = () => {
               />
             </a>
             <a
-              className={`col col-auto ${
-                lemonItems.find(
-                  (item) => item.type == 'cloth' && !item.attachedTo
-                )
-                  ? 'enabled'
-                  : 'disabled'
-              } ${currentItemsFilter == 'cloth' ? 'active' : ''}`}
+              className={classNames(
+                {
+                  'bg-yellow-400 opacity-80': currentItemsFilter === 'cloth',
+                },
+                'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+              )}
               href={'#'}
               onClick={filterOutifts('cloth')}
             >
@@ -300,13 +300,12 @@ export const LemonItems: React.FC = () => {
               />
             </a>
             <a
-              className={`col col-auto ${
-                lemonItems.find(
-                  (item) => item.type == 'mask' && !item.attachedTo
-                )
-                  ? 'enabled'
-                  : 'disabled'
-              } ${currentItemsFilter == 'mask' ? 'active' : ''}`}
+              className={classNames(
+                {
+                  'bg-yellow-400 opacity-80': currentItemsFilter === 'mask',
+                },
+                'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+              )}
               href={'#'}
               onClick={filterOutifts('mask')}
             >
@@ -315,13 +314,12 @@ export const LemonItems: React.FC = () => {
               />
             </a>
             <a
-              className={`col col-auto ${
-                lemonItems.find(
-                  (item) => item.type == 'glasses' && !item.attachedTo
-                )
-                  ? 'enabled'
-                  : 'disabled'
-              } ${currentItemsFilter == 'glasses' ? 'active' : ''}`}
+              className={classNames(
+                {
+                  'bg-yellow-400 opacity-80': currentItemsFilter === 'glasses',
+                },
+                'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+              )}
               href={'#'}
               onClick={filterOutifts('glasses')}
             >
@@ -330,13 +328,12 @@ export const LemonItems: React.FC = () => {
               />
             </a>
             <a
-              className={`col col-auto ${
-                lemonItems.find(
-                  (item) => item.type == 'shoes' && !item.attachedTo
-                )
-                  ? 'enabled'
-                  : 'disabled'
-              } ${currentItemsFilter == 'shoes' ? 'active' : ''}`}
+              className={classNames(
+                {
+                  'bg-yellow-400 opacity-80': currentItemsFilter === 'shoes',
+                },
+                'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+              )}
               href={'#'}
               onClick={filterOutifts('shoes')}
             >
@@ -345,13 +342,12 @@ export const LemonItems: React.FC = () => {
               />
             </a>
             <a
-              className={`col col-auto ${
-                lemonItems.find(
-                  (item) => item.type == 'back' && !item.attachedTo
-                )
-                  ? 'enabled'
-                  : 'disabled'
-              } ${currentItemsFilter == 'back' ? 'active' : ''}`}
+              className={classNames(
+                {
+                  'bg-yellow-400 opacity-80': currentItemsFilter === 'back',
+                },
+                'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+              )}
               href={'#'}
               onClick={filterOutifts('back')}
             >
@@ -360,13 +356,13 @@ export const LemonItems: React.FC = () => {
               />
             </a>
             <a
-              className={`col col-auto ${
-                lemonItems.find(
-                  (item) => item.type == 'fire_arms' && !item.attachedTo
-                )
-                  ? 'enabled'
-                  : 'disabled'
-              } ${currentItemsFilter == 'fire_arms' ? 'active' : ''}`}
+              className={classNames(
+                {
+                  'bg-yellow-400 opacity-80':
+                    currentItemsFilter === 'fire_arms',
+                },
+                'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+              )}
               href={'#'}
               onClick={filterOutifts('fire_arms')}
             >
@@ -375,13 +371,13 @@ export const LemonItems: React.FC = () => {
               />
             </a>
             <a
-              className={`col col-auto ${
-                lemonItems.find(
-                  (item) => item.type == 'cold_arms' && !item.attachedTo
-                )
-                  ? 'enabled'
-                  : 'disabled'
-              } ${currentItemsFilter == 'cold_arms' ? 'active' : ''}`}
+              className={classNames(
+                {
+                  'bg-yellow-400 opacity-80':
+                    currentItemsFilter === 'cold_arms',
+                },
+                'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+              )}
               href={'#'}
               onClick={filterOutifts('cold_arms')}
             >
@@ -392,6 +388,6 @@ export const LemonItems: React.FC = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };

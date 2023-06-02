@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { lineaTestnet, mainnet } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
@@ -6,7 +6,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected';
 import { AlertTemplate } from './AlertTemplate';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import Head from 'next/head';
-import { Header } from './Header';
+import { Header } from './Header/Header';
 import { Footer } from './Footer';
 
 const { chains, provider } = configureChains(
@@ -32,10 +32,6 @@ const options = {
 };
 
 export default function Layout({ children }: Props) {
-  useEffect(() => {
-    require('bootstrap/dist/js/bootstrap.bundle.min.js');
-  }, []);
-
   return (
     <>
       <Head>
@@ -69,9 +65,15 @@ export default function Layout({ children }: Props) {
       </Head>
       <AlertProvider template={AlertTemplate} {...options}>
         <WagmiConfig client={client}>
-          <Header network={'eth'} />
-          <main>{children}</main>
-          <Footer />
+          <div className="flex flex-col min-h-screen">
+            <div className="relative z-50">
+              <Header network={'eth'} />
+            </div>
+            <main className="relative flex-grow">{children}</main>
+            <div className="relative z-10">
+              <Footer />
+            </div>
+          </div>
         </WagmiConfig>
       </AlertProvider>
     </>

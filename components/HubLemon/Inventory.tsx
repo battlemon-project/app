@@ -3,9 +3,10 @@ import { useLemonStore } from '../../helpers/lemonStore';
 import { shallow } from 'zustand/shallow';
 import { LemonInfo } from './LemonInfo';
 import { LemonItems } from './LemonItems';
+import classNames from 'classnames';
 
 export const Inventory: React.FC = () => {
-  const { inventoryIsOpened, lemons, activePlatform } = useLemonStore(
+  const { lemons, activePlatform } = useLemonStore(
     ({ inventoryIsOpened, lemons, activePlatform }) => ({
       inventoryIsOpened,
       lemons,
@@ -36,25 +37,25 @@ export const Inventory: React.FC = () => {
     return <></>;
   }
 
+  console.log(currentTab);
+
   return (
-    <div
-      className={`inventory-container d-flex ${
-        inventoryIsOpened ? 'opened' : ''
-      }`}
-    >
-      <div
-        className={`inventory justify-content-center align-self-center w-100`}
-      >
-        <div className="d-flex mb-2 action-buttons">
+    <div className="w-full">
+      <div className="justify-center self-center w-100">
+        <div className="flex mb-2 gap-1.5">
           <a
             href={`#`}
-            className={`col col-auto d-flex ${
-              currentTab == 'info' && 'active'
-            }`}
+            className={classNames(
+              {
+                'bg-orange-200': currentTab === 'info',
+                'bg-slate-100': currentTab !== 'info',
+              },
+              'flex py-4 px-4 rounded-3xl border-2 border-slate-400 uppercase'
+            )}
             onClick={changeTab('info')}
           >
             <span
-              className="justify-content-center align-self-center text-center w-100"
+              className="justify-center self-center text-center w-full"
               style={{ color: '#000' }}
             >
               INFO
@@ -62,13 +63,17 @@ export const Inventory: React.FC = () => {
           </a>
           <a
             href={`#`}
-            className={`col col-auto d-flex ${
-              currentTab == 'items' && 'active'
-            }`}
+            className={classNames(
+              {
+                'bg-orange-200': currentTab === 'items',
+                'bg-slate-100': currentTab !== 'items',
+              },
+              'flex py-4 px-4 rounded-3xl border-2 border-slate-400 uppercase'
+            )}
             onClick={changeTab('items')}
           >
             <span
-              className="justify-content-center align-self-center text-center w-100"
+              className="justify-center self-center text-center w-full"
               style={{ color: '#000' }}
             >
               ITEMS
@@ -80,10 +85,12 @@ export const Inventory: React.FC = () => {
             )}`}
             rel="noreferrer"
             target="_blank"
-            className="col col-auto d-flex"
+            className={classNames(
+              'flex py-4 px-4 rounded-3xl bg-slate-100 border-2 border-slate-400 uppercase'
+            )}
           >
             <span
-              className="justify-content-center align-self-center text-center w-100"
+              className="justify-center self-center text-center w-full"
               style={{ color: '#000' }}
             >
               PLAY
@@ -91,13 +98,17 @@ export const Inventory: React.FC = () => {
           </a>
           <a
             href={'#'}
-            className={`col col-auto d-flex ${
-              currentTab == 'rent' && 'active'
-            }`}
+            className={classNames(
+              {
+                'bg-orange-200': currentTab === 'rent',
+                'bg-slate-100': currentTab !== 'rent',
+              },
+              'flex py-4 px-4 rounded-3xl border-2 border-slate-400 uppercase'
+            )}
             onClick={changeTab('rent')}
           >
             <span
-              className="justify-content-center align-self-center text-center w-100"
+              className="justify-center self-center text-center w-full"
               style={{ color: '#000' }}
             >
               RENT
@@ -105,13 +116,17 @@ export const Inventory: React.FC = () => {
           </a>
           <a
             href={`#`}
-            className={`col col-auto d-flex ${
-              currentTab == 'sell' && 'active'
-            }`}
+            className={classNames(
+              {
+                'bg-orange-200': currentTab === 'sell',
+                'bg-slate-100': currentTab !== 'sell',
+              },
+              'flex py-4 px-4 rounded-3xl border-2 border-slate-400 uppercase'
+            )}
             onClick={changeTab('sell')}
           >
             <span
-              className="justify-content-center align-self-center text-center w-100"
+              className="justify-center self-center text-center w-full"
               style={{ color: '#000' }}
             >
               SELL
@@ -119,13 +134,17 @@ export const Inventory: React.FC = () => {
           </a>
           <a
             href={`#`}
-            className={`col col-auto d-flex ${
-              currentTab == 'change' && 'active'
-            }`}
+            className={classNames(
+              {
+                'bg-orange-200': currentTab === 'change',
+                'bg-slate-100': currentTab !== 'change',
+              },
+              'flex py-4 px-4 rounded-3xl border-2 border-slate-400 uppercase'
+            )}
             onClick={changeTab('change')}
           >
             <span
-              className="justify-content-center align-self-center text-center w-100"
+              className="justify-center self-center text-center w-100"
               style={{ color: '#000' }}
             >
               CHANGE
@@ -133,13 +152,17 @@ export const Inventory: React.FC = () => {
           </a>
           <a
             href={`#`}
-            className={`col col-auto d-flex ${
-              currentTab == 'send' && 'active'
-            }`}
+            className={classNames(
+              {
+                'bg-orange-200': currentTab === 'send',
+                'bg-slate-100': currentTab !== 'send',
+              },
+              'flex py-4 px-4 rounded-3xl border-2 border-slate-400 uppercase'
+            )}
             onClick={changeTab('send')}
           >
             <span
-              className="justify-content-center align-self-center text-center w-100"
+              className="justify-center self-center text-center w-full"
               style={{ color: '#000' }}
             >
               SEND
@@ -147,7 +170,7 @@ export const Inventory: React.FC = () => {
           </a>
         </div>
 
-        <div className="inventory-center">
+        <div>
           {(() => {
             switch (currentTab) {
               case 'info':
