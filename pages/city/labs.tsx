@@ -6,7 +6,8 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
-import { craftGems, getGems, mintGem } from '../../helpers/alchemy';
+import { craftGems, mintGem } from '../../helpers/linea';
+import { getGems, getBalance } from '../../helpers/covalent';
 import { useAlert } from 'react-alert';
 import { CssLoader } from '../../components/CssLoader';
 import { BabylonLoader } from '../../components/BabylonLoader';
@@ -41,8 +42,11 @@ const Labs = () => {
     [string | null, string | null]
   >([null, null]);
   const { config: configMint } = usePrepareContractWrite(mintGem(address));
-  const { data: dataMintGem, isError: errorMintGem } =
-    useContractWrite(configMint);
+  const {
+    data: dataMintGem,
+    write: sendMintGems,
+    isError: errorMintGem,
+  } = useContractWrite(configMint);
   const { config: configCraft } = usePrepareContractWrite(
     craftGems(selectedGems[0], selectedGems[1])
   );
@@ -54,13 +58,14 @@ const Labs = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const alert = useAlert();
 
-  const { isSuccess: successMintGem } = useWaitForTransaction({
+  const { data: mintedGem, isSuccess: successMintGem } = useWaitForTransaction({
     hash: dataMintGem?.hash,
   });
 
-  const { isSuccess: successCraftGems } = useWaitForTransaction({
-    hash: dataCraftGems?.hash,
-  });
+  const { data: craftedGem, isSuccess: successCraftGems } =
+    useWaitForTransaction({
+      hash: dataCraftGems?.hash,
+    });
 
   useEffect(() => {
     if (errorMintGem || successMintGem) {
@@ -68,6 +73,7 @@ const Labs = () => {
       setLoader(true);
       refreshGems();
     }
+    console.log(mintedGem);
   }, [successMintGem, errorMintGem]);
 
   useEffect(() => {
@@ -92,21 +98,21 @@ const Labs = () => {
       return;
     }
     if (!address) return;
-    const gems = await getGems(address);
+    await getBalance(address);
 
-    const nfts: INft[] = gems.ownedNfts.map((nft) => {
-      const grade = parseInt(
-        (nft.tokenUri?.gateway ?? 'https://example.com/nft/0')
-          .split('/')
-          .at(-1) as string
-      );
-      return {
-        id: nft.tokenId,
-        grade,
-        image: gemImages[grade],
-      };
-    });
-    setUserGems(nfts);
+    // const nfts: INft[] = gems.ownedNfts.map((nft) => {
+    //   const grade = parseInt(
+    //     (nft.tokenUri?.gateway ?? 'https://example.com/nft/0')
+    //       .split('/')
+    //       .at(-1) as string
+    //   );
+    //   return {
+    //     id: nft.tokenId,
+    //     grade,
+    //     image: gemImages[grade],
+    //   };
+    // });
+    // setUserGems(nfts);
     setLoader(false);
   };
 
@@ -121,6 +127,17 @@ const Labs = () => {
       selectedGems[1] = id;
     }
     setSelectedGems([selectedGems[0], selectedGems[1]]);
+  };
+
+  const handleMint = async () => {
+    setLoader(true);
+    try {
+      await sendMintGems?.();
+    } catch (e) {
+      const { message } = e as Error;
+      alert.show(message, { type: 'error' });
+      setLoader(false);
+    }
   };
 
   const handleCraft = async () => {
@@ -190,7 +207,7 @@ const Labs = () => {
                   ) : userGems.length === 0 ? (
                     <div
                       className="col text-center"
-                      style={{ fontSize: '19px' }}
+                      style={{ fontSize: '19px', color: '#fff' }}
                     >
                       You have not gems yet
                       {/* Click to PLUS for add sticker to Crafting */}
@@ -223,22 +240,46 @@ const Labs = () => {
                 </div>
               </div>
             </div>
-            <div>
-              <button
-                className={classNames(
-                  {
-                    [styles.active]:
-                      !selectedGems.includes(null) &&
-                      userGems.find((g) => g.id == selectedGems[0])?.image ==
-                        userGems.find((g) => g.id == selectedGems[1])?.image,
-                  },
-                  styles.craft
-                )}
-                onClick={handleCraft}
-              >
-                <CraftIcon />
-                Craft
-              </button>
+            <div className="text-right">
+              <div className="row ms-auto" style={{ maxWidth: '780px' }}>
+                <div className="col-6">
+                  <button
+                    className={classNames(
+                      {
+                        [styles.active]:
+                          !selectedGems.includes(null) &&
+                          userGems.find((g) => g.id == selectedGems[0])
+                            ?.image ==
+                            userGems.find((g) => g.id == selectedGems[1])
+                              ?.image,
+                      },
+                      styles.craft
+                    )}
+                    onClick={handleCraft}
+                  >
+                    <CraftIcon />
+                    Craft
+                  </button>
+                </div>
+                <div className="col-6">
+                  <button
+                    className={classNames(
+                      {
+                        [styles.active]:
+                          !selectedGems.includes(null) &&
+                          userGems.find((g) => g.id == selectedGems[0])
+                            ?.image ==
+                            userGems.find((g) => g.id == selectedGems[1])
+                              ?.image,
+                      },
+                      styles.craft
+                    )}
+                    onClick={handleMint}
+                  >
+                    Mint
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

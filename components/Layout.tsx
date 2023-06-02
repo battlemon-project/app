@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { mainnet, sepolia } from 'wagmi/chains';
+import { lineaTestnet, mainnet } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { AlertTemplate } from './AlertTemplate';
@@ -10,7 +10,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 
 const { chains, provider } = configureChains(
-  [sepolia, mainnet],
+  [lineaTestnet, mainnet],
   [publicProvider(), publicProvider()]
 );
 

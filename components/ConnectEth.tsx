@@ -26,13 +26,13 @@ export const ConnectEth: React.FC = () => {
   };
 
   const fetchGuest = async () => {
-    const data = await fetch('/api/auth/guest', { method: 'POST' });
+    const data = await fetch('/battlemon-api/auth/guest', { method: 'POST' });
     const result = await data.json();
     return result as { token: string };
   };
 
   const getNonce = async (token: string) => {
-    const data = await fetch('/api/auth/nonce', {
+    const data = await fetch('/battlemon-api/auth/nonce', {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export const ConnectEth: React.FC = () => {
     address: string | undefined,
     signature: string
   ) => {
-    const data = await fetch('/api/auth/wallet', {
+    const data = await fetch('/battlemon-api/auth/wallet', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,

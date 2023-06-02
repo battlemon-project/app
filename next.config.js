@@ -12,7 +12,7 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/:path*",
+        source: "/battlemon-api/:path*",
         destination: "https://api.battlemon.com/:path*",
       },
     ];

@@ -1,22 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
-import { useAccount } from 'wagmi';
 import { useCookies } from 'react-cookie';
 import styles from '../../styles/Shop.module.css';
+import ACCESS_KEY_CONTRACT_SOL from '../../helpers/abi/AccessKey.json';
+import {
+  ACCESS_KEY_CONTRACT_ADDRESS,
+  IProxyMintArgs,
+  proxyMintAccessKey,
+} from '../../helpers/linea';
+import {
+  useAccount,
+  useContractRead,
+  useContractWrite,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+} from 'wagmi';
 import useSWR from 'swr';
 
 const Vault = () => {
   const [hasMounted, setHasMounted] = useState(false);
+  const [balance, setBalance] = useState(0);
   const { address, isConnected } = useAccount();
   const [checkFollow, setCheckFollow] = useState(false);
   const [checkRetwit, setCheckRetwit] = useState(false);
   const [discordCode, setDiscordCode] = useState<string | boolean>(false);
+  const [voucher, setVoucher] = useState<IProxyMintArgs | boolean>(false);
   const [cookies, setCookie] = useCookies([
     'check_follow',
     'check_retwit',
     'check_discord',
     'auth_token',
   ]);
+
+  const {
+    data: bigNumberBalance,
+    isError,
+    isLoading,
+  } = useContractRead({
+    address: ACCESS_KEY_CONTRACT_ADDRESS,
+    abi: ACCESS_KEY_CONTRACT_SOL.abi,
+    functionName: 'balanceOf',
+    args: [address],
+  });
+
+  useEffect(() => {
+    setBalance(parseFloat(bigNumberBalance as string));
+  }, [bigNumberBalance]);
 
   const checkTwitterFollow = (e: MouseEvent) => {
     if (!isConnected) {
@@ -70,7 +99,7 @@ const Vault = () => {
 
   const { data: _discordCode } = useSWR(
     ((address && cookies.auth_token) || checkFollow || checkRetwit) &&
-      '/api/activation-codes',
+      '/battlemon-api/activation-codes',
     getDiscordCode
   );
 
@@ -82,18 +111,14 @@ const Vault = () => {
         'Content-Type': 'application/json',
       },
     });
-    const { voucher }: { voucher: string } = await data.json();
-    console.log(voucher);
+    const dataVoucher: IProxyMintArgs = await data.json();
+    setVoucher(dataVoucher);
   };
 
   const { data: accessKeys } = useSWR(
-    discordCode ? '/api/vouchers/access-keys' : null,
+    discordCode ? '/battlemon-api/vouchers/access-keys' : null,
     getVouchers
   );
-
-  useEffect(() => {
-    console.log(accessKeys);
-  }, [accessKeys]);
 
   useEffect(() => {
     if (!discordCode && cookies.auth_token && isConnected) {
@@ -117,6 +142,28 @@ const Vault = () => {
     setHasMounted(true);
   }, []);
 
+  const { config: configProxyMintAccessKey } = usePrepareContractWrite(
+    proxyMintAccessKey(voucher)
+  );
+  const {
+    data: dataProxyMintAccessKey,
+    write: writeProxyMint,
+    isError: errorProxyMintAccessKey,
+  } = useContractWrite(configProxyMintAccessKey);
+
+  const { data: proxyMintedAccessKey, isSuccess: successProxyMintAccessKey } =
+    useWaitForTransaction({
+      hash: dataProxyMintAccessKey?.hash,
+    });
+
+  useEffect(() => {
+    console.log(proxyMintedAccessKey);
+  }, [successProxyMintAccessKey, errorProxyMintAccessKey]);
+
+  const handleProxyMintButton = () => {
+    writeProxyMint?.();
+  };
+
   if (!hasMounted) return <></>;
   return (
     <div className="container mt-5">
@@ -136,15 +183,30 @@ const Vault = () => {
             />
           </video>
 
-          <div className={`mt-3 ${styles.mint_container}`}>
-            <button
-              className={`btn btn-success btn-lg px-4 py-3 w-100 ${
-                styles.mint_btn
-              } ${discordCode !== true ? styles.bg_card_disabled : ''}`}
-            >
-              MINT
-            </button>
-          </div>
+          {balance > 0 ? (
+            <>
+              <div
+                className={`${styles.bg_card_description} mt-3 text-center h6`}
+              >
+                You already have key
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={`mt-3 ${styles.mint_container}`}>
+                <button
+                  onClick={handleProxyMintButton}
+                  className={`btn btn-success btn-lg px-4 py-3 w-100 ${
+                    styles.mint_btn
+                  } ${
+                    typeof voucher !== 'object' ? styles.bg_card_disabled : ''
+                  }`}
+                >
+                  MINT
+                </button>
+              </div>
+            </>
+          )}
         </div>
         <div className="col-7">
           <div
