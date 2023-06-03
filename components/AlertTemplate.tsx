@@ -38,7 +38,7 @@ export const AlertTemplate: React.FC<AlertTemplateProps> = ({
 
   return (
     <div style={{ ...alertStyle, ...style, ...optionalStyle }}>
-      <span style={{ flex: 2 }}>{message}</span>
+      <span style={{ flex: 2 }}>{message as React.ReactElement}</span>
       <button onClick={close} style={buttonStyle}>
         X
       </button>
