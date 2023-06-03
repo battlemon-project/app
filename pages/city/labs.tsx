@@ -43,8 +43,11 @@ const Labs = () => {
   >([null, null]);
   const { config: configMint } = usePrepareContractWrite(mintGem(address));
 
-  const { data: dataMintGem, isError: errorMintGem } =
-    useContractWrite(configMint);
+  const {
+    data: dataMintGem,
+    write: sendMintGems,
+    isError: errorMintGem,
+  } = useContractWrite(configMint);
 
   const { data: bigNumberBalance } = useContractRead({
     address: FREE_GEMS_CONTRACT_ADDRESS,
@@ -63,10 +66,6 @@ const Labs = () => {
   const { data: mintedGem, isSuccess: successMintGem } = useWaitForTransaction({
     hash: dataMintGem?.hash,
   });
-
-  // const { isSuccess: successCraftGems } = useWaitForTransaction({
-  //   hash: dataCraftGems?.hash,
-  // });
 
   useEffect(() => {
     if (errorMintGem || successMintGem) {
@@ -114,6 +113,17 @@ const Labs = () => {
       selectedGems[1] = id;
     }
     setSelectedGems([selectedGems[0], selectedGems[1]]);
+  };
+
+  const handleMint = async () => {
+    setLoader(true);
+    try {
+      await sendMintGems?.();
+    } catch (e) {
+      const { message } = e as Error;
+      alert.show(message, { type: 'error' });
+      setLoader(false);
+    }
   };
 
   const handleCraft = async () => {
@@ -228,43 +238,56 @@ const Labs = () => {
                     )}
                   </div>
                 </div>
-                <button
-                  className={classNames(
-                    {
-                      'pointer-events-auto text-opacity-100':
+                <div className="flex gap-3">
+                  <button
+                    className={classNames(
+                      {
+                        'pointer-events-auto text-opacity-100':
+                          !selectedGems.includes(null) &&
+                          userGems.find((g) => g.id == selectedGems[0])
+                            ?.image ==
+                            userGems.find((g) => g.id == selectedGems[1])
+                              ?.image,
+                      },
+                      'pointer-events-none flex items-center justify-center p-5 gap-2 rounded-xl w-full font-bold uppercase text-white text-opacity-50 border border-white border-opacity-50 transition-all'
+                    )}
+                    style={{
+                      background:
                         !selectedGems.includes(null) &&
                         userGems.find((g) => g.id == selectedGems[0])?.image ==
-                          userGems.find((g) => g.id == selectedGems[1])?.image,
-                    },
-                    'pointer-events-none flex items-center justify-center p-5 gap-2 rounded-xl w-full font-bold uppercase text-white text-opacity-50 border border-white border-opacity-50 transition-all'
-                  )}
-                  style={{
-                    background:
-                      !selectedGems.includes(null) &&
-                      userGems.find((g) => g.id == selectedGems[0])?.image ==
-                        userGems.find((g) => g.id == selectedGems[1])?.image
-                        ? 'linear-gradient(105.54deg,#594b8f,#6b6198)'
-                        : 'linear-gradient(105.54deg,hsla(0,0%,100%,.3),hsla(0,0%,100%,.1))',
-                  }}
-                  onClick={handleCraft}
-                >
-                  <svg
-                    width="23"
-                    height="22"
-                    viewBox="0 0 23 22"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+                          userGems.find((g) => g.id == selectedGems[1])?.image
+                          ? 'linear-gradient(105.54deg,#594b8f,#6b6198)'
+                          : 'linear-gradient(105.54deg,hsla(0,0%,100%,.3),hsla(0,0%,100%,.1))',
+                    }}
+                    onClick={handleCraft}
                   >
-                    <path
-                      d="M4 21V16M4 6V1M1.5 3.5H6.5M1.5 18.5H6.5M12.5 2L10.7658 6.50886C10.4838 7.24209 10.3428 7.60871 10.1235 7.91709C9.92919 8.1904 9.6904 8.42919 9.41709 8.62353C9.10871 8.84281 8.74209 8.98381 8.00886 9.26582L3.5 11L8.00886 12.7342C8.74209 13.0162 9.10871 13.1572 9.41709 13.3765C9.6904 13.5708 9.92919 13.8096 10.1235 14.0829C10.3428 14.3913 10.4838 14.7579 10.7658 15.4911L12.5 20L14.2342 15.4911C14.5162 14.7579 14.6572 14.3913 14.8765 14.0829C15.0708 13.8096 15.3096 13.5708 15.5829 13.3765C15.8913 13.1572 16.2579 13.0162 16.9911 12.7342L21.5 11L16.9911 9.26582C16.2579 8.98381 15.8913 8.8428 15.5829 8.62353C15.3096 8.42919 15.0708 8.1904 14.8765 7.91709C14.6572 7.60871 14.5162 7.24209 14.2342 6.50886L12.5 2Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    ></path>
-                  </svg>
-                  Craft
-                </button>
+                    <svg
+                      width="23"
+                      height="22"
+                      viewBox="0 0 23 22"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4 21V16M4 6V1M1.5 3.5H6.5M1.5 18.5H6.5M12.5 2L10.7658 6.50886C10.4838 7.24209 10.3428 7.60871 10.1235 7.91709C9.92919 8.1904 9.6904 8.42919 9.41709 8.62353C9.10871 8.84281 8.74209 8.98381 8.00886 9.26582L3.5 11L8.00886 12.7342C8.74209 13.0162 9.10871 13.1572 9.41709 13.3765C9.6904 13.5708 9.92919 13.8096 10.1235 14.0829C10.3428 14.3913 10.4838 14.7579 10.7658 15.4911L12.5 20L14.2342 15.4911C14.5162 14.7579 14.6572 14.3913 14.8765 14.0829C15.0708 13.8096 15.3096 13.5708 15.5829 13.3765C15.8913 13.1572 16.2579 13.0162 16.9911 12.7342L21.5 11L16.9911 9.26582C16.2579 8.98381 15.8913 8.8428 15.5829 8.62353C15.3096 8.42919 15.0708 8.1904 14.8765 7.91709C14.6572 7.60871 14.5162 7.24209 14.2342 6.50886L12.5 2Z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></path>
+                    </svg>
+                    Craft
+                  </button>
+                  <button
+                    className="flex items-center justify-center p-5 gap-2 rounded-xl w-full font-bold uppercase text-white text-opacity-100 border border-white border-opacity-50 transition-all"
+                    style={{
+                      background: 'linear-gradient(105.54deg,#594b8f,#6b6198)',
+                    }}
+                    onClick={handleMint}
+                  >
+                    Mint
+                  </button>
+                </div>
               </div>
             </div>
           </div>
