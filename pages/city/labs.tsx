@@ -33,10 +33,6 @@ const Labs = () => {
   const [contract, setContract] = useState<ethers.Contract>();
   const { data: signer } = useSigner();
   const [loader, setLoader] = useState<boolean>(true);
-  const [animationForGem, setAnimationForGem] = useState<[boolean, number]>([
-    false,
-    0,
-  ]);
   const [userGems, setUserGems] = useState<INft[]>([]);
   const [selectedGems, setSelectedGems] = useState<
     [string | null, string | null]
@@ -95,13 +91,6 @@ const Labs = () => {
         value: utils.parseEther('0.005'),
       });
       const receipt = await craft.wait();
-      setAnimationForGem([
-        true,
-        (userGems.find((g) => g.tokenId === selectedGems[0])?.meta ?? 0) + 1,
-      ]);
-      setTimeout(() => {
-        setAnimationForGem([false, 0]);
-      }, 4000);
     } catch (e) {
       const { message } = e as Error;
       console.log(message);
@@ -302,34 +291,6 @@ const Labs = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            id="popup-modal"
-            className="fixed top-0 left-0 right-0 z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full justify-center items-center flex"
-            style={{ display: animationForGem[0] ? 'flex' : 'none' }}
-          >
-            <div className="relative w-full max-w-2xl max-h-full">
-              <div className="relative bg-black rounded-xl shadow dark:bg-gray-700 overflow-hidden">
-                <img
-                  src={`/resources/video/Appearing_VFX_A.gif`}
-                  alt="gem1"
-                  className="w-full"
-                />
-                <img
-                  src={`/resources/assets/gems/${
-                    gemImages[animationForGem[1]]
-                  }`}
-                  alt="gem1"
-                  className="absolute"
-                  style={{
-                    transform: 'translate(-50%, -50%)',
-                    left: '50%',
-                    top: '50%',
-                  }}
-                />
               </div>
             </div>
           </div>
