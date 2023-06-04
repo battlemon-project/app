@@ -24,7 +24,7 @@ const Vault = () => {
   const [checkFollow, setCheckFollow] = useState(false);
   const [checkRetwit, setCheckRetwit] = useState(false);
   const [discordCode, setDiscordCode] = useState<string | boolean>(false);
-  const [voucher] = useState<IProxyMintArgs | boolean>(false);
+  const [voucher, setVoucher] = useState<IProxyMintArgs | boolean>(false);
   const [cookies, setCookie] = useCookies([
     'check_follow',
     'check_retwit',
@@ -72,6 +72,23 @@ const Vault = () => {
       setCookie('check_discord', 'true');
     }, 3000);
   };
+
+  const getVouchers = async (url: string | null) => {
+    if (!url) return;
+    const data = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${cookies.auth_token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const dataVoucher: IProxyMintArgs = await data.json();
+    setVoucher(dataVoucher);
+  };
+
+  useSWR(
+    discordCode ? '/battlemon-api/vouchers/access-keys' : null,
+    getVouchers
+  );
 
   useEffect(() => {
     if (balance > 0) {
@@ -152,7 +169,6 @@ const Vault = () => {
   const handleProxyMintButton = () => {
     writeProxyMint?.();
   };
-  console.log(voucher);
 
   return (
     <div className="container px-4 mt-5 mx-auto">
@@ -315,8 +331,8 @@ const Vault = () => {
             }}
           >
             <div className="absolute left-0 top-0 w-full h-full bg-blue bg-opacity-50 blur-xl rounded-2xl"></div>
-            <div>
-              <div className="relative z-10 flex items-center">
+            <div className="relative z-10">
+              <div className="flex items-center">
                 <div className="col col-auto d-flex justify-content-center px-2">
                   <svg
                     fill="none"
