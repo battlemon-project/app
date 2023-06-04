@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
-import {
-  useAccount,
-  useContractRead,
-  useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
-} from 'wagmi';
+import { useAccount, useSigner } from 'wagmi';
 import FREE_GEMS_CONTRACT_SOL from '../../helpers/abi/FreeGem.json';
 import { FREE_GEMS_CONTRACT_ADDRESS, mintGem } from '../../helpers/linea';
 import { useAlert } from 'react-alert';
@@ -15,7 +9,7 @@ import { CssLoader } from '../../components/CssLoader';
 import { GemItemCard } from '../../components/GemItemCard/GemItemCard';
 import Image from 'next/image';
 import classNames from 'classnames';
-import { getBalance } from '../../helpers/covalent';
+import { ethers } from 'ethers';
 
 interface INft {
   id: string;
@@ -35,46 +29,21 @@ const gemImages: Record<number, string> = {
 
 const Labs = () => {
   const { address } = useAccount();
+  const [contract, setContract] = useState<ethers.Contract>();
+  const { data: signer } = useSigner();
   const [loader, setLoader] = useState<boolean>(true);
   const [animationForGem] = useState<[boolean, number]>([false, 0]);
   const [userGems] = useState<INft[]>([]);
   const [selectedGems, setSelectedGems] = useState<
     [string | null, string | null]
   >([null, null]);
-  const { config: configMint } = usePrepareContractWrite(mintGem(address));
-
-  const {
-    data: dataMintGem,
-    write: sendMintGems,
-    isError: errorMintGem,
-  } = useContractWrite(configMint);
-
-  const { data: bigNumberBalance } = useContractRead({
-    address: FREE_GEMS_CONTRACT_ADDRESS,
-    abi: FREE_GEMS_CONTRACT_SOL.abi,
-    functionName: 'balanceOf',
-    args: [address],
-  });
-
-  useEffect(() => {
-    console.log(parseFloat(bigNumberBalance as string));
-  }, [bigNumberBalance]);
 
   const [hasMounted, setHasMounted] = useState(false);
   const alert = useAlert();
 
-  const { data: mintedGem, isSuccess: successMintGem } = useWaitForTransaction({
-    hash: dataMintGem?.hash,
-  });
-
-  useEffect(() => {
-    if (errorMintGem || successMintGem) {
-      setSelectedGems([null, null]);
-      setLoader(true);
-      refreshGems();
-    }
-    console.log(mintedGem);
-  }, [successMintGem, errorMintGem]);
+  // const { isSuccess: successCraftGems } = useWaitForTransaction({
+  //   hash: dataCraftGems?.hash,
+  // });
 
   // useEffect(() => {
   //   if (successCraftGems || errorCraftGems) {
@@ -98,7 +67,13 @@ const Labs = () => {
       return;
     }
     if (!address) return;
-    await getBalance(address);
+    const data = await fetch(`/api/linea/gems?address=${address}`);
+    const {
+      result: {
+        data: { token721S: gems },
+      },
+    } = await data.json();
+    await getMetadata(gems);
     setLoader(false);
   };
 
@@ -116,14 +91,16 @@ const Labs = () => {
   };
 
   const handleMint = async () => {
+    if (!contract) return;
     setLoader(true);
     try {
-      await sendMintGems?.();
+      const mint = await contract.mint(address, 1);
+      const receipt = await mint.wait(1);
     } catch (e) {
       const { message } = e as Error;
-      alert.show(message, { type: 'error' });
-      setLoader(false);
+      console.log(message);
     }
+    refreshGems();
   };
 
   const handleCraft = async () => {
@@ -137,11 +114,27 @@ const Labs = () => {
     }
   };
 
+  const getMetadata = async (gems: { [key: string]: string }[]) => {
+    if (!contract) return;
+    const metadata = await contract.tokenURI(gems[gems.length - 1].tokenId);
+    console.log(metadata);
+  };
+
   useEffect(() => {
     setHasMounted(true);
-    if (!address) return;
+    if (!address || !contract) return;
     refreshGems();
-  }, [address]);
+  }, [contract]);
+
+  useEffect(() => {
+    if (!signer || !address) return;
+    const _contract = new ethers.Contract(
+      FREE_GEMS_CONTRACT_ADDRESS,
+      FREE_GEMS_CONTRACT_SOL.abi,
+      signer
+    );
+    setContract(_contract);
+  }, [signer, address]);
 
   if (!hasMounted) return <></>;
 
@@ -218,7 +211,7 @@ const Labs = () => {
                     {loader ? (
                       <CssLoader />
                     ) : userGems.length === 0 ? (
-                      <div>You have not gems yet</div>
+                      <div className="text-white">You have not gems yet</div>
                     ) : (
                       <div className="grid grid-cols-12 md:grid-cols-10 gap-2.5 p-1.5 w-full h-fit self-start">
                         {userGems.map((gem) => (
@@ -238,55 +231,66 @@ const Labs = () => {
                     )}
                   </div>
                 </div>
-                <div className="flex gap-3">
-                  <button
-                    className={classNames(
-                      {
-                        'pointer-events-auto text-opacity-100':
-                          !selectedGems.includes(null) &&
-                          userGems.find((g) => g.id == selectedGems[0])
-                            ?.image ==
-                            userGems.find((g) => g.id == selectedGems[1])
-                              ?.image,
-                      },
-                      'pointer-events-none flex items-center justify-center p-5 gap-2 rounded-xl w-full font-bold uppercase text-white text-opacity-50 border border-white border-opacity-50 transition-all'
-                    )}
-                    style={{
-                      background:
-                        !selectedGems.includes(null) &&
-                        userGems.find((g) => g.id == selectedGems[0])?.image ==
-                          userGems.find((g) => g.id == selectedGems[1])?.image
-                          ? 'linear-gradient(105.54deg,#594b8f,#6b6198)'
-                          : 'linear-gradient(105.54deg,hsla(0,0%,100%,.3),hsla(0,0%,100%,.1))',
-                    }}
-                    onClick={handleCraft}
-                  >
-                    <svg
-                      width="23"
-                      height="22"
-                      viewBox="0 0 23 22"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M4 21V16M4 6V1M1.5 3.5H6.5M1.5 18.5H6.5M12.5 2L10.7658 6.50886C10.4838 7.24209 10.3428 7.60871 10.1235 7.91709C9.92919 8.1904 9.6904 8.42919 9.41709 8.62353C9.10871 8.84281 8.74209 8.98381 8.00886 9.26582L3.5 11L8.00886 12.7342C8.74209 13.0162 9.10871 13.1572 9.41709 13.3765C9.6904 13.5708 9.92919 13.8096 10.1235 14.0829C10.3428 14.3913 10.4838 14.7579 10.7658 15.4911L12.5 20L14.2342 15.4911C14.5162 14.7579 14.6572 14.3913 14.8765 14.0829C15.0708 13.8096 15.3096 13.5708 15.5829 13.3765C15.8913 13.1572 16.2579 13.0162 16.9911 12.7342L21.5 11L16.9911 9.26582C16.2579 8.98381 15.8913 8.8428 15.5829 8.62353C15.3096 8.42919 15.0708 8.1904 14.8765 7.91709C14.6572 7.60871 14.5162 7.24209 14.2342 6.50886L12.5 2Z"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      ></path>
-                    </svg>
-                    Craft
-                  </button>
-                  <button
-                    className="flex items-center justify-center p-5 gap-2 rounded-xl w-full font-bold uppercase text-white text-opacity-100 border border-white border-opacity-50 transition-all"
-                    style={{
-                      background: 'linear-gradient(105.54deg,#594b8f,#6b6198)',
-                    }}
-                    onClick={handleMint}
-                  >
-                    Mint
-                  </button>
+                <div className="text-right">
+                  <div className="flex" style={{ maxWidth: '780px' }}>
+                    <div className="basis-1/2 pr-2">
+                      <button
+                        className={classNames(
+                          {
+                            'pointer-events-auto text-opacity-100':
+                              !selectedGems.includes(null) &&
+                              userGems.find((g) => g.id == selectedGems[0])
+                                ?.image ==
+                                userGems.find((g) => g.id == selectedGems[1])
+                                  ?.image,
+                          },
+                          'pointer-events-none flex items-center justify-center p-5 gap-2 rounded-xl w-full font-bold uppercase text-white text-opacity-50 border border-white border-opacity-50 transition-all'
+                        )}
+                        style={{
+                          background:
+                            !selectedGems.includes(null) &&
+                            userGems.find((g) => g.id == selectedGems[0])
+                              ?.image ==
+                              userGems.find((g) => g.id == selectedGems[1])
+                                ?.image
+                              ? 'linear-gradient(105.54deg,#594b8f,#6b6198)'
+                              : 'linear-gradient(105.54deg,hsla(0,0%,100%,.3),hsla(0,0%,100%,.1))',
+                        }}
+                        onClick={handleCraft}
+                      >
+                        <svg
+                          width="23"
+                          height="22"
+                          viewBox="0 0 23 22"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M4 21V16M4 6V1M1.5 3.5H6.5M1.5 18.5H6.5M12.5 2L10.7658 6.50886C10.4838 7.24209 10.3428 7.60871 10.1235 7.91709C9.92919 8.1904 9.6904 8.42919 9.41709 8.62353C9.10871 8.84281 8.74209 8.98381 8.00886 9.26582L3.5 11L8.00886 12.7342C8.74209 13.0162 9.10871 13.1572 9.41709 13.3765C9.6904 13.5708 9.92919 13.8096 10.1235 14.0829C10.3428 14.3913 10.4838 14.7579 10.7658 15.4911L12.5 20L14.2342 15.4911C14.5162 14.7579 14.6572 14.3913 14.8765 14.0829C15.0708 13.8096 15.3096 13.5708 15.5829 13.3765C15.8913 13.1572 16.2579 13.0162 16.9911 12.7342L21.5 11L16.9911 9.26582C16.2579 8.98381 15.8913 8.8428 15.5829 8.62353C15.3096 8.42919 15.0708 8.1904 14.8765 7.91709C14.6572 7.60871 14.5162 7.24209 14.2342 6.50886L12.5 2Z"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          ></path>
+                        </svg>
+                        Craft
+                      </button>
+                    </div>
+                    <div className="basis-1/2 pl-2">
+                      <button
+                        className={classNames(
+                          'flex items-center justify-center p-5 gap-2 rounded-xl w-full font-bold uppercase text-white border border-white border-opacity-50 transition-all'
+                        )}
+                        style={{
+                          background:
+                            'linear-gradient(105.54deg,#594b8f,#6b6198)',
+                        }}
+                        onClick={handleMint}
+                      >
+                        Mint
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
