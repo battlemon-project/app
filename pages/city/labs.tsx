@@ -9,12 +9,13 @@ import { CssLoader } from '../../components/CssLoader';
 import { GemItemCard } from '../../components/GemItemCard/GemItemCard';
 import Image from 'next/image';
 import classNames from 'classnames';
-import { ethers } from 'ethers';
+import { ethers, utils } from 'ethers';
 
 interface INft {
   id: string;
   image: string;
-  grade: number;
+  tokenId: string;
+  meta: number;
 }
 
 const gemImages: Record<number, string> = {
@@ -32,35 +33,17 @@ const Labs = () => {
   const [contract, setContract] = useState<ethers.Contract>();
   const { data: signer } = useSigner();
   const [loader, setLoader] = useState<boolean>(true);
-  const [animationForGem] = useState<[boolean, number]>([false, 0]);
-  const [userGems] = useState<INft[]>([]);
+  const [animationForGem, setAnimationForGem] = useState<[boolean, number]>([
+    false,
+    0,
+  ]);
+  const [userGems, setUserGems] = useState<INft[]>([]);
   const [selectedGems, setSelectedGems] = useState<
     [string | null, string | null]
   >([null, null]);
 
   const [hasMounted, setHasMounted] = useState(false);
   const alert = useAlert();
-
-  // const { isSuccess: successCraftGems } = useWaitForTransaction({
-  //   hash: dataCraftGems?.hash,
-  // });
-
-  // useEffect(() => {
-  //   if (successCraftGems || errorCraftGems) {
-  //     if (successCraftGems) {
-  //       setAnimationForGem([
-  //         true,
-  //         (userGems.find((g) => g.id === selectedGems[0])?.grade ?? 0) + 1,
-  //       ]);
-  //       setTimeout(() => {
-  //         setAnimationForGem([false, 0]);
-  //       }, 4000);
-  //     }
-  //     setSelectedGems([null, null]);
-  //     setLoader(true);
-  //     refreshGems();
-  //   }
-  // }, [errorCraftGems, successCraftGems]);
 
   const refreshGems = async () => {
     if (process.env.NEXT_PUBLIC_PRODUCTION == 'true') {
@@ -77,15 +60,15 @@ const Labs = () => {
     setLoader(false);
   };
 
-  const handleSelectGem = (id: string) => () => {
-    if (selectedGems[0] == id) {
+  const handleSelectGem = (tokenId: string) => () => {
+    if (selectedGems[0] == tokenId) {
       selectedGems[0] = null;
-    } else if (selectedGems[1] == id) {
+    } else if (selectedGems[1] == tokenId) {
       selectedGems[1] = null;
     } else if (selectedGems[0] == null) {
-      selectedGems[0] = id;
+      selectedGems[0] = tokenId;
     } else if (selectedGems[0] != null) {
-      selectedGems[1] = id;
+      selectedGems[1] = tokenId;
     }
     setSelectedGems([selectedGems[0], selectedGems[1]]);
   };
@@ -104,20 +87,44 @@ const Labs = () => {
   };
 
   const handleCraft = async () => {
+    if (!contract) return;
     setLoader(true);
     try {
-      // await sendCraftGems?.();
+      console.log(selectedGems);
+      const craft = await contract.merge(selectedGems[0], selectedGems[1], {
+        value: utils.parseEther('0.005'),
+      });
+      const receipt = await craft.wait();
+      setAnimationForGem([
+        true,
+        (userGems.find((g) => g.tokenId === selectedGems[0])?.meta ?? 0) + 1,
+      ]);
+      setTimeout(() => {
+        setAnimationForGem([false, 0]);
+      }, 4000);
     } catch (e) {
       const { message } = e as Error;
-      alert.show(message, { type: 'error' });
-      setLoader(false);
+      console.log(message);
     }
+    setSelectedGems([null, null]);
+    setLoader(true);
+    refreshGems();
   };
 
-  const getMetadata = async (gems: { [key: string]: string }[]) => {
+  const getMetadata = async (gems: INft[]) => {
     if (!contract) return;
-    const metadata = await contract.tokenURI(gems[gems.length - 1].tokenId);
-    console.log(metadata);
+    const promises = gems.map(async (gem) => {
+      if (!gem.tokenId) {
+        gem.image = gemImages[0];
+        return gem;
+      }
+      const metaURI = await contract.tokenURI(gem.tokenId);
+      gem.meta = parseInt(metaURI.split('/').at(-1) as string);
+      gem.image = gemImages[gem.meta];
+      return gem;
+    });
+    await Promise.all(promises);
+    setUserGems(gems);
   };
 
   useEffect(() => {
@@ -157,7 +164,8 @@ const Labs = () => {
                       width={80}
                       height={80}
                       src={`/resources/assets/gems/${
-                        userGems.find((u) => u.id == selectedGems[0])?.image
+                        userGems.find((u) => u.tokenId == selectedGems[0])
+                          ?.image
                       }`}
                       alt="gem0"
                     />
@@ -179,7 +187,8 @@ const Labs = () => {
                       width={80}
                       height={80}
                       src={`/resources/assets/gems/${
-                        userGems.find((u) => u.id == selectedGems[1])?.image
+                        userGems.find((u) => u.tokenId == selectedGems[1])
+                          ?.image
                       }`}
                       alt="gem1"
                     />
@@ -217,13 +226,13 @@ const Labs = () => {
                         {userGems.map((gem) => (
                           <div
                             className="col-span-full xs:col-span-6 sm:col-span-3 md:col-span-2"
-                            key={gem.id}
+                            key={gem.tokenId}
                           >
                             <GemItemCard
-                              id={gem.id}
-                              onClick={handleSelectGem(gem.id)}
+                              id={gem.tokenId}
+                              onClick={handleSelectGem(gem.tokenId)}
                               imageURL={`/resources/assets/gems/${gem.image}`}
-                              isActive={selectedGems.includes(gem.id)}
+                              isActive={selectedGems.includes(gem.tokenId)}
                             />
                           </div>
                         ))}
@@ -237,21 +246,22 @@ const Labs = () => {
                       <button
                         className={classNames(
                           {
-                            'pointer-events-auto text-opacity-100':
+                            'pointer-events-auto':
                               !selectedGems.includes(null) &&
-                              userGems.find((g) => g.id == selectedGems[0])
+                              userGems.find((g) => g.tokenId == selectedGems[0])
                                 ?.image ==
-                                userGems.find((g) => g.id == selectedGems[1])
-                                  ?.image,
+                                userGems.find(
+                                  (g) => g.tokenId == selectedGems[1]
+                                )?.image,
                           },
-                          'pointer-events-none flex items-center justify-center p-5 gap-2 rounded-xl w-full font-bold uppercase text-white text-opacity-50 border border-white border-opacity-50 transition-all'
+                          'pointer-events-none flex items-center justify-center p-5 gap-2 rounded-xl w-full font-bold uppercase text-white border border-white border-opacity-50 transition-all'
                         )}
                         style={{
                           background:
                             !selectedGems.includes(null) &&
-                            userGems.find((g) => g.id == selectedGems[0])
+                            userGems.find((g) => g.tokenId == selectedGems[0])
                               ?.image ==
-                              userGems.find((g) => g.id == selectedGems[1])
+                              userGems.find((g) => g.tokenId == selectedGems[1])
                                 ?.image
                               ? 'linear-gradient(105.54deg,#594b8f,#6b6198)'
                               : 'linear-gradient(105.54deg,hsla(0,0%,100%,.3),hsla(0,0%,100%,.1))',
@@ -295,26 +305,25 @@ const Labs = () => {
               </div>
             </div>
           </div>
+
           <div
-            className="modal"
-            style={{ display: animationForGem[0] ? 'block' : 'none' }}
+            id="popup-modal"
+            className="fixed top-0 left-0 right-0 z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full justify-center items-center flex"
+            style={{ display: animationForGem[0] ? 'flex' : 'none' }}
           >
-            <div className="modal-dialog modal-dialog-centered">
-              <div
-                className="modal-content position-relative"
-                style={{ width: 'auto', margin: '0 auto' }}
-              >
+            <div className="relative w-full max-w-2xl max-h-full">
+              <div className="relative bg-black rounded-xl shadow dark:bg-gray-700 overflow-hidden">
                 <img
                   src={`/resources/video/Appearing_VFX_A.gif`}
                   alt="gem1"
-                  className="img-fluid"
+                  className="w-full"
                 />
                 <img
                   src={`/resources/assets/gems/${
                     gemImages[animationForGem[1]]
                   }`}
                   alt="gem1"
-                  className="img-fluid position-absolute"
+                  className="absolute"
                   style={{
                     transform: 'translate(-50%, -50%)',
                     left: '50%',

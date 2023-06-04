@@ -74,6 +74,12 @@ const Vault = () => {
   };
 
   useEffect(() => {
+    if (balance > 0) {
+      setCheckFollow(true);
+      setCheckRetwit(true);
+      setDiscordCode(true);
+      return;
+    }
     if (!discordCode && cookies.auth_token && isConnected) {
       if (cookies.check_follow) {
         setCheckFollow(true);
