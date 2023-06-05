@@ -3,19 +3,13 @@ import Layout from '../../components/Layout';
 import { useCookies } from 'react-cookie';
 import classNames from 'classnames';
 import ACCESS_KEY_CONTRACT_SOL from '../../helpers/abi/AccessKey.json';
-import {
-  useAccount,
-  useContractRead,
-  useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
-} from 'wagmi';
+import { useAccount, useContractRead, useSigner } from 'wagmi';
 import {
   ACCESS_KEY_CONTRACT_ADDRESS,
   type IProxyMintArgs,
-  proxyMintAccessKey,
 } from '../../helpers/linea';
 import useSWR from 'swr';
+import { ethers } from 'ethers';
 
 const Vault = () => {
   const [hasMounted, setHasMounted] = useState(false);
@@ -31,6 +25,8 @@ const Vault = () => {
     'check_discord',
     'auth_token',
   ]);
+  const [contract, setContract] = useState<ethers.Contract>();
+  const { data: signer } = useSigner();
 
   const { data: bigNumberBalance } = useContractRead({
     address: ACCESS_KEY_CONTRACT_ADDRESS,
@@ -82,7 +78,18 @@ const Vault = () => {
       },
     });
     const dataVoucher: IProxyMintArgs = await data.json();
-    setVoucher(dataVoucher);
+    if (!dataVoucher.error) {
+      setVoucher(dataVoucher);
+    }
+    if (
+      dataVoucher.error &&
+      dataVoucher.message == 'AccessKey already minted'
+    ) {
+      setVoucher(true);
+      setCheckFollow(true);
+      setCheckRetwit(true);
+      setDiscordCode(true);
+    }
   };
 
   useSWR(
@@ -146,28 +153,36 @@ const Vault = () => {
     setHasMounted(true);
   }, []);
 
-  const { config: configProxyMintAccessKey } = usePrepareContractWrite(
-    proxyMintAccessKey(voucher)
-  );
-  const {
-    data: dataProxyMintAccessKey,
-    write: writeProxyMint,
-    isError: errorProxyMintAccessKey,
-  } = useContractWrite(configProxyMintAccessKey);
-
-  const { data: proxyMintedAccessKey, isSuccess: successProxyMintAccessKey } =
-    useWaitForTransaction({
-      hash: dataProxyMintAccessKey?.hash,
-    });
-
   useEffect(() => {
-    console.log(proxyMintedAccessKey);
-  }, [successProxyMintAccessKey, errorProxyMintAccessKey]);
+    if (!signer || !address) return;
+    const _contract = new ethers.Contract(
+      ACCESS_KEY_CONTRACT_ADDRESS,
+      ACCESS_KEY_CONTRACT_SOL.abi,
+      signer
+    );
+    setContract(_contract);
+  }, [signer, address]);
 
   if (!hasMounted) return <></>;
 
-  const handleProxyMintButton = () => {
-    writeProxyMint?.();
+  const handleProxyMintButton = async () => {
+    if (!contract || !voucher || typeof voucher != 'object') return;
+    try {
+      const mint = await contract.proxyMint(
+        [
+          voucher.mintRequest.sender,
+          voucher.mintRequest.proxy,
+          voucher.mintRequest.amount,
+          voucher.mintRequest.nonce,
+        ],
+        voucher.signature
+      );
+      const receipt = await mint.wait(1);
+      setVoucher(true);
+    } catch (e) {
+      const { message } = e as Error;
+      console.log(message);
+    }
   };
 
   return (
@@ -187,7 +202,7 @@ const Vault = () => {
               type="video/mp4"
             />
           </video>
-          {balance > 0 ? (
+          {balance > 0 || voucher === true ? (
             <div
               className={`bg-white bg-opacity-10 border border-white border-opacity-40 py-3 px-20 rounded-2xl text-white mt-3 text-center`}
             >
@@ -218,12 +233,12 @@ const Vault = () => {
           <div
             className={classNames(
               {
-                'pointer-events-none': cookies.check_follow,
+                'pointer-events-none': checkFollow,
               },
               'relative flex flex-col xs:flex-row justify-between gap-3 xs:items-center rounded-2xl shadow p-4 mb-3 text-white border-2 border-white border-opacity-40'
             )}
             style={{
-              background: cookies.check_follow
+              background: checkFollow
                 ? 'linear-gradient(90.66deg, rgba(56, 191, 128, 0.6) 0.57%, rgba(56, 191, 128, 0.4) 99.48%)'
                 : 'linear-gradient(90.66deg, rgba(255, 255, 255, 0.3) 0.57%, rgba(255, 255, 255, 0.1) 99.48%)',
             }}
@@ -268,13 +283,13 @@ const Vault = () => {
           <div
             className={classNames(
               {
-                'opacity-40 pointer-events-none ': !cookies.check_follow,
-                'pointer-events-none': cookies.check_retwit,
+                'opacity-40 pointer-events-none ': !checkFollow,
+                'pointer-events-none': checkRetwit,
               },
               'relative flex flex-col xs:flex-row justify-between gap-3 xs:items-center rounded-2xl shadow p-4 mb-3 text-white border-2 border-white border-opacity-40'
             )}
             style={{
-              background: cookies.check_retwit
+              background: checkRetwit
                 ? 'linear-gradient(90.66deg, rgba(56, 191, 128, 0.6) 0.57%, rgba(56, 191, 128, 0.4) 99.48%)'
                 : 'linear-gradient(90.66deg, rgba(255, 255, 255, 0.3) 0.57%, rgba(255, 255, 255, 0.1) 99.48%)',
             }}
@@ -300,7 +315,7 @@ const Vault = () => {
                 <p>
                   <b>Retwit something from us</b>
                 </p>
-                <p>{cookies.check_retwit ? 'Success' : 'Retwit not found'}</p>
+                <p>{checkRetwit ? 'Success' : 'Retwit not found'}</p>
               </div>
             </div>
 
@@ -319,7 +334,7 @@ const Vault = () => {
           <div
             className={classNames(
               {
-                'opacity-40 pointer-events-none': !cookies.check_retwit,
+                'opacity-40 pointer-events-none': !checkRetwit,
               },
               'relative flex flex-col xs:flex-row justify-between gap-3 xs:items-center rounded-2xl shadow p-4 mb-3 text-white border-2 border-white border-opacity-40'
             )}

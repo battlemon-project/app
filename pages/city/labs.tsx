@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import { useAccount, useSigner } from 'wagmi';
 import FREE_GEMS_CONTRACT_SOL from '../../helpers/abi/FreeGem.json';
-import { FREE_GEMS_CONTRACT_ADDRESS, mintGem } from '../../helpers/linea';
+import { FREE_GEMS_CONTRACT_ADDRESS } from '../../helpers/linea';
 import { useAlert } from 'react-alert';
 import { BabylonLoader } from '../../components/BabylonLoader';
 import { CssLoader } from '../../components/CssLoader';
@@ -88,7 +88,7 @@ const Labs = () => {
     try {
       console.log(selectedGems);
       const craft = await contract.merge(selectedGems[0], selectedGems[1], {
-        value: utils.parseEther('0.005'),
+        value: utils.parseEther('0.0005'),
       });
       const receipt = await craft.wait();
     } catch (e) {

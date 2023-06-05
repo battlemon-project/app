@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { NftType } from '../../../helpers/graphql';
+import { FREE_GEMS_CONTRACT_ADDRESS } from '../../../helpers/linea';
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,7 +19,7 @@ export default async function handler(
         token721S(where: {
           owner: "${address}",
           collection_: {
-            name: "Lemon Gem"
+            id: "${FREE_GEMS_CONTRACT_ADDRESS}"
           }
         }) {
           id
@@ -30,9 +31,6 @@ export default async function handler(
   );
 
   const result = await response.json();
-
-  if (!result?.data?.token721S)
-    res.status(200).json({ error: 'data is wrong' });
 
   res.status(200).json({ result: result });
 }
