@@ -114,7 +114,7 @@ export const Header: React.FC<HeaderProps> = ({ network }) => {
         'py-4 relative'
       )}
     >
-      <div className="container mx-auto flex justify-between px-4">
+      <div className="container mx-auto flex justify-between items-center px-4">
         <Logo />
         {size > 1200 ? (
           <>
