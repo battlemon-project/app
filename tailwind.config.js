@@ -20,6 +20,9 @@ module.exports = {
         50: '200px',
         96: '384px',
       },
+      width: {
+        32: '128px',
+      },
       height: {
         90: '360px',
       },
