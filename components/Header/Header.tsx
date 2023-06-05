@@ -110,23 +110,24 @@ export const Header: React.FC<HeaderProps> = ({ network }) => {
   return (
     <header
       className={classNames(
-        { 'bg-midnight': size < 1200 && isOpen },
+        { 'bg-midnight': size < 1280 && isOpen },
         'py-4 relative'
       )}
     >
       <div className="container mx-auto flex justify-between px-4">
         <Logo />
-        {size > 1200 ? (
+        {size > 1280 ? (
           <>
             {router.asPath !== '/' ? (
-              <div className="flex gap-3">
+              <div className="flex items-end gap-8 border-b-2 border-white border-opacity-50">
                 {navLinks.map((link) => (
-                  <NavLink
-                    key={link.name + link.href}
-                    name={link.name}
-                    href={link.href}
-                    subLinks={link.subLinks}
-                  />
+                  <div className="w-32" key={link.name + link.href}>
+                    <NavLink
+                      name={link.name}
+                      href={link.href}
+                      subLinks={link.subLinks}
+                    />
+                  </div>
                 ))}
               </div>
             ) : null}
