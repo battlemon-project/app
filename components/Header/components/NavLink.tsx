@@ -73,7 +73,7 @@ export const NavLink: React.FC<NavLinkProps> = ({ name, href, subLinks }) => {
                 <Link
                   className={classNames(
                     {
-                      'pointer-events-none': link.isDisables,
+                      'pointer-events-none': link.isDisabled,
                       '': link.href === router.pathname,
                     },
                     'relative py-2 text-white whitespace-nowrap border-b border-b-white border-opacity-50'
