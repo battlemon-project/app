@@ -15,7 +15,7 @@ interface HeaderProps {
 export interface LinkType {
   name: string;
   href: string;
-  isDisables?: boolean;
+  isDisabled?: boolean;
 }
 
 const navLinks = [
@@ -35,7 +35,7 @@ const navLinks = [
       {
         name: 'Bridge',
         href: '',
-        isDisables: true,
+        isDisabled: true,
       },
     ] as LinkType[],
   },
@@ -54,7 +54,7 @@ const navLinks = [
       {
         name: 'Grading',
         href: '',
-        isDisables: true,
+        isDisabled: true,
       },
     ] as LinkType[],
   },
@@ -69,14 +69,18 @@ const navLinks = [
       {
         name: 'LJC Pool',
         href: '',
-        isDisables: true,
+        isDisabled: true,
       },
     ] as LinkType[],
   },
   {
     name: 'Shop',
-    href: '/city/marketplace',
+    href: '/city/mint',
     subLinks: [
+      {
+        name: 'Mint',
+        href: '/city/mint',
+      },
       {
         name: 'Launchpad',
         href: '/city/launchpad',
@@ -84,6 +88,7 @@ const navLinks = [
       {
         name: 'Marketplace',
         href: '/city/marketplace',
+        isDisabled: true,
       },
     ] as LinkType[],
   },
