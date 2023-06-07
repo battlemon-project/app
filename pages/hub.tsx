@@ -9,6 +9,7 @@ import { useLemonStore } from '../helpers/lemonStore';
 import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import alchemy, { getLemons, mintLemonData } from '../helpers/alchemy';
 import { useAlert } from 'react-alert';
+import { useRouter } from 'next/router';
 
 const HubScene = dynamic(async () => await import('../scenes/HubScene'), {
   suspense: true,
@@ -20,15 +21,16 @@ const Hub = () => {
     data: true,
   });
   const alert = useAlert();
-  const { address, isConnected } = useAccount();
+  const router = useRouter();
+  const { address, status, isConnected } = useAccount();
   const [hasMounted, setHasMounted] = useState(false);
 
   const { config } = usePrepareContractWrite(mintLemonData(address));
   const { write } = useContractWrite(config);
 
-  useEffect(() => {
-    // console.log(loader)
-  }, [loader]);
+  if (status === 'disconnected') {
+    router.replace('/');
+  }
 
   const refreshLemons = async () => {
     if (process.env.NEXT_PUBLIC_PRODUCTION == 'true') {

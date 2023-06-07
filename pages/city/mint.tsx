@@ -1,4 +1,4 @@
-import React, { type MouseEventHandler, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import { useCookies } from 'react-cookie';
 import classNames from 'classnames';
@@ -42,30 +42,6 @@ const Mint = () => {
   useEffect(() => {
     setBalance(parseFloat(bigNumberBalance as string));
   }, [bigNumberBalance]);
-
-  const checkTwitterFollow = (e: React.MouseEvent) => {
-    if (!isConnected) {
-      alert('You need to Sign In');
-      e.preventDefault();
-      return;
-    }
-    setTimeout(() => {
-      setCookie('check_follow', 'true');
-    }, 3000);
-  };
-
-  const checkTwitterRetwit = (e: MouseEventHandler<HTMLAnchorElement>) => {
-    if (!isConnected) {
-      alert('You need to Sign In');
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      e.preventDefault();
-      return;
-    }
-    setTimeout(() => {
-      setCookie('check_retwit', 'true');
-    }, 3000);
-  };
 
   const checkDiscordJoin = () => {
     setTimeout(() => {
@@ -217,110 +193,6 @@ const Mint = () => {
         <div className="col-span-full lg:col-span-7">
           <div
             className={classNames(
-              {
-                'pointer-events-none': cookies.check_follow,
-              },
-              'relative flex flex-col xs:flex-row justify-between gap-3 xs:items-center rounded-2xl shadow p-4 mb-3 text-white border-2 border-white border-opacity-40'
-            )}
-            style={{
-              background: cookies.check_follow
-                ? 'linear-gradient(90.66deg, rgba(56, 191, 128, 0.6) 0.57%, rgba(56, 191, 128, 0.4) 99.48%)'
-                : 'linear-gradient(90.66deg, rgba(255, 255, 255, 0.3) 0.57%, rgba(255, 255, 255, 0.1) 99.48%)',
-            }}
-          >
-            <div className="absolute left-0 top-0 w-full h-full bg-blue bg-opacity-50 blur-xl rounded-2xl"></div>
-            <div className="relative z-10 flex items-center">
-              <div className="col col-auto d-flex justify-content-center px-2">
-                <svg
-                  fill="none"
-                  viewBox="0 0 26 22"
-                  width="40"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    clipRule="evenodd"
-                    d="M23.3382 5.66804C23.348 5.89575 23.3545 6.12347 23.3545 6.35441C23.3545 13.3587 17.9887 21.437 8.177 21.437C5.16425 21.437 2.36112 20.5601 0 19.0565C0.417625 19.1049 0.84175 19.1292 1.27238 19.1292C3.77163 19.1292 6.071 18.2829 7.8975 16.8601C5.56237 16.8181 3.59288 15.2854 2.91363 13.1795C3.24025 13.2408 3.57337 13.2731 3.91788 13.2731C4.40375 13.2731 4.875 13.2085 5.3235 13.0874C2.88275 12.6013 1.04487 10.4582 1.04487 7.89029V7.82246C1.76312 8.21976 2.587 8.45878 3.46125 8.48623C2.02963 7.53499 1.08712 5.9119 1.08712 4.07402C1.08712 3.10178 1.35037 2.19091 1.81025 1.40763C4.44112 4.61505 8.372 6.72587 12.805 6.94713C12.714 6.55952 12.6669 6.15415 12.6669 5.7391C12.6669 2.81108 15.0556 0.437012 18.0001 0.437012C19.5357 0.437012 20.9219 1.0814 21.8936 2.11178C23.1091 1.87437 24.2515 1.43347 25.2817 0.826229C24.8836 2.06333 24.037 3.10178 22.9369 3.75909C24.0159 3.62989 25.0429 3.34565 26 2.92413C25.285 3.98681 24.3799 4.92028 23.3382 5.66804Z"
-                    fill="#fff"
-                    fillRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="px-2">
-                <p>
-                  <b>Follow us on Twitter</b>
-                </p>
-                <p>{cookies.check_follow ? 'Connected' : 'Disconnected'}</p>
-              </div>
-            </div>
-
-            <div className="self-stretch relative z-10">
-              <a
-                target="_blank"
-                rel="noreferrer"
-                className="flex p-3 xs:p-0 justify-center items-center text-xl h-full text-white border-2 border-white border-opacity-20 rounded-2xl text-center px-2.5 min-w-28"
-                onClick={checkTwitterFollow}
-                href="https://twitter.com/BATTLEM0N"
-              >
-                {checkFollow ? 'Done' : 'Follow'}
-              </a>
-            </div>
-          </div>
-          <div
-            className={classNames(
-              {
-                'opacity-40 pointer-events-none ': !cookies.check_follow,
-                'pointer-events-none': cookies.check_retwit,
-              },
-              'relative flex flex-col xs:flex-row justify-between gap-3 xs:items-center rounded-2xl shadow p-4 mb-3 text-white border-2 border-white border-opacity-40'
-            )}
-            style={{
-              background: cookies.check_retwit
-                ? 'linear-gradient(90.66deg, rgba(56, 191, 128, 0.6) 0.57%, rgba(56, 191, 128, 0.4) 99.48%)'
-                : 'linear-gradient(90.66deg, rgba(255, 255, 255, 0.3) 0.57%, rgba(255, 255, 255, 0.1) 99.48%)',
-            }}
-          >
-            <div className="absolute left-0 top-0 w-full h-full bg-blue bg-opacity-50 blur-xl rounded-2xl"></div>
-            <div className="relative flex items-center">
-              <div className="col col-auto d-flex justify-content-center px-2">
-                <svg
-                  fill="none"
-                  viewBox="0 0 26 22"
-                  width="40"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    clipRule="evenodd"
-                    d="M23.3382 5.66804C23.348 5.89575 23.3545 6.12347 23.3545 6.35441C23.3545 13.3587 17.9887 21.437 8.177 21.437C5.16425 21.437 2.36112 20.5601 0 19.0565C0.417625 19.1049 0.84175 19.1292 1.27238 19.1292C3.77163 19.1292 6.071 18.2829 7.8975 16.8601C5.56237 16.8181 3.59288 15.2854 2.91363 13.1795C3.24025 13.2408 3.57337 13.2731 3.91788 13.2731C4.40375 13.2731 4.875 13.2085 5.3235 13.0874C2.88275 12.6013 1.04487 10.4582 1.04487 7.89029V7.82246C1.76312 8.21976 2.587 8.45878 3.46125 8.48623C2.02963 7.53499 1.08712 5.9119 1.08712 4.07402C1.08712 3.10178 1.35037 2.19091 1.81025 1.40763C4.44112 4.61505 8.372 6.72587 12.805 6.94713C12.714 6.55952 12.6669 6.15415 12.6669 5.7391C12.6669 2.81108 15.0556 0.437012 18.0001 0.437012C19.5357 0.437012 20.9219 1.0814 21.8936 2.11178C23.1091 1.87437 24.2515 1.43347 25.2817 0.826229C24.8836 2.06333 24.037 3.10178 22.9369 3.75909C24.0159 3.62989 25.0429 3.34565 26 2.92413C25.285 3.98681 24.3799 4.92028 23.3382 5.66804Z"
-                    fill="#fff"
-                    fillRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="px-2">
-                <p>
-                  <b>Retwit something from us</b>
-                </p>
-                <p>{cookies.check_retwit ? 'Success' : 'Retwit not found'}</p>
-              </div>
-            </div>
-
-            <div className="relative self-stretch">
-              <a
-                target="_blank"
-                rel="noreferrer"
-                className="relative z-10 flex justify-center items-center p-3 xs:p-0 text-xl h-full text-white border-2 border-white border-opacity-20 rounded-2xl px-2.5 min-w-28"
-                onClick={(e) => checkTwitterRetwit(e as any)}
-                href="https://twitter.com/BATTLEM0N"
-              >
-                {checkRetwit ? 'Done' : 'Retwit'}
-              </a>
-            </div>
-          </div>
-          <div
-            className={classNames(
-              {
-                'opacity-40 pointer-events-none': !cookies.check_retwit,
-              },
               'relative flex flex-col xs:flex-row justify-between gap-3 xs:items-center rounded-2xl shadow p-4 mb-3 text-white border-2 border-white border-opacity-40'
             )}
             style={{

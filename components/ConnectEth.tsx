@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { signMessage } from '@wagmi/core';
+import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 import { useCookies } from 'react-cookie';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
@@ -15,14 +14,15 @@ export const ConnectEth: React.FC = () => {
     connector: new InjectedConnector(),
   });
   const { disconnect } = useDisconnect();
+  const { signMessage } = useSignMessage();
 
   const signOut = () => {
-    //removeCookie('auth_token');
+    // removeCookie('auth_token');
     disconnect();
   };
 
   const handleConnect = async () => {
-    connect();
+    connect({ chainId: 5 });
   };
 
   const fetchGuest = async () => {
@@ -64,9 +64,13 @@ export const ConnectEth: React.FC = () => {
     const { nonce } = await getNonce(guestToken);
     let signature: `0x${string}` | null = null;
     try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       signature = await signMessage({
         message: `Signing nonce: ${nonce}`,
       });
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       const { token } = await authWallet(guestToken, address, signature);
       setCookie('auth_token', token, {
         expires: new Date(((d) => d.setDate(d.getDate() + 365))(new Date())),
@@ -83,7 +87,7 @@ export const ConnectEth: React.FC = () => {
     if (cookies.current_address !== address) {
       setCookie('current_address', address);
       removeCookie('auth_token');
-      setTimeout(() => connectAuthServer(), 5000);
+      setTimeout(async () => await connectAuthServer(), 5000);
     }
     if (!cookies.auth_token) {
       connectAuthServer();

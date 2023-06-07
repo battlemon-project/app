@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from '../../components/Layout';
 
-const Vault = () => {
+const Mixing = () => {
   return (
     <div className="container px-4 text-center mx-auto flex justify-center pt-24">
       <video className="rounded-xl" loop autoPlay playsInline muted>
@@ -11,5 +11,5 @@ const Vault = () => {
   );
 };
 
-Vault.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>;
-export default Vault;
+Mixing.getLayout = (page: React.ReactElement) => <Layout>{page}</Layout>;
+export default Mixing;

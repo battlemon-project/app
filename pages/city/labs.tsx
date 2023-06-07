@@ -3,13 +3,13 @@ import Layout from '../../components/Layout';
 import { useAccount, useSigner } from 'wagmi';
 import FREE_GEMS_CONTRACT_SOL from '../../helpers/abi/FreeGem.json';
 import { FREE_GEMS_CONTRACT_ADDRESS } from '../../helpers/linea';
-import { useAlert } from 'react-alert';
 import { BabylonLoader } from '../../components/BabylonLoader';
 import { CssLoader } from '../../components/CssLoader';
 import { GemItemCard } from '../../components/GemItemCard/GemItemCard';
 import Image from 'next/image';
 import classNames from 'classnames';
 import { ethers, utils } from 'ethers';
+import { useRouter } from 'next/router';
 
 interface INft {
   id: string;
@@ -29,7 +29,7 @@ const gemImages: Record<number, string> = {
 };
 
 const Labs = () => {
-  const { address } = useAccount();
+  const { address, status } = useAccount();
   const [contract, setContract] = useState<ethers.Contract>();
   const { data: signer } = useSigner();
   const [loader, setLoader] = useState<boolean>(true);
@@ -39,7 +39,11 @@ const Labs = () => {
   >([null, null]);
 
   const [hasMounted, setHasMounted] = useState(false);
-  const alert = useAlert();
+  const router = useRouter();
+
+  if (status === 'disconnected') {
+    router.replace('/');
+  }
 
   const refreshGems = async () => {
     if (process.env.NEXT_PUBLIC_PRODUCTION == 'true') {
@@ -139,7 +143,7 @@ const Labs = () => {
       {address ? (
         <>
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto flex flex-col lg:flex-row gap-8 items-center pt-20">
+            <div className="max-w-4xl mx-auto flex flex-col lg:flex-row gap-8 items-center pt-24">
               <div className="flex lg:block lg:basis-36 shrink-0 gap-8">
                 <div
                   className="flex items-center justify-center border border-white border-opacity-20 rounded-2xl w-36 h-36 mb-3 backdrop-blur-lg"
