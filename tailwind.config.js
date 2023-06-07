@@ -12,6 +12,8 @@ module.exports = {
         'midnight-light': '#034E5F',
         gray: '#d3d4d5',
         blue: '#11a6c5',
+        'purple-fade-from': 'rgb(89, 75, 143)',
+        'purple-fade-to': 'rgb(107, 97, 152)',
       },
       minWidth: {
         28: '128px',
