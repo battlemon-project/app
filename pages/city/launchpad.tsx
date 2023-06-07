@@ -98,7 +98,7 @@ const Launchpad = () => {
           id="renderCanvas"
           ref={canvasRef}
         ></canvas>
-        <button className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-md px-8 py-4 text-lg bg-white font-bold text-black ">
+        <button className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-md px-8 py-4 text-lg bg-white font-bold text-white bg-opacity-20 hover:bg-gradient-to-r hover:from-purple-fade-from hover:to-purple-fade-from transition-all">
           0.1 ETH
         </button>
       </div>

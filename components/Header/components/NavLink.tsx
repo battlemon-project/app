@@ -62,21 +62,22 @@ export const NavLink: React.FC<NavLinkProps> = ({ name, href, subLinks }) => {
           onMouseLeave={onMouseLeave}
         >
           <div
-            className="border-2 border-white border-opacity-50 flex flex-col rounded-xl overflow-hidden min-w-full w-fit backdrop-blur-lg p-3"
+            className="border-2 border-white border-opacity-50 flex flex-col rounded-xl overflow-hidden min-w-full w-fit backdrop-blur-lg px-3"
             style={{
               background:
                 'linear-gradient(105.54deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 100%)',
             }}
           >
-            {subLinks.map((link) => {
+            {subLinks.map((link, i) => {
               return (
                 <Link
                   className={classNames(
                     {
                       'pointer-events-none': link.isDisabled,
                       '': link.href === router.pathname,
+                      'border-b border-b-white': i + 1 < subLinks.length,
                     },
-                    'relative py-2 text-white whitespace-nowrap border-b border-b-white border-opacity-50'
+                    'relative py-2 text-white whitespace-nowrap  border-opacity-50'
                   )}
                   key={link.href + link.name}
                   href={link.href}
