@@ -14,7 +14,7 @@ export const ConnectEth: React.FC = () => {
     connector: new InjectedConnector(),
   });
   const { disconnect } = useDisconnect();
-  const { signMessage } = useSignMessage();
+  const { signMessageAsync } = useSignMessage();
 
   const signOut = () => {
     // removeCookie('auth_token');
@@ -22,7 +22,7 @@ export const ConnectEth: React.FC = () => {
   };
 
   const handleConnect = async () => {
-    connect({ chainId: 5 });
+    connect({ chainId: 59140 });
   };
 
   const fetchGuest = async () => {
@@ -64,13 +64,9 @@ export const ConnectEth: React.FC = () => {
     const { nonce } = await getNonce(guestToken);
     let signature: `0x${string}` | null = null;
     try {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      signature = await signMessage({
+      signature = await signMessageAsync({
         message: `Signing nonce: ${nonce}`,
       });
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       const { token } = await authWallet(guestToken, address, signature);
       setCookie('auth_token', token, {
         expires: new Date(((d) => d.setDate(d.getDate() + 365))(new Date())),
