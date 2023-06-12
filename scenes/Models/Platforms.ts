@@ -204,7 +204,7 @@ export const Platforms = async ({
         } else {
           if (step != 1) {
             const operatorFocusLemonF = scene.getAnimationGroupByName(
-              'operatorFocusLemonF'
+              'operator_FocusLemon_f'
             );
             operatorFocusLemonF?.start(false, 1);
             useLemonStore.setState({ inventoryIsOpened: true });
@@ -283,7 +283,7 @@ export const Platforms = async ({
   return {
     back: () => {
       const operatorFocusLemonB = scene.getAnimationGroupByName(
-        'operatorFocusLemonB'
+        'operator_FocusLemon_b'
       );
       operatorFocusLemonB?.start(false, 1);
       lemonPositions.forEach((position, index) => {

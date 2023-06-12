@@ -12,6 +12,7 @@ import { LemonGenerator } from './Models/LemonGenerator';
 import { useLemonStore } from '../helpers/lemonStore';
 import { allItems, allProperties } from '../helpers/dummyLemon';
 import { type LemonOwnedNft } from '../helpers/alchemy';
+import classNames from 'classnames';
 
 type updateLemonType = (lemon: LemonOwnedNft) => Promise<void>;
 let updateSomeLemon: updateLemonType = async () => {};
@@ -99,7 +100,7 @@ export default function LemonSandboxScene() {
     <>
       <canvas
         ref={canvasRef}
-        className="vh-100 w-100 position-absolute top-0"
+        className="h-screen w-full absolute top-0"
         id="renderCanvas"
         style={{
           background:
@@ -111,20 +112,20 @@ export default function LemonSandboxScene() {
         }}
       />
       <div
-        className="position-absolute col-2 ps-3"
+        className="absolute px-4 left-0 w-72"
         style={{ display: visibleInterface ? 'block' : 'none' }}
       >
         {lemons.ownedNfts[0].rawMetadata.properties.map((prop, i) => (
-          <div key={i} className="pt-1">
+          <div key={i} className="pt-1 w-full">
             <b
-              className="small px-1"
+              className="text-sm px-1"
               style={{ background: '#fff', borderRadius: '3px' }}
             >
               {prop.name}
             </b>
             <br />
             <select
-              className="form-select form-select-sm"
+              className="pt-1 pb-1 pr-9 pl-2 w-full rounded border-transparent border-r-8"
               value={prop.name ?? undefined}
               onChange={(e) => {
                 changeProperty(prop.type, e.target.value);
@@ -148,20 +149,20 @@ export default function LemonSandboxScene() {
       </div>
 
       <div
-        className="position-absolute col-2 pe-3"
+        className="absolute right-0 w-72 px-4"
         style={{ right: '0', display: visibleInterface ? 'block' : 'none' }}
       >
         {lemons.ownedNfts[0].rawMetadata.items.map((prop, i) => (
-          <div key={i} className="pt-1">
+          <div className="pt-1 w-full" key={i}>
             <b
-              className="small px-1"
+              className="text-sm px-1"
               style={{ background: '#fff', borderRadius: '3px' }}
             >
               {prop.type}
             </b>
             <br />
             <select
-              className="form-select form-select-sm"
+              className="pt-1 pb-1 pr-9 pl-2 w-full rounded"
               value={prop.name ?? undefined}
               onChange={(e) => {
                 changeItem(prop.type, e.target.value);
@@ -184,13 +185,13 @@ export default function LemonSandboxScene() {
         ))}
         <br />
         <b
-          className="small px-1"
+          className="text-sm px-1"
           style={{ background: '#fff', borderRadius: '3px' }}
         >
           Background
         </b>
         <input
-          className="form-control form-control-sm"
+          className="p-1 rounded"
           value={background}
           onChange={(e) => {
             setBackground(e.target.value);
@@ -199,14 +200,10 @@ export default function LemonSandboxScene() {
       </div>
 
       <div
-        style={{
-          position: 'absolute',
-          right: 0,
-          bottom: 0,
-          width: '80px',
-          height: '80px',
-          opacity: visibleInterface ? '1' : '0',
-        }}
+        className={classNames(
+          { 'opacity-100': visibleInterface, 'opacity-0': !visibleInterface },
+          'absolute w-20 h-20 right-0 bottom-0'
+        )}
         onClick={() => {
           setVisibleInterface(!visibleInterface);
         }}

@@ -2,10 +2,13 @@ import React from 'react';
 
 export const Footer: React.FC = () => {
   return (
-    <div className="container w-100 fixed-bottom footer">
-      <div className="float-end d-flex">
+    <div className="container p-4 mx-auto w-full">
+      <div className="flex justify-end gap-3">
         <div className="col">
-          <a className="svg-wrap" href="https://github.com/battlemon-project">
+          <a
+            className="svg-wrap text-white text-opacity-70 hover:text-opacity-100"
+            href="https://github.com/battlemon-project"
+          >
             <svg
               height="25"
               width="25"
@@ -37,7 +40,10 @@ export const Footer: React.FC = () => {
           </a>
         </div>
         <div className="col">
-          <a className="svg-wrap" href="https://twitter.com/BATTLEM0N">
+          <a
+            className="svg-wrap text-white text-opacity-70 hover:text-opacity-100"
+            href="https://twitter.com/BATTLEM0N"
+          >
             <svg
               fill="none"
               height="22"
@@ -55,7 +61,10 @@ export const Footer: React.FC = () => {
           </a>
         </div>
         <div className="col">
-          <a className="svg-wrap" href="https://dsc.gg/battlemon">
+          <a
+            className="svg-wrap text-white text-opacity-70 hover:text-opacity-100"
+            href="https://discord.gg/battlemon"
+          >
             <svg
               fill="none"
               height="26"
@@ -79,7 +88,10 @@ export const Footer: React.FC = () => {
           </a>
         </div>
         <div className="col">
-          <a className="svg-wrap" href="https://medium.com/@Battlemon">
+          <a
+            className="svg-wrap text-white text-opacity-70 hover:text-opacity-100"
+            href="https://medium.com/@Battlemon"
+          >
             <svg
               fill="none"
               height="22"

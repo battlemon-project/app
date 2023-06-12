@@ -5,11 +5,14 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   output: 'standalone',
   async rewrites() {
     return [
       {
-        source: "/api/:path*",
+        source: "/battlemon-api/:path*",
         destination: "https://api.battlemon.com/:path*",
       },
     ];

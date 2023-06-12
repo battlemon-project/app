@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { WalletProvider } from '@suiet/wallet-kit';
 import { AlertTemplate } from './AlertTemplate';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import Head from 'next/head';
-import { Header } from './Header';
+import { Header } from './Header/Header';
 import { Footer } from './Footer';
 
 interface Props {
@@ -18,10 +18,6 @@ const options = {
 };
 
 export default function Layout({ children }: Props) {
-  useEffect(() => {
-    require('bootstrap/dist/js/bootstrap.bundle.min.js');
-  }, []);
-
   return (
     <>
       <Head>

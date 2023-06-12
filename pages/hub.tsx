@@ -9,6 +9,7 @@ import { useLemonStore } from '../helpers/lemonStore';
 import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import alchemy, { getLemons, mintLemonData } from '../helpers/alchemy';
 import { useAlert } from 'react-alert';
+import { useRouter } from 'next/router';
 
 const HubScene = dynamic(async () => await import('../scenes/HubScene'), {
   suspense: true,
@@ -20,15 +21,16 @@ const Hub = () => {
     data: true,
   });
   const alert = useAlert();
-  const { address, isConnected } = useAccount();
+  const router = useRouter();
+  const { address, status, isConnected } = useAccount();
   const [hasMounted, setHasMounted] = useState(false);
 
   const { config } = usePrepareContractWrite(mintLemonData(address));
   const { write } = useContractWrite(config);
 
-  useEffect(() => {
-    // console.log(loader)
-  }, [loader]);
+  if (status === 'disconnected') {
+    router.replace('/');
+  }
 
   const refreshLemons = async () => {
     if (process.env.NEXT_PUBLIC_PRODUCTION == 'true') {
@@ -89,35 +91,29 @@ const Hub = () => {
   }, []);
 
   return (
-    <>
-      {process.env.NEXT_PUBLIC_PRODUCTION != 'true' &&
-        hasMounted &&
-        address && (
-          <div
-            className="sticky-top text-center d-inline-block position-absolute"
-            style={{
-              zIndex: 1080,
-              left: '50%',
-              top: '75px',
-              transform: 'translateX(-50%)',
-            }}
-          >
-            <button
-              className="btn btn-lg btn-light px-4"
-              onClick={handleMintLemon}
-            >
-              Mint NFT (Testnet)
-            </button>
-          </div>
-        )}
+    <div className="absolute top-0 left-0  w-full h-full">
+      <div className="w-full h-full container mx-auto px-4">
+        {process.env.NEXT_PUBLIC_PRODUCTION != 'true' &&
+          hasMounted &&
+          address && (
+            <div className="flex justify-center">
+              <button
+                className="bg-white py-2 px-6 rounded-xl text-xl hover:bg-gray transition-all"
+                onClick={handleMintLemon}
+              >
+                Mint NFT (Testnet)
+              </button>
+            </div>
+          )}
 
-      {!loader.data && (
-        <HubScene setLoader={setLoader} handleMintLemon={handleMintLemon} />
-      )}
-      {(loader.babylon || loader.data) && (
-        <BabylonLoader isConnected={isConnected && hasMounted} />
-      )}
-    </>
+        {!loader.data && (
+          <HubScene setLoader={setLoader} handleMintLemon={handleMintLemon} />
+        )}
+        {(loader.babylon || loader.data) && (
+          <BabylonLoader isConnected={isConnected && hasMounted} />
+        )}
+      </div>
+    </div>
   );
 };
 
