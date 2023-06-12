@@ -17,7 +17,8 @@ export const ConnectEth: React.FC = () => {
   const { signMessageAsync } = useSignMessage();
 
   const signOut = () => {
-    // removeCookie('auth_token');
+    removeCookie('auth_token');
+    removeCookie('current_address');
     disconnect();
   };
 
@@ -82,10 +83,6 @@ export const ConnectEth: React.FC = () => {
     if (!address) return;
     if (cookies.current_address !== address) {
       setCookie('current_address', address);
-      removeCookie('auth_token');
-      setTimeout(async () => await connectAuthServer(), 5000);
-    }
-    if (!cookies.auth_token) {
       connectAuthServer();
     }
   }, [address]);
@@ -98,10 +95,7 @@ export const ConnectEth: React.FC = () => {
 
   return (
     <ul className="navbar-nav mb-2 mb-lg-0 fs-5">
-      <li
-        className="nav-item dropdown"
-        // style={{ position: 'relative', top: '-9px' }}
-      >
+      <li className="nav-item dropdown">
         {isConnected && address ? (
           <div className="relative">
             <button

@@ -1,8 +1,6 @@
 // import { type ItemType } from './lemonStore';
 import ACCESS_KEY_CONTRACT_SOL from './abi/AccessKey.json';
-import FREE_GEMS_CONTRACT_SOL from './abi/FreeGem.json';
 // import REFERRAL_CONTRACT_SOL from './abi/Referral.json';
-import { utils } from 'ethers';
 
 export const ACCESS_KEY_CONTRACT_ADDRESS: `0x${string}` =
   '0x1edbB12b64612084B2e5464DB1224f9447c4eC76';
@@ -32,6 +30,7 @@ export const proxyMintAccessKey = (args: IProxyMintArgs | boolean) => {
     address: ACCESS_KEY_CONTRACT_ADDRESS,
     abi: ACCESS_KEY_CONTRACT_SOL.abi,
     functionName: 'proxyMint',
+    chainId: 59140,
     args: [
       [
         args.mintRequest.sender,

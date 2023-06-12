@@ -21,8 +21,6 @@ const Mint = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const [balance, setBalance] = useState(0);
   const { address, isConnected } = useAccount();
-  const [checkFollow, setCheckFollow] = useState(false);
-  const [checkRetwit, setCheckRetwit] = useState(false);
   const [discordCode, setDiscordCode] = useState<string | boolean>(false);
   const [voucher, setVoucher] = useState<IProxyMintArgs | boolean>(false);
   const [cookies, setCookie] = useCookies([
@@ -68,24 +66,10 @@ const Mint = () => {
 
   useEffect(() => {
     if (balance > 0) {
-      setCheckFollow(true);
-      setCheckRetwit(true);
       setDiscordCode(true);
       return;
     }
-    if (!discordCode && cookies.auth_token && isConnected) {
-      if (cookies.check_follow) {
-        setCheckFollow(true);
-      }
-      if (cookies.check_retwit) {
-        setCheckRetwit(true);
-      }
-    } else if (discordCode && cookies.auth_token && isConnected) {
-      setCheckFollow(true);
-      setCheckRetwit(true);
-    } else {
-      setCheckFollow(false);
-      setCheckRetwit(false);
+    if (!cookies.auth_token || !isConnected) {
       setDiscordCode(false);
     }
   }, [cookies, address, discordCode]);
@@ -113,8 +97,7 @@ const Mint = () => {
   };
 
   const { data: _discordCode } = useSWR(
-    ((address && cookies.auth_token) || checkFollow || checkRetwit) &&
-      '/battlemon-api/activation-codes',
+    address && cookies.auth_token && '/battlemon-api/activation-codes',
     getDiscordCode
   );
 
@@ -144,6 +127,10 @@ const Mint = () => {
 
   const handleProxyMintButton = () => {
     writeProxyMint?.();
+  };
+
+  const onCopyClick = (value: string) => {
+    navigator.clipboard.writeText(value);
   };
 
   return (
@@ -245,12 +232,43 @@ const Mint = () => {
                       our special channel
                     </a>
                   </p>
-                  <p className="my-0">
+                  <p className="flex flex-wrap items-center my-0 gap-1">
                     Enter command:
                     <br />
                     <span>
                       <kbd>/activate code: {discordCode}</kbd>
                     </span>
+                    <svg
+                      className="cursor-pointer"
+                      onClick={() => onCopyClick(discordCode)}
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlnsXlink="http://www.w3.org/1999/xlink"
+                    >
+                      <title>ic_fluent_copy_24_regular</title>
+                      <desc>Created with Sketch.</desc>
+                      <g
+                        id="🔍-Product-Icons"
+                        stroke="none"
+                        strokeWidth="1"
+                        fill="none"
+                        fillRule="evenodd"
+                      >
+                        <g
+                          id="ic_fluent_copy_24_regular"
+                          fill="#fff"
+                          fillRule="nonzero"
+                        >
+                          <path
+                            d="M5.50280381,4.62704038 L5.5,6.75 L5.5,17.2542087 C5.5,19.0491342 6.95507456,20.5042087 8.75,20.5042087 L17.3662868,20.5044622 C17.057338,21.3782241 16.2239751,22.0042087 15.2444057,22.0042087 L8.75,22.0042087 C6.12664744,22.0042087 4,19.8775613 4,17.2542087 L4,6.75 C4,5.76928848 4.62744523,4.93512464 5.50280381,4.62704038 Z M17.75,2 C18.9926407,2 20,3.00735931 20,4.25 L20,17.25 C20,18.4926407 18.9926407,19.5 17.75,19.5 L8.75,19.5 C7.50735931,19.5 6.5,18.4926407 6.5,17.25 L6.5,4.25 C6.5,3.00735931 7.50735931,2 8.75,2 L17.75,2 Z M17.75,3.5 L8.75,3.5 C8.33578644,3.5 8,3.83578644 8,4.25 L8,17.25 C8,17.6642136 8.33578644,18 8.75,18 L17.75,18 C18.1642136,18 18.5,17.6642136 18.5,17.25 L18.5,4.25 C18.5,3.83578644 18.1642136,3.5 17.75,3.5 Z"
+                            id="🎨-Color"
+                          ></path>
+                        </g>
+                      </g>
+                    </svg>
                   </p>
                 </div>
               )}
@@ -272,12 +290,10 @@ const Mint = () => {
               Unique Key-card that gives access to the incredible game world of
               Lemoland, full of adventures and NFT treasures.{' '}
             </p>
-
             <p className="mb-4">
               Unique NFT key-pass will be available in Testnet and also
               transferred to Mainnet.
             </p>
-
             <div className="flex justify-between mb-1">
               <b>Contract Address</b>
               <div>0x60efdg33a...434iq357c6</div>
@@ -285,10 +301,6 @@ const Mint = () => {
             <div className="flex justify-between mb-1">
               <b>Token Standard</b>
               <div>ERC721</div>
-            </div>
-            <div className="flex justify-between mb-1">
-              <b>Total minted</b>
-              <div>25 Keys</div>
             </div>
           </div>
         </div>
