@@ -225,7 +225,7 @@ const Mint = () => {
                     Go to{' '}
                     <a
                       className="text-white underline cursor-pointer"
-                      href="https://discord.com/channels/893433519110488064/1087341135824965693"
+                      href="https://discordapp.com/channels/893433519110488064/1116478869118144532"
                       target="_blank"
                       rel="noreferrer"
                     >
