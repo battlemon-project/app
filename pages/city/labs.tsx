@@ -46,9 +46,6 @@ const Labs = () => {
   }
 
   const refreshGems = async () => {
-    if (process.env.NEXT_PUBLIC_PRODUCTION == 'true') {
-      return;
-    }
     if (!address) return;
     const data = await fetch(`/api/linea/gems?address=${address}`);
     const {

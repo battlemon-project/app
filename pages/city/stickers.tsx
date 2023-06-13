@@ -26,7 +26,7 @@ const Stickers = () => {
   }, []);
 
   return (
-    <div className="container pt-5 mt-5">
+    <div className="container pt-5 mt-5 mx-auto">
       <Suspense fallback={<BabylonLoader isConnected={true} />}>
         <HomeScene />
       </Suspense>
