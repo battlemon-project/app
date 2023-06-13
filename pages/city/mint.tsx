@@ -130,7 +130,7 @@ const Mint = () => {
   };
 
   const onCopyClick = (value: string) => {
-    navigator.clipboard.writeText(value);
+    navigator.clipboard.writeText(`/activate code: ${value}`);
   };
 
   return (
