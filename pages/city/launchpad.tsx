@@ -144,7 +144,7 @@ const Launchpad = () => {
               className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-md px-8 py-4 text-lg bg-white font-bold text-white bg-opacity-20 hover:bg-gradient-to-r hover:from-purple-fade-from hover:to-purple-fade-from transition-all"
               onClick={handleOpen}
             >
-              0.01 ETH
+              0.01 ETH!
             </button>
           </>
         ) : (
