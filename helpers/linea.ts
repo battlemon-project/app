@@ -10,6 +10,8 @@ export const REFERRAL_CONTRACT_ADDRESS: `0x${string}` =
   '0x6e58359d2F3Fd0f870cC187246a52848dc7AFCE8';
 export const FREE_GEMS_CONTRACT_ADDRESS: `0x${string}` =
   '0x35D42D4BdC36CfE33A5ea6672A1B81752A963d6d';
+export const PICK_AXE_CONTRACT_ADDRESS: `0x${string}` =
+  '0xB0375deF6ABA7687c268bEcac620865b0c1ED120';
 
 export interface IProxyMintArgs {
   mintRequest: {
