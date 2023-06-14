@@ -9,7 +9,10 @@ export const Home = async (scene: Scene, router: NextRouter): Promise<void> => {
     scene
   );
 
-  const buildingStrokes: Record<string, { stroke: string[]; page?: string }> = {
+  const buildingStrokes: Record<
+    string,
+    { stroke: string[]; page?: string; newTab?: boolean }
+  > = {
     factory: {
       stroke: ['factory_stroke'],
       page: '/city/defi',
@@ -41,6 +44,8 @@ export const Home = async (scene: Scene, router: NextRouter): Promise<void> => {
     },
     lemterprise: {
       stroke: ['lemterprise_stroke'],
+      page: 'https://battlemon.gitbook.io',
+      newTab: true,
     },
     engines: {
       stroke: ['engines_stroke'],
@@ -87,6 +92,12 @@ export const Home = async (scene: Scene, router: NextRouter): Promise<void> => {
 
   scene.onPointerPick = function (evt) {
     const picked = buildingStrokes[selectedBuilding];
+
+    if (picked.newTab) {
+      window.open(picked.page, '_blank')?.focus();
+      return;
+    }
+
     if (picked.page) {
       router.push(picked.page);
     }
