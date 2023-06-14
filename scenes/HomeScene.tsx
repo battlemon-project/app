@@ -41,10 +41,10 @@ export default function HomeScene() {
       camera.setTarget(new Vector3(0, 5, 0));
 
       scene.beforeRender = function () {
-        if (camera.rotation.x > 0.05) {
-          camera.rotation.x = 0.05;
-        } else if (camera.rotation.x < -0.05) {
-          camera.rotation.x = -0.05;
+        if (camera.rotation.x > 0) {
+          camera.rotation.x = 0;
+        } else if (camera.rotation.x < 0) {
+          camera.rotation.x = 0;
         }
 
         const detaview = document.body.offsetWidth / 1200;
