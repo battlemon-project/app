@@ -54,7 +54,7 @@ const Labs = () => {
       },
     } = await data.json();
     await getMetadata(gems);
-    setLoader(false);
+    setLoader(false)
   };
 
   const handleSelectGem = (tokenId: string) => () => {
