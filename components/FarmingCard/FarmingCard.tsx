@@ -30,7 +30,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
       </div>
       <div className="font-semibold text-xl mb-2">{title}</div>
       <button className="border border-white bg-transparent p-2 rounded-lg text-white hover:bg-white hover:text-black">
-        Proceed
+        Soon
       </button>
     </div>
   );

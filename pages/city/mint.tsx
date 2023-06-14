@@ -296,7 +296,7 @@ const Mint = () => {
             </p>
             <div className="flex justify-between mb-1">
               <b>Contract Address</b>
-              <div>0x60efdg33a...434iq357c6</div>
+              <div>0xd622Dc376...80Ca3A19F2</div>
             </div>
             <div className="flex justify-between mb-1">
               <b>Token Standard</b>
