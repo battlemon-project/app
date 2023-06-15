@@ -6,7 +6,7 @@ import {
   type GLTFFileLoader,
   GLTFLoaderAnimationStartMode,
 } from '@babylonjs/loaders';
-import { useAccount, useSigner } from 'wagmi';
+import { useAccount, useNetwork, useSigner, useSwitchNetwork } from 'wagmi';
 import { PICK_AXE_CONTRACT_ADDRESS } from '../../helpers/linea';
 import PICK_AXE_CONTRACT_SOL from '../../helpers/abi/PickAxe.json';
 import { ethers, utils } from 'ethers';
@@ -19,8 +19,14 @@ const Launchpad = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const { address, status } = useAccount();
   const [isChestOpened, setIsChestOpened] = useState(false);
+  const { switchNetwork } = useSwitchNetwork();
+  const { chain } = useNetwork();
 
   const handleOpen = async () => {
+    if (switchNetwork && chain?.id !== 59140) {
+      switchNetwork(59140);
+      return;
+    }
     if (!contract) return;
     setLoader(true);
     try {

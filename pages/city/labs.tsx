@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
-import { useAccount, useSigner } from 'wagmi';
+import { useAccount, useNetwork, useSigner, useSwitchNetwork } from 'wagmi';
 import FREE_GEMS_CONTRACT_SOL from '../../helpers/abi/FreeGem.json';
 import { FREE_GEMS_CONTRACT_ADDRESS } from '../../helpers/linea';
 import { BabylonLoader } from '../../components/BabylonLoader';
@@ -37,6 +37,8 @@ const Labs = () => {
   const [selectedGems, setSelectedGems] = useState<
     [string | null, string | null]
   >([null, null]);
+  const { switchNetwork } = useSwitchNetwork();
+  const { chain } = useNetwork();
 
   const [hasMounted, setHasMounted] = useState(false);
   const router = useRouter();
@@ -54,7 +56,7 @@ const Labs = () => {
       },
     } = await data.json();
     await getMetadata(gems);
-    setLoader(false)
+    setLoader(false);
   };
 
   const handleSelectGem = (tokenId: string) => () => {
@@ -72,6 +74,10 @@ const Labs = () => {
 
   const handleMint = async () => {
     if (!contract) return;
+    if (switchNetwork && chain?.id !== 59140) {
+      switchNetwork(59140);
+      return;
+    }
     setLoader(true);
     try {
       const mint = await contract.mint(address, 1);
@@ -85,6 +91,10 @@ const Labs = () => {
 
   const handleCraft = async () => {
     if (!contract) return;
+    if (switchNetwork && chain?.id !== 59140) {
+      switchNetwork(59140);
+      return;
+    }
     setLoader(true);
     try {
       console.log(selectedGems);
