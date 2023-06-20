@@ -7,7 +7,9 @@ import {
   useAccount,
   useContractRead,
   useContractWrite,
+  useNetwork,
   usePrepareContractWrite,
+  useSwitchNetwork,
   useWaitForTransaction,
 } from 'wagmi';
 import {
@@ -29,6 +31,8 @@ const Mint = () => {
     'check_discord',
     'auth_token',
   ]);
+  const { switchNetwork } = useSwitchNetwork();
+  const { chain } = useNetwork();
 
   const { data: bigNumberBalance } = useContractRead({
     address: ACCESS_KEY_CONTRACT_ADDRESS,
@@ -126,6 +130,11 @@ const Mint = () => {
   if (!hasMounted) return <></>;
 
   const handleProxyMintButton = () => {
+    if (switchNetwork && chain?.id !== 59140) {
+      switchNetwork(59140);
+      return;
+    }
+
     writeProxyMint?.();
   };
 
@@ -296,7 +305,7 @@ const Mint = () => {
             </p>
             <div className="flex justify-between mb-1">
               <b>Contract Address</b>
-              <div>0x60efdg33a...434iq357c6</div>
+              <div>0xd622Dc376...80Ca3A19F2</div>
             </div>
             <div className="flex justify-between mb-1">
               <b>Token Standard</b>
