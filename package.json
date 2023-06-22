@@ -42,7 +42,8 @@
     "swr": "^2.1.5",
     "tailwindcss": "^3.3.2",
     "typescript": "*",
-    "wagmi": "^0.12.10",
+    "viem": "^1.1.4",
+    "wagmi": "^1.2.1",
     "zustand": "^4.3.2"
   },
   "devDependencies": {

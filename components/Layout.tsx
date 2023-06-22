@@ -1,23 +1,21 @@
 import React from 'react';
-import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { lineaTestnet, mainnet } from 'wagmi/chains';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
-import { InjectedConnector } from 'wagmi/connectors/injected';
+import { lineaTestnet } from 'wagmi/chains';
 import { AlertTemplate } from './AlertTemplate';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import Head from 'next/head';
 import { Header } from './Header/Header';
 import { Footer } from './Footer';
 
-const { chains, provider } = configureChains(
-  [lineaTestnet, mainnet],
-  [publicProvider(), publicProvider()]
+const { publicClient, webSocketPublicClient } = configureChains(
+  [lineaTestnet],
+  [publicProvider()]
 );
 
-const client = createClient({
+const config = createConfig({
   autoConnect: true,
-  connectors: [new InjectedConnector({ chains })],
-  provider,
+  publicClient,
 });
 
 interface Props {
@@ -64,7 +62,7 @@ export default function Layout({ children }: Props) {
         />
       </Head>
       <AlertProvider template={AlertTemplate} {...options}>
-        <WagmiConfig client={client}>
+        <WagmiConfig config={config}>
           <div className="flex flex-col min-h-screen">
             <div className="relative z-50">
               <Header network={'eth'} />

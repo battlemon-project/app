@@ -6,50 +6,24 @@ import {
   type GLTFFileLoader,
   GLTFLoaderAnimationStartMode,
 } from '@babylonjs/loaders';
-import { useAccount, useNetwork, useSigner, useSwitchNetwork } from 'wagmi';
-import { PICK_AXE_CONTRACT_ADDRESS } from '../../helpers/linea';
-import PICK_AXE_CONTRACT_SOL from '../../helpers/abi/PickAxe.json';
-import { ethers, utils } from 'ethers';
+import usePickAxe from '../../hooks/usePickAxe';
 import Image from 'next/dist/client/image';
+import { BabylonLoader } from '../../components/BabylonLoader';
 
 const Launchpad = () => {
-  const { data: signer } = useSigner();
-  const [contract, setContract] = useState<ethers.Contract>();
+  const { authorized, mintPickAxe, successMintPickAxe } = usePickAxe();
   const canvasRef = useRef(null);
   const [loader, setLoader] = useState<boolean>(true);
-  const { address, status } = useAccount();
   const [isChestOpened, setIsChestOpened] = useState(false);
-  const { switchNetwork } = useSwitchNetwork();
-  const { chain } = useNetwork();
 
   const handleOpen = async () => {
-    if (switchNetwork && chain?.id !== 59140) {
-      switchNetwork(59140);
-      return;
-    }
-    if (!contract) return;
     setLoader(true);
-    try {
-      const mint = await contract.mint(address, {
-        value: utils.parseEther('0.01'),
-      });
-      const receipt = await mint.wait(1);
-      setIsChestOpened(true);
-    } catch (e) {
-      const { message } = e as Error;
-      console.log(message);
-    }
+    await mintPickAxe?.();
   };
 
   useEffect(() => {
-    if (!signer || !address) return;
-    const _contract = new ethers.Contract(
-      PICK_AXE_CONTRACT_ADDRESS,
-      PICK_AXE_CONTRACT_SOL.abi,
-      signer
-    );
-    setContract(_contract);
-  }, [signer, address]);
+    successMintPickAxe && setIsChestOpened(true);
+  }, [successMintPickAxe]);
 
   useEffect(() => {
     const canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
@@ -135,6 +109,8 @@ const Launchpad = () => {
       engine.hideLoadingUI();
     };
   }, []);
+
+  if (!authorized) return <BabylonLoader isConnected={false} />;
 
   return (
     <>
