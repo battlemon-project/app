@@ -7,14 +7,23 @@ import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import Head from 'next/head';
 import { Header } from './Header/Header';
 import { Footer } from './Footer';
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
 
-const { publicClient, webSocketPublicClient } = configureChains(
+const { publicClient, chains } = configureChains(
   [lineaTestnet],
   [publicProvider()]
 );
 
+const { connectors } = getDefaultWallets({
+  appName: 'Battlemon',
+  projectId: 'Battlemon',
+  chains,
+});
+
 const config = createConfig({
   autoConnect: true,
+  connectors,
   publicClient,
 });
 
@@ -63,15 +72,17 @@ export default function Layout({ children }: Props) {
       </Head>
       <AlertProvider template={AlertTemplate} {...options}>
         <WagmiConfig config={config}>
-          <div className="flex flex-col min-h-screen">
-            <div className="relative z-50">
-              <Header network={'eth'} />
+          <RainbowKitProvider chains={chains}>
+            <div className="flex flex-col min-h-screen">
+              <div className="relative z-50">
+                <Header network={'eth'} />
+              </div>
+              <main className="relative flex-grow">{children}</main>
+              <div className="relative z-10">
+                <Footer />
+              </div>
             </div>
-            <main className="relative flex-grow">{children}</main>
-            <div className="relative z-10">
-              <Footer />
-            </div>
-          </div>
+          </RainbowKitProvider>
         </WagmiConfig>
       </AlertProvider>
     </>

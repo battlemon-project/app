@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 import { useCookies } from 'react-cookie';
 import { InjectedConnector } from 'wagmi/connectors/injected';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export const ConnectEth: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
@@ -94,47 +95,53 @@ export const ConnectEth: React.FC = () => {
   if (!hasMounted) return null;
 
   return (
-    <ul className="navbar-nav mb-2 mb-lg-0 fs-5">
-      <li className="nav-item dropdown">
-        {isConnected && address ? (
-          <div className="relative">
-            <button
-              className="flex border border-white py-2.5 px-5 rounded-xl text-white font-normal dropdown-toggle hover:text-black hover:bg-white transition-all"
-              id="navbarDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              onMouseEnter={onMouseEnter}
-              onMouseLeave={onMouseLeave}
-            >
-              <span className="short_address">
-                <span className="ellipsis">{address}</span>
-                <span className="indent">{address}</span>
-              </span>
-            </button>
-            {isOpen ? (
-              <ul
-                className="absolute top-11 left-0 border border-white w-full py-2.5 px-5 rounded-xl text-white hover:text-black hover:bg-white transition-all"
-                aria-labelledby="navbarDropdown"
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-              >
-                <li>
-                  <button className="dropdown-item" onClick={signOut}>
-                    Sign Out
+    <ConnectButton.Custom>
+      {({ openConnectModal }) => {
+        return (
+          <ul className="navbar-nav mb-2 mb-lg-0 fs-5">
+            <li className="nav-item dropdown">
+              {isConnected && address ? (
+                <div className="relative">
+                  <button
+                    className="flex border border-white py-2.5 px-5 rounded-xl text-white font-normal dropdown-toggle hover:text-black hover:bg-white transition-all"
+                    id="navbarDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                  >
+                    <span className="short_address">
+                      <span className="ellipsis">{address}</span>
+                      <span className="indent">{address}</span>
+                    </span>
                   </button>
-                </li>
-              </ul>
-            ) : null}
-          </div>
-        ) : (
-          <button
-            className="block border border-white w-52 py-2.5 px-5 rounded-xl text-white hover:text-black hover:bg-white transition-all"
-            onClick={handleConnect}
-          >
-            Connect
-          </button>
-        )}
-      </li>
-    </ul>
+                  {isOpen ? (
+                    <ul
+                      className="absolute top-11 left-0 border border-white w-full py-2.5 px-5 rounded-xl text-white hover:text-black hover:bg-white transition-all"
+                      aria-labelledby="navbarDropdown"
+                      onMouseEnter={onMouseEnter}
+                      onMouseLeave={onMouseLeave}
+                    >
+                      <li>
+                        <button className="dropdown-item" onClick={signOut}>
+                          Sign Out
+                        </button>
+                      </li>
+                    </ul>
+                  ) : null}
+                </div>
+              ) : (
+                <button
+                  className="block border border-white w-52 py-2.5 px-5 rounded-xl text-white hover:text-black hover:bg-white transition-all"
+                  onClick={openConnectModal}
+                >
+                  Connect
+                </button>
+              )}
+            </li>
+          </ul>
+        );
+      }}
+    </ConnectButton.Custom>
   );
 };
