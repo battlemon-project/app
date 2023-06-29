@@ -24,7 +24,7 @@ const options = {
   transition: transitions.SCALE,
 };
 
-const projectId = 'bfee0a8ba8efe0c5f52e718ac3daf9e9';
+const projectId = '30b84ca08da49c3ef8b9a2145c1306e7';
 const { publicClient, chains } = configureChains(
   [lineaTestnet],
   [w3mProvider({ projectId })]
