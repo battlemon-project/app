@@ -27,7 +27,6 @@ export interface IProxyMintArgs {
 
 export const proxyMintAccessKey = (args: IProxyMintArgs | boolean) => {
   if (typeof args !== 'object' || !args.mintRequest || !args.signature) return;
-  console.log(args);
   return {
     address: ACCESS_KEY_CONTRACT_ADDRESS,
     abi: ACCESS_KEY_CONTRACT_SOL.abi,

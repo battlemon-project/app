@@ -1,22 +1,17 @@
 import React from 'react';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import { publicProvider } from 'wagmi/providers/public';
 import { lineaTestnet } from 'wagmi/chains';
 import { AlertTemplate } from './AlertTemplate';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import Head from 'next/head';
 import { Header } from './Header/Header';
 import { Footer } from './Footer';
-
-const { publicClient, webSocketPublicClient } = configureChains(
-  [lineaTestnet],
-  [publicProvider()]
-);
-
-const config = createConfig({
-  autoConnect: true,
-  publicClient,
-});
+import {
+  EthereumClient,
+  w3mConnectors,
+  w3mProvider,
+} from '@web3modal/ethereum';
+import { Web3Modal } from '@web3modal/react';
 
 interface Props {
   children?: JSX.Element;
@@ -28,6 +23,20 @@ const options = {
   offset: '30px',
   transition: transitions.SCALE,
 };
+
+const projectId = 'bfee0a8ba8efe0c5f52e718ac3daf9e9';
+const { publicClient, chains } = configureChains(
+  [lineaTestnet],
+  [w3mProvider({ projectId })]
+);
+
+const config = createConfig({
+  autoConnect: true,
+  connectors: w3mConnectors({ chains, projectId }),
+  publicClient,
+});
+
+const ethereumClient = new EthereumClient(config, chains);
 
 export default function Layout({ children }: Props) {
   return (
@@ -73,6 +82,7 @@ export default function Layout({ children }: Props) {
             </div>
           </div>
         </WagmiConfig>
+        <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
       </AlertProvider>
     </>
   );
