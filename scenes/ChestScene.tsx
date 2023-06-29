@@ -62,7 +62,7 @@ export default function HomeScene() {
           GLTFLoaderAnimationStartMode.NONE;
       });
 
-      Chests(scene, router);
+      Chests(scene);
 
       return scene;
     };
@@ -87,32 +87,10 @@ export default function HomeScene() {
   }, []);
 
   return (
-    <div className="relative">
-      <div className={classNames('absolute w-full flex bottom-4')}>
-        <div className="text-white text-center text-3xl font-semibold basis-1/3 pl-24">
-          <div>0 / 2000</div>
-          <button className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all">
-            0.2ETH
-          </button>
-        </div>
-        <div className="text-white text-center text-3xl font-semibold basis-1/3">
-          <div>0 / 1000</div>
-          <button className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all">
-            0.5ETH
-          </button>
-        </div>
-        <div className="text-white text-center text-3xl font-semibold basis-1/3 pr-20">
-          <div>0 / 500</div>
-          <button className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all">
-            1ETH
-          </button>
-        </div>
-      </div>
-      <canvas
-        ref={canvasRef}
-        style={{ width: '100%', height: '500px', background: 'transparent' }}
-        id="chestCanvas"
-      />
-    </div>
+    <canvas
+      ref={canvasRef}
+      className='h-screen w-screen fixed top-0'
+      id="chestCanvas"
+    />
   );
 }

@@ -2,8 +2,7 @@ import { type Scene, SceneLoader, Vector3 } from '@babylonjs/core';
 import type { NextRouter } from 'next/router';
 
 export const Chests = async (
-  scene: Scene,
-  router: NextRouter
+  scene: Scene
 ): Promise<void> => {
   const chests = [
     {
