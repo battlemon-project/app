@@ -104,7 +104,6 @@ const useFreeGem = () => {
   };
 
   return {
-    authorized: true,
     mintFreeGem,
     successMintFreeGem,
     mergeFreeGem,

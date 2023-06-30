@@ -9,9 +9,11 @@ import {
 import usePickAxe from '../../hooks/usePickAxe';
 import Image from 'next/dist/client/image';
 import { BabylonLoader } from '../../components/BabylonLoader';
+import { useAuth } from '../../hooks/useAuth';
 
 const Launchpad = () => {
-  const { authorized, mintPickAxe, successMintPickAxe } = usePickAxe();
+  const { mintPickAxe, successMintPickAxe } = usePickAxe();
+  const { isAuthorized } = useAuth()
   const canvasRef = useRef(null);
   const [loader, setLoader] = useState<boolean>(true);
   const [isChestOpened, setIsChestOpened] = useState(false);
@@ -110,7 +112,7 @@ const Launchpad = () => {
     };
   }, []);
 
-  if (!authorized) return <BabylonLoader isConnected={false} />;
+  if (!isAuthorized) return <BabylonLoader isConnected={false} />;
 
   return (
     <>

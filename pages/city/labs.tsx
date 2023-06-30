@@ -6,16 +6,17 @@ import { GemItemCard } from '../../components/GemItemCard/GemItemCard';
 import Image from 'next/image';
 import classNames from 'classnames';
 import useFreeGem, { INft } from '../../hooks/useFreeGem';
+import { useAuth } from '../../hooks/useAuth';
 
 const Labs = () => {
   const {
-    authorized,
     mintFreeGem,
     successMintFreeGem,
     mergeFreeGem,
     successMergeFreeGem,
     getFreeGemList,
   } = useFreeGem();
+  const { isAuthorized } = useAuth()
   const [loader, setLoader] = useState<boolean>(true);
   const [userGems, setUserGems] = useState<INft[]>([]);
   const [selectedGems, setSelectedGems] = useState<
@@ -60,10 +61,10 @@ const Labs = () => {
   }, [successMintFreeGem, successMergeFreeGem]);
 
   useEffect(() => {
-    authorized && refreshGems();
-  }, [authorized]);
+    isAuthorized && refreshGems();
+  }, [isAuthorized]);
 
-  if (!authorized) return <BabylonLoader isConnected={false} />;
+  if (!isAuthorized) return <BabylonLoader isConnected={false} />;
 
   return (
     <div className="container mx-auto px-4">

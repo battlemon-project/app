@@ -76,7 +76,7 @@ export default function Layout({ children }: Props) {
             <div className="relative z-50">
               <Header network={'eth'} />
             </div>
-            <main className="relative flex-grow">{children}</main>
+            <main className="flex-grow">{children}</main>
             <div className="relative z-10">
               <Footer />
             </div>

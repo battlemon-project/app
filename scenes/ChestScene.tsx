@@ -6,15 +6,14 @@ import {
   GLTFLoaderAnimationStartMode,
 } from '@babylonjs/loaders';
 import LoadingScreen from '../components/LoadingScreen';
-import { useRouter } from 'next/router';
 import { Chests } from './Models/Chests';
-import classNames from 'classnames';
+import runDebugger from "../helpers/debugLayer";
+
 
 export default function HomeScene() {
   const FpsElement =
     typeof document !== 'undefined' && document.getElementById('fps');
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
-  const router = useRouter();
 
   BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (loader) {
     (loader as GLTFFileLoader).animationStartMode =
@@ -38,10 +37,10 @@ export default function HomeScene() {
         scene
       );
 
-      camera.fov = 0.01;
-      camera.setTarget(new Vector3(0, 0.5, 0));
+      camera.fov = 0.03;
+      camera.fovMode = BABYLON.Camera.FOVMODE_HORIZONTAL_FIXED
+      camera.setTarget(new Vector3(0, 0, 0));
 
-      camera.attachControl(canvasRef.current, true);
       const light = new BABYLON.HemisphericLight(
         'light',
         new BABYLON.Vector3(10, 10, -10),
@@ -68,8 +67,9 @@ export default function HomeScene() {
     };
 
     const scene = createScene();
-    scene.executeWhenReady(() => {
+    scene.executeWhenReady(async () => {
       engine.hideLoadingUI();
+      await runDebugger(scene);
     });
 
     engine.runRenderLoop(function () {

@@ -4,9 +4,11 @@ import { BabylonLoader } from '../../components/BabylonLoader';
 import ChestScene from '../../scenes/ChestScene';
 import usePickAxe from '../../hooks/usePickAxe';
 import classNames from 'classnames';
+import { useAuth } from '../../hooks/useAuth';
 
 const MarketPlace = () => {
-  const { authorized, mintPickAxe, successMintPickAxe } = usePickAxe();
+  const { mintPickAxe, successMintPickAxe } = usePickAxe();
+  const { isAuthorized } = useAuth()
 
   useEffect(() => {
     document?.body.classList.add('babylon-page');
@@ -16,11 +18,12 @@ const MarketPlace = () => {
     };
   }, []);
 
-  if (!authorized) return <BabylonLoader isConnected={false} />;
+  if (!isAuthorized) return <BabylonLoader isConnected={false} />;
 
   return (
     <>
-      <div className={classNames('absolute w-full flex bottom-4')}>
+      <ChestScene />
+      <div className={classNames('absolute w-full flex top-1/2 pt-4')}>
         <div className="text-white text-center text-3xl font-semibold basis-1/3 pl-24">
           <div>0 / 2000</div>
           <button className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all">
@@ -40,7 +43,6 @@ const MarketPlace = () => {
           </button>
         </div>
       </div>
-      <ChestScene />
     </>
   );
 };
