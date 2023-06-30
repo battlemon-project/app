@@ -93,12 +93,12 @@ export const Home = async (scene: Scene, router: NextRouter): Promise<void> => {
   scene.onPointerPick = function (evt) {
     const picked = buildingStrokes[selectedBuilding];
 
-    if (picked.newTab) {
+    if (picked?.newTab) {
       window.open(picked.page, '_blank')?.focus();
       return;
     }
 
-    if (picked.page) {
+    if (picked?.page) {
       router.push(picked.page);
     }
   };

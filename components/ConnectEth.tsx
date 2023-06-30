@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 import { useCookies } from 'react-cookie';
-import { InjectedConnector } from 'wagmi/connectors/injected';
+import { useWeb3Modal } from '@web3modal/react';
 
 export const ConnectEth: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
@@ -10,11 +10,10 @@ export const ConnectEth: React.FC = () => {
     'current_address',
   ]);
   const { address, isConnected } = useAccount();
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
+  const { connect } = useConnect();
   const { disconnect } = useDisconnect();
   const { signMessageAsync } = useSignMessage();
+  const { open } = useWeb3Modal();
 
   const signOut = () => {
     removeCookie('auth_token');
@@ -129,7 +128,7 @@ export const ConnectEth: React.FC = () => {
         ) : (
           <button
             className="block border border-white w-52 py-2.5 px-5 rounded-xl text-white hover:text-black hover:bg-white transition-all"
-            onClick={handleConnect}
+            onClick={open}
           >
             Connect
           </button>

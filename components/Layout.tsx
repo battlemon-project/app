@@ -1,24 +1,17 @@
 import React from 'react';
-import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { lineaTestnet, mainnet } from 'wagmi/chains';
-import { publicProvider } from 'wagmi/providers/public';
-import { InjectedConnector } from 'wagmi/connectors/injected';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import { lineaTestnet } from 'wagmi/chains';
 import { AlertTemplate } from './AlertTemplate';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import Head from 'next/head';
 import { Header } from './Header/Header';
 import { Footer } from './Footer';
-
-const { chains, provider } = configureChains(
-  [lineaTestnet, mainnet],
-  [publicProvider(), publicProvider()]
-);
-
-const client = createClient({
-  autoConnect: true,
-  connectors: [new InjectedConnector({ chains })],
-  provider,
-});
+import {
+  EthereumClient,
+  w3mConnectors,
+  w3mProvider,
+} from '@web3modal/ethereum';
+import { Web3Modal } from '@web3modal/react';
 
 interface Props {
   children?: JSX.Element;
@@ -30,6 +23,20 @@ const options = {
   offset: '30px',
   transition: transitions.SCALE,
 };
+
+const projectId = '30b84ca08da49c3ef8b9a2145c1306e7';
+const { publicClient, chains } = configureChains(
+  [lineaTestnet],
+  [w3mProvider({ projectId })]
+);
+
+const config = createConfig({
+  autoConnect: true,
+  connectors: w3mConnectors({ chains, projectId }),
+  publicClient,
+});
+
+const ethereumClient = new EthereumClient(config, chains);
 
 export default function Layout({ children }: Props) {
   return (
@@ -64,7 +71,7 @@ export default function Layout({ children }: Props) {
         />
       </Head>
       <AlertProvider template={AlertTemplate} {...options}>
-        <WagmiConfig client={client}>
+        <WagmiConfig config={config}>
           <div className="flex flex-col min-h-screen">
             <div className="relative z-50">
               <Header network={'eth'} />
@@ -75,6 +82,7 @@ export default function Layout({ children }: Props) {
             </div>
           </div>
         </WagmiConfig>
+        <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
       </AlertProvider>
     </>
   );
