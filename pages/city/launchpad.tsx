@@ -1,147 +1,98 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
-import * as BABYLON from '@babylonjs/core';
-import { SceneLoader, Vector3 } from '@babylonjs/core';
-import {
-  type GLTFFileLoader,
-  GLTFLoaderAnimationStartMode,
-} from '@babylonjs/loaders';
-import usePickAxe from '../../hooks/usePickAxe';
-import Image from 'next/dist/client/image';
 import { BabylonLoader } from '../../components/BabylonLoader';
+import ChestScene from '../../scenes/ChestScene';
+import usePickAxe from '../../hooks/usePickAxe';
+import classNames from 'classnames';
+import { useAuth } from '../../hooks/useAuth';
+import { useChests } from '../../hooks/useChests';
 
 const Launchpad = () => {
-  const { authorized, mintPickAxe, successMintPickAxe } = usePickAxe();
-  const canvasRef = useRef(null);
-  const [loader, setLoader] = useState<boolean>(true);
-  const [isChestOpened, setIsChestOpened] = useState(false);
+  const { openA, openB, openC, openAStart, openBStart, openCStart } =
+    useChests();
+  const [chestType, setChestType] = useState<string>();
+  const { mintPickAxe, successMintPickAxe } = usePickAxe();
+  const { isAuthorized } = useAuth();
 
-  const handleOpen = async () => {
-    setLoader(true);
+  const handleOpenA = async () => {
+    setChestType('A');
+    openAStart?.();
+    await mintPickAxe?.();
+  };
+
+  const handleOpenB = async () => {
+    setChestType('B');
+    openBStart?.();
+    await mintPickAxe?.();
+  };
+
+  const handleOpenC = async () => {
+    setChestType('C');
+    openCStart?.();
     await mintPickAxe?.();
   };
 
   useEffect(() => {
-    successMintPickAxe && setIsChestOpened(true);
+    if (chestType == 'A') {
+      openA?.();
+    }
+    if (chestType == 'B') {
+      openB?.();
+    }
+    if (chestType == 'C') {
+      openC?.();
+    }
   }, [successMintPickAxe]);
 
   useEffect(() => {
-    const canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
+    document?.body.classList.add('babylon-page');
 
-    if (!canvas) {
-      return;
-    }
-
-    const engine = new BABYLON.Engine(canvas, true);
-
-    const createScene = () => {
-      const scene = new BABYLON.Scene(engine);
-      const camera = new BABYLON.ArcRotateCamera(
-        'camera',
-        -Math.PI / 2,
-        Math.PI / 2.1,
-        175,
-        new BABYLON.Vector3(0, 0, 0),
-        scene
-      );
-      camera.lowerRadiusLimit = 175;
-      camera.upperRadiusLimit = 175;
-      camera.upperBetaLimit = camera.beta;
-      camera.lowerBetaLimit = camera.beta;
-
-      camera.fov = 0.01;
-      camera.setTarget(new Vector3(0, 0.5, 0));
-
-      camera.attachControl(canvasRef.current, true);
-      const light = new BABYLON.HemisphericLight(
-        'light',
-        new BABYLON.Vector3(10, 10, -10),
-        scene
-      );
-      light.intensity = 0.5;
-
-      const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData(
-        `${process.env.NEXT_PUBLIC_STATIC}/glb/environmentSpecular.env`,
-        scene
-      );
-      scene.environmentTexture = hdrTexture;
-      scene.environmentTexture.level = 1;
-      scene.clearColor = new BABYLON.Color4(0, 0, 0, 0.0000000000000001);
-
-      BABYLON.SceneLoader.OnPluginActivatedObservable.add((loader) => {
-        (loader as GLTFFileLoader).animationStartMode =
-          GLTFLoaderAnimationStartMode.NONE;
-      });
-
-      return scene;
-    };
-
-    const scene = createScene();
-
-    SceneLoader.ImportMeshAsync(
-      '',
-      `${process.env.NEXT_PUBLIC_MODELS}/treasure/`,
-      'basket_b.gltf',
-      scene
-    ).then((c) => {
-      console.log(c);
-      const rootNode = c.meshes[0];
-      rootNode.rotate(new Vector3(0, 200, 0), 1);
-      rootNode.position = new Vector3(0, 0, 0);
-    });
-    scene.executeWhenReady(() => {
-      engine.hideLoadingUI();
-    });
-
-    const FpsElement =
-      typeof document !== 'undefined' && document.getElementById('fps');
-
-    engine.runRenderLoop(function () {
-      scene.render();
-      if (FpsElement) FpsElement.innerHTML = engine.getFps().toFixed(2);
-    });
-
-    window.addEventListener('resize', function () {
-      engine.resize();
-    });
-
-    return () => {
-      engine.hideLoadingUI();
+    return function cleanup() {
+      document?.body.classList.remove('babylon-page');
     };
   }, []);
 
-  if (!authorized) return <BabylonLoader isConnected={false} />;
+  if (!isAuthorized) return <BabylonLoader isConnected={false} />;
 
   return (
     <>
-      <div className="relative container px-4 mx-auto">
-        {!isChestOpened ? (
-          <>
-            <canvas
-              className="w-full h-full"
-              id="renderCanvas"
-              ref={canvasRef}
-            ></canvas>
+      <ChestScene />
+      <div
+        className={classNames(
+          'absolute w-full flex top-1/2 pt-4 justify-center'
+        )}
+      >
+        {(!chestType || chestType == 'A') && (
+          <div className="text-white text-center text-3xl font-semibold basis-1/3 p-10">
+            <div>0 / &#8734;</div>
             <button
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-md px-8 py-4 text-lg bg-white font-bold text-white bg-opacity-20 hover:bg-gradient-to-r hover:from-purple-fade-from hover:to-purple-fade-from transition-all"
-              onClick={handleOpen}
+              className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all"
+              onClick={handleOpenA}
             >
-              0.01 ETH
+              0.0022 ETH
             </button>
-          </>
-        ) : (
-          <div className="flex justify-center pt-24">
-            <div>
-              <Image
-                src="/resources/assets/axes/blue-axe.png"
-                width={256}
-                height={256}
-                alt="axe"
-              />
-              <div className="mt-5 text-center text-white text-xl">
-                Congratulations!!
-              </div>
-            </div>
+          </div>
+        )}
+        {(!chestType || chestType == 'B') && (
+          <div className="text-white text-center text-3xl font-semibold basis-1/3 p-10">
+            <div>0 / 100 000</div>
+            <button
+              className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all"
+              onClick={handleOpenB}
+            >
+              0.0066 ETH
+            </button>
+          </div>
+        )}
+        {(!chestType || chestType == 'C') && (
+          <div className="text-white text-center text-3xl font-semibold basis-1/3 p-10">
+            <div>0 / 30 000</div>
+            <button
+              className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all"
+              onClick={handleOpenC}
+            >
+              0.019 ETH
+            </button>
           </div>
         )}
       </div>
