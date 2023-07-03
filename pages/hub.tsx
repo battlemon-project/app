@@ -91,7 +91,7 @@ const Hub = () => {
   }, []);
 
   return (
-    <div className="absolute top-0 left-0  w-full h-full">
+    <div className="absolute top-0 left-0 pt-32  w-full h-full">
       <div className="w-full h-full container mx-auto px-4">
         {process.env.NEXT_PUBLIC_PRODUCTION != 'true' &&
           hasMounted &&
