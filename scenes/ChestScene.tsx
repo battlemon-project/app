@@ -7,7 +7,6 @@ import {
 } from '@babylonjs/loaders';
 import LoadingScreen from '../components/LoadingScreen';
 import { Chests } from './Models/Chests';
-import runDebugger from '../helpers/debugLayer';
 
 export default function HomeScene() {
   const FpsElement =
@@ -16,7 +15,7 @@ export default function HomeScene() {
 
   BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (loader) {
     (loader as GLTFFileLoader).animationStartMode =
-      GLTFLoaderAnimationStartMode.ALL;
+      GLTFLoaderAnimationStartMode.NONE;
   });
 
   useEffect(() => {
@@ -55,11 +54,6 @@ export default function HomeScene() {
       scene.environmentTexture.level = 1;
       scene.clearColor = new BABYLON.Color4(0, 0, 0, 0.0000000000000001);
 
-      BABYLON.SceneLoader.OnPluginActivatedObservable.add((loader) => {
-        (loader as GLTFFileLoader).animationStartMode =
-          GLTFLoaderAnimationStartMode.NONE;
-      });
-
       Chests(scene);
 
       return scene;
@@ -68,7 +62,6 @@ export default function HomeScene() {
     const scene = createScene();
     scene.executeWhenReady(async () => {
       engine.hideLoadingUI();
-      await runDebugger(scene);
     });
 
     engine.runRenderLoop(function () {
