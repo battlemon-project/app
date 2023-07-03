@@ -83,7 +83,7 @@
                 4
             ],
             "mesh" : 5,
-            "name" : "basket_b_bottom"
+            "name" : "basket_b"
         }
     ],
     "animations" : [
@@ -132,7 +132,7 @@
                     }
                 }
             ],
-            "name" : "open",
+            "name" : "open_b",
             "samplers" : [
                 {
                     "input" : 67,

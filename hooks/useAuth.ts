@@ -1,18 +1,18 @@
-import { useAccount, useDisconnect as useDisconnectWagmi, useSignMessage } from 'wagmi';
+import {
+  useAccount,
+  useDisconnect as useDisconnectWagmi,
+  useSignMessage,
+} from 'wagmi';
 import { useCookies } from 'react-cookie';
 import { useEffect, useState } from 'react';
 
-const cookiesList = [
-  'auth_token',
-  'current_address',
-]
+const cookiesList = ['auth_token', 'current_address'];
 
 export const useAuth = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const [cookies, setCookie] = useCookies(cookiesList);
   const { address } = useAccount();
   const { signMessageAsync } = useSignMessage();
-
 
   const fetchGuest = async () => {
     const data = await fetch('/battlemon-api/auth/guest', { method: 'POST' });
@@ -78,18 +78,18 @@ export const useAuth = () => {
   if (address && cookies.auth_token && hasMounted) {
     return { isAuthorized: true, address };
   }
-  return { address }
+  return { address };
 };
 
 export const useDisconnect = () => {
-  const [,,removeCookie] = useCookies(cookiesList);
+  const [, , removeCookie] = useCookies(cookiesList);
   const { disconnect: disconnectWagmi } = useDisconnectWagmi();
-  
+
   const disconnect = () => {
     removeCookie('auth_token');
     removeCookie('current_address');
     disconnectWagmi();
   };
 
-  return { disconnect }
-}
+  return { disconnect };
+};

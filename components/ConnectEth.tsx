@@ -11,7 +11,6 @@ export const ConnectEth: React.FC = () => {
   const onMouseEnter = () => setIsOpen(true);
   const onMouseLeave = () => setIsOpen(false);
 
-
   useEffect(() => {
     setHasMounted(true);
   }, []);

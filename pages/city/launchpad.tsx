@@ -13,7 +13,7 @@ import { useAuth } from '../../hooks/useAuth';
 
 const Launchpad = () => {
   const { mintPickAxe, successMintPickAxe } = usePickAxe();
-  const { isAuthorized } = useAuth()
+  const { isAuthorized } = useAuth();
   const canvasRef = useRef(null);
   const [loader, setLoader] = useState<boolean>(true);
   const [isChestOpened, setIsChestOpened] = useState(false);

@@ -7,8 +7,7 @@ import {
 } from '@babylonjs/loaders';
 import LoadingScreen from '../components/LoadingScreen';
 import { Chests } from './Models/Chests';
-import runDebugger from "../helpers/debugLayer";
-
+import runDebugger from '../helpers/debugLayer';
 
 export default function HomeScene() {
   const FpsElement =
@@ -38,7 +37,7 @@ export default function HomeScene() {
       );
 
       camera.fov = 0.03;
-      camera.fovMode = BABYLON.Camera.FOVMODE_HORIZONTAL_FIXED
+      camera.fovMode = BABYLON.Camera.FOVMODE_HORIZONTAL_FIXED;
       camera.setTarget(new Vector3(0, 0, 0));
 
       const light = new BABYLON.HemisphericLight(
@@ -89,7 +88,7 @@ export default function HomeScene() {
   return (
     <canvas
       ref={canvasRef}
-      className='h-screen w-screen fixed top-0'
+      className="h-screen w-screen fixed top-0"
       id="chestCanvas"
     />
   );

@@ -16,7 +16,7 @@ const Labs = () => {
     successMergeFreeGem,
     getFreeGemList,
   } = useFreeGem();
-  const { isAuthorized } = useAuth()
+  const { isAuthorized } = useAuth();
   const [loader, setLoader] = useState<boolean>(true);
   const [userGems, setUserGems] = useState<INft[]>([]);
   const [selectedGems, setSelectedGems] = useState<

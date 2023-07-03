@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/useAuth';
 
 const MarketPlace = () => {
   const { mintPickAxe, successMintPickAxe } = usePickAxe();
-  const { isAuthorized } = useAuth()
+  const { isAuthorized } = useAuth();
 
   useEffect(() => {
     document?.body.classList.add('babylon-page');
