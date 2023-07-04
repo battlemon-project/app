@@ -59,7 +59,7 @@ const Launchpad = () => {
       <ChestScene />
       <div
         className={classNames(
-          'absolute w-full flex top-1/2 pt-4 justify-center'
+          `absolute w-full flex pt-4 justify-center ${chestType ? 'bottom-3' : 'top-1/2'}`
         )}
       >
         {(!chestType || chestType == 'A') && (

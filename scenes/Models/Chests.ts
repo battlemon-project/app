@@ -66,10 +66,10 @@ export const Chests = async (scene: Scene): Promise<void> => {
           30,
           30,
           new Vector3(1, 1, 1),
-          new Vector3(1.4, 1.4, 1.4),
+          new Vector3(1.3, 1.3, 1.3),
           0
         );
-        if (chest.node) chest.node.position = new Vector3(0, 0, 0);
+        if (chest.node) chest.node.position = new Vector3(0, -0.8, 0);
         chests.forEach((_ch, index) => {
           if (index !== i && _ch.node) {
             _ch.node.scaling = new Vector3(0, 0, 0);
