@@ -14,6 +14,7 @@ import { LemonGenerator } from './Models/LemonGenerator';
 import type { BabylonLoaderType } from '../components/BabylonLoader';
 import { useLemonStore } from '../helpers/lemonStore';
 import { Inventory } from '../components/HubLemon/Inventory';
+import classNames from 'classnames';
 
 let destroyPlatforms: () => void;
 let backPlatforms: () => void;
@@ -126,7 +127,7 @@ export default function HubScene({
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full h-full">
       <canvas className="h-full w-full" id="renderCanvas" />
       <div className="container w-full absolute left-0 top-5">
         {step > 0 && (
@@ -143,7 +144,7 @@ export default function HubScene({
       </div>
 
       {inventoryIsOpened ? (
-        <div className="absolute top-1/2 right-0 max-w-2xl w-full -translate-y-1/2">
+        <div className={classNames('absolute top-4 right-0 max-w-2xl w-full')}>
           <Inventory />
         </div>
       ) : null}

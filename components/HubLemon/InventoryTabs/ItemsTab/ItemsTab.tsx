@@ -230,7 +230,7 @@ export const ItemsTab: React.FC = () => {
         </div>
         <div>
           {currentItemsFilter != 'dressed' && (
-            <div className="flex shrink-0 mt-2 bottom-buttons px-3 py-2">
+            <div className="flex shrink-0 mt-2 bottom-buttons px-3 py-2 relative">
               <a
                 className={classNames(
                   {
