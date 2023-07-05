@@ -109,7 +109,7 @@ export const ItemsTab: React.FC = () => {
   return (
     <>
       <div className="relative">
-        <div className="grid grid-cols-12 gap-2 p-2.5 self-start w-full min-h-50 h-90 overflow-y-auto">
+        <div className="grid grid-cols-12 gap-2 p-2.5 self-start w-full min-h-40 h-72 2xl:min-h-50 2xl:h-90 overflow-y-auto">
           {currentItemsFilter == 'dressed' ? (
             <>
               {lemonItems
@@ -121,7 +121,7 @@ export const ItemsTab: React.FC = () => {
                 .map((item, idx) => (
                   <div
                     className={classNames({
-                      'bg-white border-opacity-80 col-span-3 border px-1 rounded-xl overflow-hidden h-40':
+                      'bg-white border-opacity-80 col-span-3 border px-1 rounded-xl overflow-hidden h-32 2xl:h-40':
                         item.id === selectedItem?.id,
                     })}
                     key={`${item.type}${idx}`}
@@ -207,7 +207,7 @@ export const ItemsTab: React.FC = () => {
                       {
                         'bg-white bg-opacity-20': item.id === selectedItem?.id,
                       },
-                      'col-span-3 border border-white px-1 rounded-xl h-40'
+                      'col-span-3 border border-white px-1 rounded-xl h-32 2xl:h-40'
                     )}
                     key={`${item.type}${idx}`}
                   >
@@ -230,22 +230,20 @@ export const ItemsTab: React.FC = () => {
         </div>
         <div>
           {currentItemsFilter != 'dressed' && (
-            <div className="flex shrink-0 mt-2 bottom-buttons px-3 py-2 relative">
+            <div className="flex shrink-0 mt-2 bottom-buttons gap-1 2xl:gap-0 px-3 py-2 relative">
               <a
                 className={classNames(
                   {
                     'bg-blue opacity-80': currentItemsFilter === undefined,
                   },
-                  'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+                  'relative flex items-center justify-center basis-12 2xl:basis-16 w-12 h-12 2xl:w-16 2xl:h-16 rounded-full'
                 )}
                 href={'#'}
                 onClick={filterOutifts('all')}
               >
                 <b className="relative z-10">ALL</b>
-                <Image
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                  width={63}
-                  height={63}
+                <img
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 basis-12 2xl:1/2 2xl w-12 h-12 2xl:w-16 2xl:h-16"
                   alt="icon"
                   src={`${process.env.NEXT_PUBLIC_STATIC}/assets/tiny/icon_hand_empty.png`}
                 />
@@ -255,7 +253,7 @@ export const ItemsTab: React.FC = () => {
                   {
                     'bg-blue opacity-80': currentItemsFilter === 'cap',
                   },
-                  'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full cursor-pointer'
+                  'relative flex items-center justify-center basis-12 2xl:basis-16 w-12 h-12 2xl:w-16 2xl:h-16 rounded-full cursor-pointer'
                 )}
                 onClick={filterOutifts('cap')}
               >
@@ -268,7 +266,7 @@ export const ItemsTab: React.FC = () => {
                   {
                     'bg-blue opacity-80': currentItemsFilter === 'belt',
                   },
-                  'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+                  'relative flex items-center justify-center basis-12 2xl:basis-16 w-12 h-12 2xl:w-16 2xl:h-16 rounded-full'
                 )}
                 href={'#'}
                 onClick={filterOutifts('belt')}
@@ -282,7 +280,7 @@ export const ItemsTab: React.FC = () => {
                   {
                     'bg-blue opacity-80': currentItemsFilter === 'cloth',
                   },
-                  'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+                  'relative flex items-center justify-center basis-12 2xl:basis-16 w-12 h-12 2xl:w-16 2xl:h-16 rounded-full'
                 )}
                 href={'#'}
                 onClick={filterOutifts('cloth')}
@@ -296,7 +294,7 @@ export const ItemsTab: React.FC = () => {
                   {
                     'bg-blue opacity-80': currentItemsFilter === 'mask',
                   },
-                  'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+                  'relative flex items-center justify-center basis-12 2xl:basis-16 w-12 h-12 2xl:w-16 2xl:h-16 rounded-full'
                 )}
                 href={'#'}
                 onClick={filterOutifts('mask')}
@@ -310,7 +308,7 @@ export const ItemsTab: React.FC = () => {
                   {
                     'bg-blue opacity-80': currentItemsFilter === 'glasses',
                   },
-                  'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+                  'relative flex items-center justify-center basis-12 2xl:basis-16 w-12 h-12 2xl:w-16 2xl:h-16 rounded-full'
                 )}
                 href={'#'}
                 onClick={filterOutifts('glasses')}
@@ -324,7 +322,7 @@ export const ItemsTab: React.FC = () => {
                   {
                     'bg-blue opacity-80': currentItemsFilter === 'shoes',
                   },
-                  'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+                  'relative flex items-center justify-center basis-12 2xl:basis-16 w-12 h-12 2xl:w-16 2xl:h-16 rounded-full'
                 )}
                 href={'#'}
                 onClick={filterOutifts('shoes')}
@@ -338,7 +336,7 @@ export const ItemsTab: React.FC = () => {
                   {
                     'bg-blue opacity-80': currentItemsFilter === 'back',
                   },
-                  'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+                  'relative flex items-center justify-center basis-12 2xl:basis-16 w-12 h-12 2xl:w-16 2xl:h-16 rounded-full'
                 )}
                 href={'#'}
                 onClick={filterOutifts('back')}
@@ -352,7 +350,7 @@ export const ItemsTab: React.FC = () => {
                   {
                     'bg-blue opacity-80': currentItemsFilter === 'fire_arms',
                   },
-                  'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+                  'relative flex items-center justify-center basis-12 2xl:basis-16 w-12 h-12 2xl:w-16 2xl:h-16 rounded-full'
                 )}
                 href={'#'}
                 onClick={filterOutifts('fire_arms')}
@@ -366,7 +364,7 @@ export const ItemsTab: React.FC = () => {
                   {
                     'bg-blue opacity-80': currentItemsFilter === 'cold_arms',
                   },
-                  'relative flex items-center justify-center basis-16 w-16 h-16 rounded-full'
+                  'relative flex items-center justify-center basis-12 2xl:basis-16 w-12 h-12 2xl:w-16 2xl:h-16 rounded-full'
                 )}
                 href={'#'}
                 onClick={filterOutifts('cold_arms')}

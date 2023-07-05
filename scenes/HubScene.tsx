@@ -144,7 +144,11 @@ export default function HubScene({
       </div>
 
       {inventoryIsOpened ? (
-        <div className={classNames('absolute top-4 right-0 max-w-2xl w-full')}>
+        <div
+          className={classNames(
+            'absolute top-4 right-0 max-w-xl 2xl:max-w-2xl w-full'
+          )}
+        >
           <Inventory />
         </div>
       ) : null}
