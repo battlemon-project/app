@@ -36,7 +36,7 @@ const usePickAxe = () => {
     }
   };
 
-  return { authorized: true, mintPickAxe, successMintPickAxe };
+  return { mintPickAxe, successMintPickAxe };
 };
 
 export default usePickAxe;
