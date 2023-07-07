@@ -25,6 +25,15 @@ const options = {
 };
 
 const projectId = '30b84ca08da49c3ef8b9a2145c1306e7';
+const UTORGProjectId = process.env.NEXT_PUBLIC_UTORG_PROJECT_ID as string;
+const UTORGWalletConfig = {
+  id: UTORGProjectId,
+  name: 'UTORG',
+  links: {
+    native: 'UTORG://mainactivity',
+    universal: process.env.NEXT_PUBLIC_UTORG_LINK as string,
+  },
+};
 const { publicClient, chains } = configureChains(
   [lineaTestnet],
   [w3mProvider({ projectId })]
@@ -82,7 +91,16 @@ export default function Layout({ children }: Props) {
             </div>
           </div>
         </WagmiConfig>
-        <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+        <Web3Modal
+          mobileWallets={[UTORGWalletConfig]}
+          desktopWallets={[UTORGWalletConfig]}
+          walletImages={{
+            [UTORGProjectId]:
+              'https://play-lh.googleusercontent.com/hVlVFdN_0VjeKHw9LwltazoyZ_sUHO8jo6RGrjOVRR37mxZuWxFbLyJHj4ImSBoPnhY=w240-h480-rw',
+          }}
+          projectId={projectId}
+          ethereumClient={ethereumClient}
+        />
       </AlertProvider>
     </>
   );
