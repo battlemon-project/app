@@ -57,8 +57,13 @@ export const Chests = async (scene: Scene): Promise<void> => {
   }
 
   chests.forEach((chest, i) => {
+    const openAnimation = scene.getAnimationGroupByName(
+      chest.animationName
+    ) as AnimationGroup;
+
     useChests.setState({
       [chest.functionName + 'Start']: () => {
+        openAnimation.reset();
         Animation.CreateAndStartAnimation(
           `Chest_scale`,
           chest.node,
@@ -77,9 +82,6 @@ export const Chests = async (scene: Scene): Promise<void> => {
         });
       },
       [chest.functionName]: () => {
-        const openAnimation = scene.getAnimationGroupByName(
-          chest.animationName
-        ) as AnimationGroup;
         openAnimation.start(false, 1);
       },
     });

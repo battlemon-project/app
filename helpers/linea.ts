@@ -3,15 +3,15 @@ import ACCESS_KEY_CONTRACT_SOL from './abi/AccessKey.json';
 // import REFERRAL_CONTRACT_SOL from './abi/Referral.json';
 
 export const ACCESS_KEY_CONTRACT_ADDRESS: `0x${string}` =
-  '0xd622Dc376B30E5657e15E2Be1355F080Ca3A19F2';
+  '0x77dD7316C9bf899790B948698F0c98a317ef9140';
 export const GEMS_CONTRACT_ADDRESS: `0x${string}` =
   '0x6bF309Ad2b7c0eBE44e69a53Bb2cCED79f17FC66';
 export const REFERRAL_CONTRACT_ADDRESS: `0x${string}` =
-  '0x6e58359d2F3Fd0f870cC187246a52848dc7AFCE8';
+  '0x15Ed5594ed40e9c4f8aA4342077ef0b3a1820B5a';
 export const FREE_GEMS_CONTRACT_ADDRESS: `0x${string}` =
   '0x35D42D4BdC36CfE33A5ea6672A1B81752A963d6d';
 export const PICK_AXE_CONTRACT_ADDRESS: `0x${string}` =
-  '0xB0375deF6ABA7687c268bEcac620865b0c1ED120';
+  '0x8d0a883079f5eBBF0C7bDc66415360e838966957';
 
 export interface IProxyMintArgs {
   mintRequest: {

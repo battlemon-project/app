@@ -20,7 +20,7 @@ const Marketplace = () => {
 
   const handleOpen = async () => {
     setLoader(true);
-    await mintPickAxe?.();
+    await mintPickAxe?.(1, 0.0066);
   };
 
   useEffect(() => {
