@@ -5,7 +5,7 @@ import ACCESS_KEY_CONTRACT_SOL from './abi/AccessKey.json';
 export const ACCESS_KEY_CONTRACT_ADDRESS: `0x${string}` =
   '0x77dD7316C9bf899790B948698F0c98a317ef9140';
 export const GEMS_CONTRACT_ADDRESS: `0x${string}` =
-  '0x6bF309Ad2b7c0eBE44e69a53Bb2cCED79f17FC66';
+  '0x65087009aCDE8e06d2263B30Ddc7fF271D08D673';
 export const REFERRAL_CONTRACT_ADDRESS: `0x${string}` =
   '0x15Ed5594ed40e9c4f8aA4342077ef0b3a1820B5a';
 export const FREE_GEMS_CONTRACT_ADDRESS: `0x${string}` =

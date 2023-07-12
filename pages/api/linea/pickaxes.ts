@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { GEMS_CONTRACT_ADDRESS } from '../../../helpers/linea';
+import { PICK_AXE_CONTRACT_ADDRESS } from '../../../helpers/linea';
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,7 +18,7 @@ export default async function handler(
         token721S(where: {
           owner: "${address}",
           collection_: {
-            id: "${GEMS_CONTRACT_ADDRESS}"
+            id: "${PICK_AXE_CONTRACT_ADDRESS}"
           }
         }) {
           id
