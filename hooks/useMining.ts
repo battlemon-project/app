@@ -6,6 +6,7 @@ import { PICK_AXE_CONTRACT_ADDRESS } from '../helpers/linea';
 import { parseEther } from 'viem';
 import { useState } from 'react';
 import { StaticImageData } from 'next/image';
+import { create } from 'zustand';
 
 export interface INft {
   id: string;
@@ -131,5 +132,13 @@ const useFreeGem = () => {
     getPickAxesList,
   };
 };
+
+interface MiningStoreProp {
+  startMining?: (rank: number) => void;
+  showPickAxe?: (rank: number) => void;
+  startGemAppear?: (rank: number) => void;
+}
+
+export const useMiningStore = create<MiningStoreProp>((set) => ({}));
 
 export default useFreeGem;
