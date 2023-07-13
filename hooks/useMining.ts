@@ -15,9 +15,9 @@ export interface INft {
   meta: number;
 }
 
-import Pick1 from '../public/resources/assets/256/IcePick-3.png';
-import Pick2 from '../public/resources/assets/256/IcePick-1.png';
-import Pick3 from '../public/resources/assets/256/IcePick-2.png';
+import Pick1 from '../public/resources/assets/256/IcePick-2.png';
+import Pick2 from '../public/resources/assets/256/IcePick-3.png';
+import Pick3 from '../public/resources/assets/256/IcePick-1.png';
 
 const pickAxeImages: Record<number, StaticImageData> = {
   0: Pick1,
