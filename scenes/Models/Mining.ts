@@ -34,9 +34,9 @@ export const Mining = async (scene: Scene): Promise<void> => {
   }
 
   const pickAxes: TransformNode[] = [
-    scene.getTransformNodeByName('IcePick_Yellow') as TransformNode,
     scene.getTransformNodeByName('IcePick_Blue') as TransformNode,
-    scene.getTransformNodeByName('IcePick_Purple') as TransformNode
+    scene.getTransformNodeByName('IcePick_Purple') as TransformNode,
+    scene.getTransformNodeByName('IcePick_Yellow') as TransformNode,
   ];
 
   const showPickAxe = (rank: number) => {

@@ -15,9 +15,9 @@ export interface INft {
   meta: number;
 }
 
-import Pick1 from '../public/resources/assets/256/IcePick-1.png';
-import Pick2 from '../public/resources/assets/256/IcePick-2.png';
-import Pick3 from '../public/resources/assets/256/IcePick-3.png';
+import Pick1 from '../public/resources/assets/256/IcePick-3.png';
+import Pick2 from '../public/resources/assets/256/IcePick-1.png';
+import Pick3 from '../public/resources/assets/256/IcePick-2.png';
 
 const pickAxeImages: Record<number, StaticImageData> = {
   0: Pick1,
@@ -25,7 +25,7 @@ const pickAxeImages: Record<number, StaticImageData> = {
   2: Pick3,
 };
 
-const useFreeGem = () => {
+const useMining = () => {
   const { address, publicClient, walletClient } = useLinea();
   const [chipOffHashHash, setChipOffHash] = useState<`0x${string}`>();
   const [sharpHash, setSharpHash] = useState<`0x${string}`>();
@@ -141,4 +141,4 @@ interface MiningStoreProp {
 
 export const useMiningStore = create<MiningStoreProp>((set) => ({}));
 
-export default useFreeGem;
+export default useMining;
