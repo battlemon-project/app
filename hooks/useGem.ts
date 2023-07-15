@@ -13,16 +13,6 @@ export interface INft {
   meta: number;
 }
 
-const gemImages: Record<number, string> = {
-  0: 'BTLN_Gem_Green_A_128.png',
-  1: 'BTLN_Gem_Blue_A_128.png',
-  2: 'BTLN_Gem_Yellow_A_128.png',
-  3: 'BTLN_Gem_Purple_A_128.png',
-  4: 'BTLN_Gem_Orange_A_128.png',
-  5: 'BTLN_Gem_Red_A_128.png',
-  6: 'BTLN_Gem_Sky_A_128.png',
-};
-
 const useGem = () => {
   const { address, publicClient, walletClient } = useLinea();
   const [mintMergeGemHash, setMergeGemHash] = useState<`0x${string}`>();
@@ -64,7 +54,7 @@ const useGem = () => {
 
     const promises = gems.map(async (gem: INft) => {
       if (!gem.tokenId) {
-        gem.image = gemImages[0];
+        gem.image = '0.png';
         return gem;
       }
       const metaURI = (await publicClient.readContract({
@@ -74,7 +64,7 @@ const useGem = () => {
         args: [gem.tokenId],
       })) as string;
       gem.meta = parseInt(metaURI.split('/').at(-1) as string);
-      gem.image = gemImages[gem.meta];
+      gem.image = gem.meta + '.png';
       return gem;
     });
 

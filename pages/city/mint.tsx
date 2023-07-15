@@ -17,7 +17,7 @@ const Labs = () => {
     getSharpnessOf,
     getPickAxesList,
   } = useMining();
-  const { startGemAppear, startMining, showPickAxe } = useMiningStore();
+  const { startGemAppear, startMining, showPickAxe, startSharp, stopSharp } = useMiningStore();
   const { isAuthorized } = useAuth();
   const [loader, setLoader] = useState<boolean>(true);
   const [loaderSharpness, setLoaderSharpness] = useState<boolean>(false);
@@ -56,6 +56,7 @@ const Labs = () => {
   const handleSharp = async () => {
     if (!selectedPickAxe) return;
     setLoaderSharpness(true);
+    startSharp?.(selectedPickAxe.meta);
     await sharp?.(selectedPickAxe);
   };
 
@@ -68,6 +69,7 @@ const Labs = () => {
   useEffect(() => {
     if (!successSharp || !selectedPickAxe) return;
     updateSharpness(selectedPickAxe.tokenId);
+    stopSharp?.(selectedPickAxe.meta);
   }, [successSharp]);
 
   useEffect(() => {

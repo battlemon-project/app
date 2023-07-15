@@ -137,6 +137,8 @@ interface MiningStoreProp {
   startMining?: (rank: number) => void;
   showPickAxe?: (rank: number) => void;
   startGemAppear?: (rank: number) => void;
+  startSharp?: (rank: number) => void;
+  stopSharp?: (rank: number) => void;
 }
 
 export const useMiningStore = create<MiningStoreProp>((set) => ({}));

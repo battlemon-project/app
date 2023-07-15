@@ -27,7 +27,9 @@ export const Mining = async (scene: Scene): Promise<void> => {
   idleAnimation?.start(true, 1);
   const miningAnimation = scene.getAnimationGroupByName('Mining');
   const gemAppearAnimation = scene.getAnimationGroupByName('GemAppear');
-
+  const happyLemonAnimation = scene.getAnimationGroupByName('HappyLemon');
+  const sharpingAnimation = scene.getAnimationGroupByName('Sharping');
+  
   const placeholderGem = scene.getMeshByName('placeholder_gem');
   if (placeholderGem) {
     placeholderGem.visibility = 0;
@@ -46,18 +48,29 @@ export const Mining = async (scene: Scene): Promise<void> => {
     });
     if (rank < 0 || !pickAxes[rank]) return;
     pickAxes[rank].scaling = new Vector3(1, 1, 1);
+    scene.stopAllAnimations();
+    showGem(-1);
+    idleAnimation?.start(true, 1);
   };
   showPickAxe(-1);
 
   const startMining = (rank: number) => {
     showPickAxe(rank);
     miningAnimation?.start(true, 1);
+    showGem(-1);
   };
 
   const gems: Mesh[] = [
-    scene.getMeshByName('Gem_Green_A') as Mesh,
-    scene.getMeshByName('Gem_Blue_A') as Mesh,
-    scene.getMeshByName('Gem_Yellow_A') as Mesh,
+    scene.getMeshByName('Gem_01') as Mesh,
+    scene.getMeshByName('Gem_02') as Mesh,
+    scene.getMeshByName('Gem_03') as Mesh,
+    scene.getMeshByName('Gem_04') as Mesh,
+    scene.getMeshByName('Gem_05') as Mesh,
+    scene.getMeshByName('Gem_06') as Mesh,
+    scene.getMeshByName('Gem_07') as Mesh,
+    scene.getMeshByName('Gem_08') as Mesh,
+    scene.getMeshByName('Gem_09') as Mesh,
+    scene.getMeshByName('Gem_10') as Mesh,
   ];
 
   const showGem = (rank: number) => {
@@ -71,14 +84,31 @@ export const Mining = async (scene: Scene): Promise<void> => {
 
   const startGemAppear = (rank: number) => {
     showGem(rank);
+    showPickAxe(-1);
     miningAnimation?.stop();
-    idleAnimation?.start(false, 1);
     gemAppearAnimation?.start(false, 1);
+    happyLemonAnimation?.start(true, 1);
+  };
+
+  
+  const startSharp = (rank: number) => {
+    showGem(-1);
+    showPickAxe(rank);
+    sharpingAnimation?.start(true, 1);
+  };
+
+  const stopSharp = (rank: number) => {
+    showGem(-1);
+    showPickAxe(rank);
+    sharpingAnimation?.stop();
+    idleAnimation?.start(true, 1);
   };
 
   useMiningStore.setState({
     startMining,
     showPickAxe,
     startGemAppear,
+    startSharp,
+    stopSharp
   });
 };
