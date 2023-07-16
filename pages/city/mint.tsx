@@ -7,6 +7,7 @@ import MiningScene from '../../scenes/MiningScene';
 import classNames from 'classnames';
 import useMining, { INft, useMiningStore } from '../../hooks/useMining';
 import { useAuth } from '../../hooks/useAuth';
+import { TransactionReceipt } from 'viem';
 
 const Labs = () => {
   const {
@@ -16,8 +17,10 @@ const Labs = () => {
     successSharp,
     getSharpnessOf,
     getPickAxesList,
+    chipOffData,
+    getGemRank
   } = useMining();
-  const { startGemAppear, startMining, showPickAxe, startSharp, stopSharp } = useMiningStore();
+  const { startGemAppear, startMining, showPickAxe, startSharp, stopSharp, startUnsuccess } = useMiningStore();
   const { isAuthorized } = useAuth();
   const [loader, setLoader] = useState<boolean>(true);
   const [loaderSharpness, setLoaderSharpness] = useState<boolean>(false);
@@ -60,10 +63,29 @@ const Labs = () => {
     await sharp?.(selectedPickAxe);
   };
 
+  const startSuccess = async (chipOffData: TransactionReceipt): Promise<void> => {
+    const tokenId = parseInt(chipOffData.logs[0].topics[3] || '0')
+    const rank = await getGemRank?.(tokenId.toString())
+    if (rank !== undefined) {
+      startGemAppear?.(rank);
+    }
+    if (selectedPickAxe) {
+      updateSharpness(selectedPickAxe.tokenId);
+    }
+  }
+
   useEffect(() => {
     if (!successChipOff || !selectedPickAxe) return;
-    startGemAppear?.(0);
-    updateSharpness(selectedPickAxe.tokenId);
+    console.log(123123123123)
+    console.log(chipOffData?.logs)
+
+    if (chipOffData && chipOffData.logs?.length && chipOffData.logs[0].topics.length > 3) {
+      startSuccess(chipOffData)
+    } else {
+      startUnsuccess?.();
+      updateSharpness(selectedPickAxe.tokenId);
+    }
+
   }, [successChipOff]);
 
   useEffect(() => {

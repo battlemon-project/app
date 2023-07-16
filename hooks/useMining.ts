@@ -2,7 +2,8 @@ import useLinea from './useLinea';
 import { useWaitForTransaction } from 'wagmi';
 import { lineaTestnet } from 'wagmi/chains';
 import PICK_AXE_CONTRACT_SOL from '../helpers/abi/PickAxe.json';
-import { PICK_AXE_CONTRACT_ADDRESS } from '../helpers/linea';
+import GEMS_CONTRACT_SOL from '../helpers/abi/Gem.json';
+import { PICK_AXE_CONTRACT_ADDRESS, GEMS_CONTRACT_ADDRESS } from '../helpers/linea';
 import { parseEther } from 'viem';
 import { useState } from 'react';
 import { StaticImageData } from 'next/image';
@@ -30,9 +31,12 @@ const useMining = () => {
   const [chipOffHashHash, setChipOffHash] = useState<`0x${string}`>();
   const [sharpHash, setSharpHash] = useState<`0x${string}`>();
 
-  const { isSuccess: successChipOff } = useWaitForTransaction({
+  const { isSuccess: successChipOff, data: chipOffData } = useWaitForTransaction({
     hash: chipOffHashHash,
   });
+
+
+
   const { isSuccess: successSharp } = useWaitForTransaction({
     hash: sharpHash,
   });
@@ -94,6 +98,18 @@ const useMining = () => {
     return sharpness;
   };
 
+
+  const getGemRank = async (tokenId: string): Promise<number> => {
+    const metaURI = (await publicClient.readContract({
+      address: GEMS_CONTRACT_ADDRESS,
+      abi: GEMS_CONTRACT_SOL.abi,
+      functionName: 'tokenURI',
+      args: [tokenId],
+    })) as string;
+    const rank = parseInt(metaURI.split('/').at(-1) as string);
+    return rank
+  }
+
   const getPickAxesList = async () => {
     if (!address) return;
     const data = await fetch(`/api/linea/pickaxes?address=${address}`);
@@ -128,8 +144,10 @@ const useMining = () => {
     successChipOff,
     sharp,
     successSharp,
+    chipOffData,
     getSharpnessOf,
     getPickAxesList,
+    getGemRank
   };
 };
 
@@ -139,6 +157,7 @@ interface MiningStoreProp {
   startGemAppear?: (rank: number) => void;
   startSharp?: (rank: number) => void;
   stopSharp?: (rank: number) => void;
+  startUnsuccess?: () => void;
 }
 
 export const useMiningStore = create<MiningStoreProp>((set) => ({}));
