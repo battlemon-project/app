@@ -42,8 +42,8 @@ export const ConnectEth: React.FC = () => {
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
               >
-                <li>
-                  <button className="dropdown-item" onClick={disconnect}>
+                <li onClick={disconnect} style={{cursor: 'pointer'}}>
+                  <button className="dropdown-item">
                     Sign Out
                   </button>
                 </li>

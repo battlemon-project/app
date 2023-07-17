@@ -5,6 +5,7 @@ import {
 } from 'wagmi';
 import { useCookies } from 'react-cookie';
 import { useEffect, useState } from 'react';
+import { useWeb3Modal } from '@web3modal/react';
 
 const cookiesList = ['auth_token', 'current_address'];
 
@@ -13,6 +14,7 @@ export const useAuth = () => {
   const [cookies, setCookie] = useCookies(cookiesList);
   const { address } = useAccount();
   const { signMessageAsync } = useSignMessage();
+  const { open } = useWeb3Modal();
 
   const fetchGuest = async () => {
     const data = await fetch('/battlemon-api/auth/guest', { method: 'POST' });
@@ -49,6 +51,10 @@ export const useAuth = () => {
   };
 
   const connectAuthServer = async () => {
+    if (!address) {
+      open();
+      return;
+    }
     const { token: guestToken } = await fetchGuest();
     const { nonce } = await getNonce(guestToken);
     let signature: `0x${string}` | null = null;
@@ -66,14 +72,6 @@ export const useAuth = () => {
   useEffect(() => {
     setHasMounted(true);
   }, []);
-
-  useEffect(() => {
-    if (!address) return;
-    if (cookies.current_address !== address) {
-      setCookie('current_address', address);
-      connectAuthServer();
-    }
-  }, [address]);
 
   if (address && cookies.auth_token && hasMounted) {
     return { isAuthorized: true, address };
