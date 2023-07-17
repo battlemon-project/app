@@ -78,7 +78,7 @@ export const useAuth = () => {
   if (address && cookies.auth_token && hasMounted) {
     return { isAuthorized: true, address };
   }
-  return { address };
+  return { address, connectAuthServer };
 };
 
 export const useDisconnect = () => {

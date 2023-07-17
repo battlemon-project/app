@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import classNames from 'classnames';
+import { useAuth } from '../hooks/useAuth';
 
 export interface BabylonLoaderType {
   babylon: boolean;
@@ -16,6 +17,13 @@ export const BabylonLoader: React.FC<BabylonLoaderProps> = ({
 }: {
   isConnected: boolean;
 }) => {
+  const { connectAuthServer } = useAuth();
+
+  const signTransaction = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    connectAuthServer?.();
+  };
+
   return (
     <div
       className="bg-black h-screen w-full fixed top-0 left-0 flex items-center justify-center"
@@ -23,7 +31,26 @@ export const BabylonLoader: React.FC<BabylonLoaderProps> = ({
     >
       <div className="relative inline-block w-64 h-64">
         <div className="text-white mx-auto w-full text-center font-bold text-xl">
-          {isConnected ? '' : 'You need to Sign In'}
+          {isConnected ? (
+            ''
+          ) : (
+            <>
+              {connectAuthServer ? (
+                <>
+                  You need to{' '}
+                  <a
+                    href="#"
+                    style={{ textDecoration: 'underline', color: '#228efa' }}
+                    onClick={signTransaction}
+                  >
+                    Sign Transaction
+                  </a>
+                </>
+              ) : (
+                <>You need to Sign In</>
+              )}
+            </>
+          )}
         </div>
         <Image
           src={`${process.env.NEXT_PUBLIC_STATIC}/assets/btlmn_logo_inner_256.png`}

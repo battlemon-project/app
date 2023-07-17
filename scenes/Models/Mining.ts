@@ -30,8 +30,6 @@ export const Mining = async (scene: Scene): Promise<void> => {
   const happyLemonAnimation = scene.getAnimationGroupByName('HappyLemon');
   const sadLemonAnimation = scene.getAnimationGroupByName('SadLemon');
   const sharpingAnimation = scene.getAnimationGroupByName('Sharping');
-  
-  
 
   const placeholderGem = scene.getMeshByName('placeholder_gem');
   if (placeholderGem) {
@@ -98,7 +96,7 @@ export const Mining = async (scene: Scene): Promise<void> => {
     miningAnimation?.stop();
     sadLemonAnimation?.start(true, 1);
   };
-  
+
   const startSharp = (rank: number) => {
     showGem(-1);
     showPickAxe(rank);
@@ -118,6 +116,6 @@ export const Mining = async (scene: Scene): Promise<void> => {
     startGemAppear,
     startSharp,
     stopSharp,
-    startUnsuccess
+    startUnsuccess,
   });
 };

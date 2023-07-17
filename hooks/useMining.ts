@@ -3,7 +3,10 @@ import { useWaitForTransaction } from 'wagmi';
 import { lineaTestnet } from 'wagmi/chains';
 import PICK_AXE_CONTRACT_SOL from '../helpers/abi/PickAxe.json';
 import GEMS_CONTRACT_SOL from '../helpers/abi/Gem.json';
-import { PICK_AXE_CONTRACT_ADDRESS, GEMS_CONTRACT_ADDRESS } from '../helpers/linea';
+import {
+  PICK_AXE_CONTRACT_ADDRESS,
+  GEMS_CONTRACT_ADDRESS,
+} from '../helpers/linea';
 import { parseEther } from 'viem';
 import { useState } from 'react';
 import { StaticImageData } from 'next/image';
@@ -31,11 +34,10 @@ const useMining = () => {
   const [chipOffHashHash, setChipOffHash] = useState<`0x${string}`>();
   const [sharpHash, setSharpHash] = useState<`0x${string}`>();
 
-  const { isSuccess: successChipOff, data: chipOffData } = useWaitForTransaction({
-    hash: chipOffHashHash,
-  });
-
-
+  const { isSuccess: successChipOff, data: chipOffData } =
+    useWaitForTransaction({
+      hash: chipOffHashHash,
+    });
 
   const { isSuccess: successSharp } = useWaitForTransaction({
     hash: sharpHash,
@@ -98,7 +100,6 @@ const useMining = () => {
     return sharpness;
   };
 
-
   const getGemRank = async (tokenId: string): Promise<number> => {
     const metaURI = (await publicClient.readContract({
       address: GEMS_CONTRACT_ADDRESS,
@@ -107,8 +108,8 @@ const useMining = () => {
       args: [tokenId],
     })) as string;
     const rank = parseInt(metaURI.split('/').at(-1) as string);
-    return rank
-  }
+    return rank;
+  };
 
   const getPickAxesList = async () => {
     if (!address) return;
@@ -147,7 +148,7 @@ const useMining = () => {
     chipOffData,
     getSharpnessOf,
     getPickAxesList,
-    getGemRank
+    getGemRank,
   };
 };
 

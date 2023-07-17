@@ -9,7 +9,7 @@ export const REFERRAL_CONTRACT_ADDRESS: `0x${string}` =
   '0x27eEF9466dc2218bD46025D2D9b4c22B717ac8bD';
 export const PICK_AXE_CONTRACT_ADDRESS: `0x${string}` =
   '0x1Fd0e6Fa0adC9826fC89B0aDc5C2135ff28Bc18C';
-  
+
 export interface IProxyMintArgs {
   mintRequest: {
     amount: number;
