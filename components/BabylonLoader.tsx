@@ -17,6 +17,8 @@ export const BabylonLoader: React.FC<BabylonLoaderProps> = ({
 }: {
   isConnected: boolean;
 }) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   const { connectAuthServer } = useAuth();
 
   const signTransaction = (e: React.MouseEvent<HTMLElement>) => {

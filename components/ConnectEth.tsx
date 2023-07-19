@@ -6,8 +6,8 @@ import Link from 'next/link';
 export const ConnectEth: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const { open } = useWeb3Modal();
-  const { disconnect } = useDisconnect();
   const { address } = useAuth();
+  const { disconnect } = useDisconnect();
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const onMouseEnter = () => setIsOpen(true);
   const onMouseLeave = () => setIsOpen(false);
