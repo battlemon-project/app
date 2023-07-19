@@ -16,7 +16,7 @@ export interface INft {
   id: string;
   image: StaticImageData;
   tokenId: string;
-  meta: number;
+  rank: number;
 }
 
 import Pick1 from '../public/resources/assets/256/IcePick-2.png';
@@ -74,7 +74,7 @@ const useMining = () => {
         chain: lineaTestnet,
         functionName: 'sharp',
         args: [pickAxe.tokenId],
-        value: parseEther(['0.0001', '0.00016', '0.00022'][pickAxe.meta]),
+        value: parseEther(['0.0001', '0.00016', '0.00022'][pickAxe.rank]),
       });
       const hash = await walletClient?.writeContract(request);
       if (hash) setSharpHash(hash);
@@ -113,30 +113,21 @@ const useMining = () => {
 
   const getPickAxesList = async () => {
     if (!address) return;
+    
     const data = await fetch(`/api/linea/pickaxes?address=${address}`);
     const {
       result: {
-        data: { token721S: pickaxes },
+        data: {
+          user: { tokens: pickaxes },
+        },
       },
     } = await data.json();
 
-    const promises = pickaxes.map(async (pickAxe: INft) => {
-      if (!pickAxe.tokenId) {
-        pickAxe.image = pickAxeImages[0];
-        return pickAxe;
-      }
-      const metaURI = (await publicClient.readContract({
-        address: PICK_AXE_CONTRACT_ADDRESS,
-        abi: PICK_AXE_CONTRACT_SOL.abi,
-        functionName: 'tokenURI',
-        args: [pickAxe.tokenId],
-      })) as string;
-      pickAxe.meta = parseInt(metaURI.split('/').at(-1) as string);
-      pickAxe.image = pickAxeImages[pickAxe.meta];
+    pickaxes.map((pickAxe: INft) => {
+      pickAxe.image = pickAxeImages[pickAxe.rank];
       return pickAxe;
     });
 
-    await Promise.all(promises);
     return pickaxes;
   };
 
