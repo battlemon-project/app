@@ -10,6 +10,10 @@ export const REFERRAL_CONTRACT_ADDRESS: `0x${string}` =
 export const PICK_AXE_CONTRACT_ADDRESS: `0x${string}` =
   '0x05B70A9DC808293fe9c98A5977250Ac2E965d72a';
 
+export function timeout(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export interface IProxyMintArgs {
   mintRequest: {
     amount: number;

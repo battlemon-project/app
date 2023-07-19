@@ -6,6 +6,7 @@ import GEMS_CONTRACT_SOL from '../helpers/abi/Gem.json';
 import {
   PICK_AXE_CONTRACT_ADDRESS,
   GEMS_CONTRACT_ADDRESS,
+  timeout,
 } from '../helpers/linea';
 import { parseEther } from 'viem';
 import { useState } from 'react';
@@ -114,7 +115,7 @@ const useMining = () => {
 
   const getPickAxesList = async () => {
     if (!address) return;
-    
+    await timeout(2000);
     const data = await fetch(`/api/linea/pickaxes?address=${address}`);
     const {
       result: {

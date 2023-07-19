@@ -2,7 +2,7 @@ import useLinea from './useLinea';
 import { useWaitForTransaction } from 'wagmi';
 import { lineaTestnet } from 'wagmi/chains';
 import GEMS_CONTRACT_SOL from '../helpers/abi/Gem.json';
-import { GEMS_CONTRACT_ADDRESS } from '../helpers/linea';
+import { GEMS_CONTRACT_ADDRESS, timeout } from '../helpers/linea';
 import { parseEther } from 'viem';
 import { useState } from 'react';
 
@@ -46,6 +46,7 @@ const useGem = () => {
 
   const getGemList = async () => {
     if (!address) return;
+    await timeout(2000);
     const data = await fetch(`/api/linea/gems?address=${address}`);
     
     const {
