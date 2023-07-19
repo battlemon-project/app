@@ -57,6 +57,7 @@ const useMining = () => {
         abi: PICK_AXE_CONTRACT_SOL.abi,
         chain: lineaTestnet,
         functionName: 'chipOff',
+        gas: 200_000n,
         args: [tokenId],
       });
       const hash = await walletClient?.writeContract(request);
