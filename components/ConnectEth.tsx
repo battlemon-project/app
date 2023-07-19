@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useWeb3Modal } from '@web3modal/react';
-import { useDisconnect, useAuth } from '../hooks/useAuth';
+import { useAuth, useDisconnect } from '../hooks/useAuth';
+import Link from 'next/link';
 
 export const ConnectEth: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const { open } = useWeb3Modal();
-  const { disconnect } = useDisconnect();
   const { address } = useAuth();
+  const { disconnect } = useDisconnect();
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const onMouseEnter = () => setIsOpen(true);
   const onMouseLeave = () => setIsOpen(false);
@@ -37,13 +38,24 @@ export const ConnectEth: React.FC = () => {
             </button>
             {isOpen ? (
               <ul
-                className="absolute top-11 left-0 border border-white w-full py-2.5 px-5 rounded-xl text-white hover:text-black hover:bg-white transition-all"
+                className="absolute flex flex-col top-11 left-0 border border-white w-full  rounded-xl transition-all overflow-hidden"
                 aria-labelledby="navbarDropdown"
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
               >
-                <li onClick={disconnect} style={{cursor: 'pointer'}}>
-                  <button className="dropdown-item">
+                <li>
+                  <Link
+                    className=" block w-full text-center py-2.5 px-5 text-white hover:text-black hover:bg-white"
+                    href="/referral"
+                  >
+                    Referral
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    className=" block w-full py-2.5 px-5 text-white hover:text-black hover:bg-white"
+                    onClick={disconnect}
+                  >
                     Sign Out
                   </button>
                 </li>

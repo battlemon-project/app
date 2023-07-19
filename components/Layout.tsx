@@ -12,6 +12,7 @@ import {
   w3mProvider,
 } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
+import { Toaster } from 'react-hot-toast';
 
 interface Props {
   children?: JSX.Element;
@@ -82,6 +83,7 @@ export default function Layout({ children }: Props) {
             </div>
           </div>
         </WagmiConfig>
+        <Toaster />
         <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
       </AlertProvider>
     </>
