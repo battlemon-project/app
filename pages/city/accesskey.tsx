@@ -231,7 +231,7 @@ const Mint = () => {
               {typeof discordCode == 'string' && (
                 <div style={{ paddingLeft: '65px' }}>
                   <p className="my-0">
-                    Go to{' '}
+                    Go to {' '}
                     <a
                       className="text-white underline cursor-pointer"
                       href="https://discordapp.com/channels/893433519110488064/1116478869118144532"
