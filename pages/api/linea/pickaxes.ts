@@ -9,22 +9,21 @@ export default async function handler(
   const address = req.query.address as string;
 
   const response = await fetch(
-    'https://thegraph.goerli.zkevm.consensys.net/subgraphs/name/knobs/erc721',
+    process.env.THEGRAPH + '/pickaxe',
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         query: `{
-        token721S(where: {
-          owner: "${address}",
-          collection_: {
-            id: "${PICK_AXE_CONTRACT_ADDRESS}"
+          user(id: "${address.toLocaleLowerCase()}") {
+            id
+            tokens {
+              id
+              tokenID
+              rank
+            }
           }
-        }) {
-          id
-          tokenId
-        }
-      }`,
+        }`,
       }),
     }
   );

@@ -9,27 +9,25 @@ export default async function handler(
   const address = req.query.address as string;
 
   const response = await fetch(
-    'https://thegraph.goerli.zkevm.consensys.net/subgraphs/name/knobs/erc721',
+    process.env.THEGRAPH + '/gem',
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         query: `{
-        token721S(where: {
-          owner: "${address}",
-          collection_: {
-            id: "${GEMS_CONTRACT_ADDRESS}"
+          user(id: "${address.toLocaleLowerCase()}") {
+            id
+            tokens {
+              id
+              tokenID
+              levelOf
+            }
           }
-        }) {
-          id
-          tokenId
-        }
-      }`,
+        }`,
       }),
     }
   );
-
+  
   const result = await response.json();
-
   res.status(200).json({ result: result });
 }

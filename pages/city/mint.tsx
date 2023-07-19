@@ -85,8 +85,6 @@ const Labs = () => {
 
   useEffect(() => {
     if (!successChipOff || !selectedPickAxe) return;
-    console.log(123123123123);
-    console.log(chipOffData?.logs);
 
     if (
       chipOffData &&
