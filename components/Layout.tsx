@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { lineaTestnet } from 'wagmi/chains';
 import { AlertTemplate } from './AlertTemplate';
@@ -13,6 +13,12 @@ import {
 } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
 import { Toaster } from 'react-hot-toast';
+import {
+  AuthProvider,
+  type UserType,
+} from '../context/AuthContext/AuthContext';
+import { useCookies } from 'react-cookie';
+import { useAuth } from '../hooks/useAuth';
 
 interface Props {
   children?: JSX.Element;
@@ -73,15 +79,7 @@ export default function Layout({ children }: Props) {
       </Head>
       <AlertProvider template={AlertTemplate} {...options}>
         <WagmiConfig config={config}>
-          <div className="flex flex-col min-h-screen">
-            <div className="relative z-50">
-              <Header network={'eth'} />
-            </div>
-            <main className="flex-grow">{children}</main>
-            <div className="relative z-10">
-              <Footer />
-            </div>
-          </div>
+          <AuthBlock>{children}</AuthBlock>
         </WagmiConfig>
         <Toaster />
         <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
@@ -89,3 +87,41 @@ export default function Layout({ children }: Props) {
     </>
   );
 }
+
+const AuthBlock = ({ children }: Props) => {
+  const [user, setUser] = useState<UserType | null>(null);
+  const [cookies] = useCookies();
+  const { fetchUserProfile } = useAuth();
+
+  useEffect(() => {
+    const token = cookies.auth_token;
+    if (token && Boolean(fetchUserProfile)) {
+      fetchUserProfile(token).then((d) => {
+        setUser(d);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const token = cookies.auth_token;
+    if (token && Boolean(fetchUserProfile)) {
+      fetchUserProfile(token).then((d) => {
+        setUser(d);
+      });
+    }
+  }, [cookies.auth_token]);
+
+  return (
+    <AuthProvider value={{ user, setUser }}>
+      <div className="flex flex-col min-h-screen">
+        <div className="relative z-50">
+          <Header network="eth" />
+        </div>
+        <main className="flex-grow">{children}</main>
+        <div className="relative z-10">
+          <Footer />
+        </div>
+      </div>
+    </AuthProvider>
+  );
+};

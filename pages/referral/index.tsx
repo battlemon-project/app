@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Layout from '../../components/Layout';
 import { useAuth } from '../../hooks/useAuth';
 import { BabylonLoader } from '../../components/BabylonLoader';
@@ -6,11 +6,14 @@ import { useReferral } from '../../hooks/useReferral';
 import { useCookies } from 'react-cookie';
 import { Formik } from 'formik';
 import toast from 'react-hot-toast';
+import { AuthContext } from '../../context/AuthContext/AuthContext';
 
 const Referral = () => {
-  const { isAuthorized, user, setUser } = useAuth();
+  const { isAuthorized } = useAuth();
   const [cookies] = useCookies();
   const { createReferralCode } = useReferral();
+  const { user, setUser } = useContext(AuthContext);
+
   if (!isAuthorized) return <BabylonLoader isConnected={false} />;
 
   return (

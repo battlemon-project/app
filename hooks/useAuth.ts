@@ -4,11 +4,12 @@ import {
   useSignMessage,
 } from 'wagmi';
 import { useCookies } from 'react-cookie';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useWeb3Modal } from '@web3modal/react';
 import { useRouter } from 'next/router';
 import { useReferral } from './useReferral';
 import toast from 'react-hot-toast';
+import { AuthContext } from '../context/AuthContext/AuthContext';
 
 const cookiesList = ['auth_token', 'current_address'];
 
@@ -20,7 +21,6 @@ export interface UserType {
 }
 
 export const useAuth = () => {
-  const [user, setUser] = useState<UserType | null>(null);
   const [hasMounted, setHasMounted] = useState(false);
   const [cookies, setCookie] = useCookies(cookiesList);
   const { address } = useAccount();
@@ -158,19 +158,10 @@ export const useAuth = () => {
 
   useEffect(() => {
     setHasMounted(true);
-
-    const token = cookies.auth_token;
-    if (token && Boolean(fetchUserProfile)) {
-      fetchUserProfile(token).then((d) => {
-        setUser(d);
-      });
-    }
   }, []);
 
   const defaultReturn = {
     address,
-    user,
-    setUser,
     fetchUserProfile,
   };
 
@@ -195,7 +186,7 @@ export const useAuth = () => {
 export const useDisconnect = () => {
   const [, , removeCookie] = useCookies(cookiesList);
   const { disconnect: disconnectWagmi } = useDisconnectWagmi();
-  const { setUser } = useAuth();
+  const { setUser } = useContext(AuthContext);
 
   const disconnect = () => {
     removeCookie('auth_token');
