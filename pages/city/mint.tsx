@@ -51,7 +51,7 @@ const Labs = () => {
   };
 
   const handleSelectPickAxe = (pickAxe: INft) => async () => {
-    showPickAxe?.(pickAxe.meta);
+    showPickAxe?.(pickAxe.rank);
     setSelectedPickAxe(pickAxe);
     updateSharpness(pickAxe.tokenId);
   };
@@ -59,14 +59,14 @@ const Labs = () => {
   const handleMint = async () => {
     if (!selectedPickAxe) return;
     setLoaderSharpness(true);
-    startMining?.(selectedPickAxe.meta);
+    startMining?.(selectedPickAxe.rank);
     await chipOff?.(selectedPickAxe.tokenId);
   };
 
   const handleSharp = async () => {
     if (!selectedPickAxe) return;
     setLoaderSharpness(true);
-    startSharp?.(selectedPickAxe.meta);
+    startSharp?.(selectedPickAxe.rank);
     await sharp?.(selectedPickAxe);
   };
 
@@ -101,7 +101,7 @@ const Labs = () => {
   useEffect(() => {
     if (!successSharp || !selectedPickAxe) return;
     updateSharpness(selectedPickAxe.tokenId);
-    stopSharp?.(selectedPickAxe.meta);
+    stopSharp?.(selectedPickAxe.rank);
   }, [successSharp]);
 
   useEffect(() => {

@@ -10,7 +10,7 @@ export interface INft {
   id: string;
   image: string;
   tokenId: string;
-  meta: number;
+  rank: number;
 }
 
 const useGem = () => {
@@ -48,27 +48,17 @@ const useGem = () => {
     const data = await fetch(`/api/linea/gems?address=${address}`);
     const {
       result: {
-        data: { token721S: gems },
+        data: {
+          user: { tokens: gems },
+        },
       },
     } = await data.json();
 
-    const promises = gems.map(async (gem: INft) => {
-      if (!gem.tokenId) {
-        gem.image = '0.png';
-        return gem;
-      }
-      const metaURI = (await publicClient.readContract({
-        address: GEMS_CONTRACT_ADDRESS,
-        abi: GEMS_CONTRACT_SOL.abi,
-        functionName: 'tokenURI',
-        args: [gem.tokenId],
-      })) as string;
-      gem.meta = parseInt(metaURI.split('/').at(-1) as string);
-      gem.image = gem.meta + '.png';
+    gems.map((gem: INft) => {
+      gem.image = gem.rank + '.png';
       return gem;
     });
 
-    await Promise.all(promises);
     return gems;
   };
 

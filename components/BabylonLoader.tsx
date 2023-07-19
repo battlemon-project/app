@@ -37,10 +37,14 @@ export const BabylonLoader: React.FC<BabylonLoaderProps> = ({
             <>
               {connectAuthServer ? (
                 <>
-                  You need to 
+                  You need to
                   <a
                     href="#"
-                    style={{ textDecoration: 'underline', color: '#228efa', padding: '0 0 0 6px' }}
+                    style={{
+                      textDecoration: 'underline',
+                      color: '#228efa',
+                      padding: '0 0 0 6px',
+                    }}
                     onClick={signTransaction}
                   >
                     Sign Transaction

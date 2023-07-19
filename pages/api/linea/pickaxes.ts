@@ -8,25 +8,22 @@ export default async function handler(
 ) {
   const address = req.query.address as string;
 
-  const response = await fetch(
-    process.env.THEGRAPH + '/pickaxe',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        query: `{
+  const response = await fetch(process.env.THEGRAPH + '/pickaxe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      query: `{
           user(id: "${address.toLocaleLowerCase()}") {
             id
             tokens {
               id
-              tokenID
+              tokenId: tokenID
               rank
             }
           }
         }`,
-      }),
-    }
-  );
+    }),
+  });
 
   const result = await response.json();
 
