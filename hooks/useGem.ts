@@ -25,7 +25,7 @@ const useGem = () => {
     return {};
   }
 
-  const mergeGem = async (gem1: string, gem2: string) => {
+  const mergeGem = async (gem1: string, gem2: string, price: number) => {
     try {
       const { request } = await publicClient.simulateContract({
         account: address,
@@ -34,7 +34,7 @@ const useGem = () => {
         chain: lineaTestnet,
         functionName: 'merge',
         args: [gem1, gem2],
-        value: parseEther('0.0005'),
+        value: parseEther(price.toString()),
       });
       const hash = await walletClient?.writeContract(request);
       if (hash) setMergeGemHash(hash);

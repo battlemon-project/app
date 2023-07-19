@@ -7,10 +7,12 @@ import Image from 'next/image';
 import classNames from 'classnames';
 import useGem, { INft } from '../../hooks/useGem';
 import { useAuth } from '../../hooks/useAuth';
+import { useReferral } from '../../hooks/useReferral';
 
 const Labs = () => {
   const { mergeGem, successMergeGem, getGemList } = useGem();
-  const { isAuthorized } = useAuth();
+  const { isAuthorized, address } = useAuth();
+  const { isReferral } = useReferral();
   const [loader, setLoader] = useState<boolean>(true);
   const [userGems, setUserGems] = useState<INft[]>([]);
   const [selectedGems, setSelectedGems] = useState<
@@ -40,7 +42,12 @@ const Labs = () => {
   const handleCraft = async () => {
     if (!selectedGems[0] || !selectedGems[1]) return;
     setLoader(true);
-    await mergeGem?.(selectedGems[0], selectedGems[1]);
+    let price = 0.0005;
+    const referal = address && await isReferral(address);
+    if (referal) {
+      price = 0.000475
+    }
+    await mergeGem?.(selectedGems[0], selectedGems[1], price);
     setSelectedGems([null, null]);
   };
 
