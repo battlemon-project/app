@@ -30,6 +30,6 @@ export default async function handler(
   
     res.status(200).json({ result: result });
   } catch (error: any) {
-    res.status(500).json({ error: error, name: error.name, message: error.message, stack: error.stack, graph: process.env.THEGRAPH });
+    res.status(500).json({ error: error, name: error.name, message: error.message, stack: undefined, graph: process.env.THEGRAPH });
   }
 }
