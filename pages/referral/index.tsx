@@ -59,6 +59,9 @@ const Referral = () => {
               <Formik
                 initialValues={{ code: '' }}
                 onSubmit={async (d) => {
+                  if (d.code.length < 4 || d.code.length > 10) {
+                    toast.error('Referral code length must be from 4 to 10');
+                  }
                   const token = cookies.auth_token;
                   if (token) {
                     createReferralCode(token, d.code)
