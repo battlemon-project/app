@@ -49,7 +49,7 @@ export const BabylonLoader: React.FC<BabylonLoaderProps> = ({
                     }}
                     onClick={signTransaction}
                   >
-                    Sign Transaction
+                    Sign Message
                   </a>
                 </>
               ) : (

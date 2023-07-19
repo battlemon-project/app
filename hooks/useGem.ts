@@ -28,6 +28,7 @@ const useGem = () => {
   const mergeGem = async (gem1: string, gem2: string) => {
     try {
       const { request } = await publicClient.simulateContract({
+        account: address,
         address: GEMS_CONTRACT_ADDRESS,
         abi: GEMS_CONTRACT_SOL.abi,
         chain: lineaTestnet,
@@ -50,10 +51,12 @@ const useGem = () => {
     const {
       result: {
         data: {
-          user: { tokens: gems },
+          user,
         },
       },
     } = await data.json();
+
+    const gems = user?.tokens || [];
 
     gems.map((gem: INft) => {
       gem.image = gem.rank + '.png';

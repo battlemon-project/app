@@ -69,6 +69,7 @@ const useMining = () => {
   const sharp = async (pickAxe: INft) => {
     try {
       const { request } = await publicClient.simulateContract({
+        account: address,
         address: PICK_AXE_CONTRACT_ADDRESS,
         abi: PICK_AXE_CONTRACT_SOL.abi,
         chain: lineaTestnet,
@@ -118,11 +119,13 @@ const useMining = () => {
     const {
       result: {
         data: {
-          user: { tokens: pickaxes },
+          user
         },
       },
     } = await data.json();
 
+    const pickaxes = user?.tokens || [];
+    
     pickaxes.map((pickAxe: INft) => {
       pickAxe.image = pickAxeImages[pickAxe.rank];
       return pickAxe;
