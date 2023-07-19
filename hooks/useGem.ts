@@ -46,6 +46,7 @@ const useGem = () => {
   const getGemList = async () => {
     if (!address) return;
     const data = await fetch(`/api/linea/gems?address=${address}`);
+    
     const {
       result: {
         data: {

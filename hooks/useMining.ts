@@ -113,6 +113,7 @@ const useMining = () => {
 
   const getPickAxesList = async () => {
     if (!address) return;
+    
     const data = await fetch(`/api/linea/pickaxes?address=${address}`);
     const {
       result: {
