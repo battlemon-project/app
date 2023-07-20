@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
 import { AlertTemplate } from './AlertTemplate';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import Head from 'next/head';
@@ -12,6 +11,15 @@ import {
   w3mProvider,
 } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
+import { Toaster } from 'react-hot-toast';
+import {
+  AuthProvider,
+  type UserType,
+} from '../context/AuthContext/AuthContext';
+import { useCookies } from 'react-cookie';
+import { useAuth } from '../hooks/useAuth';
+import { lineaMainnet } from '../helpers/linea';
+import { lineaTestnet } from 'wagmi/chains';
 
 interface Props {
   children?: JSX.Element;
@@ -26,10 +34,10 @@ const options = {
 
 const projectId = '30b84ca08da49c3ef8b9a2145c1306e7';
 const { publicClient, chains } = configureChains(
-  [lineaTestnet],
-  [w3mProvider({ projectId })]
+  [lineaMainnet, lineaTestnet],
+  [w3mProvider({ projectId }), w3mProvider({ projectId })]
 );
-
+console.log();
 const config = createConfig({
   autoConnect: true,
   connectors: w3mConnectors({ chains, projectId }),
@@ -72,18 +80,49 @@ export default function Layout({ children }: Props) {
       </Head>
       <AlertProvider template={AlertTemplate} {...options}>
         <WagmiConfig config={config}>
-          <div className="flex flex-col min-h-screen">
-            <div className="relative z-50">
-              <Header network={'eth'} />
-            </div>
-            <main className="flex-grow">{children}</main>
-            <div className="relative z-10">
-              <Footer />
-            </div>
-          </div>
+          <AuthBlock>{children}</AuthBlock>
         </WagmiConfig>
+        <Toaster />
         <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
       </AlertProvider>
     </>
   );
 }
+
+const AuthBlock = ({ children }: Props) => {
+  const [user, setUser] = useState<UserType | null>(null);
+  const [cookies] = useCookies();
+  const { fetchUserProfile } = useAuth();
+
+  useEffect(() => {
+    const token = cookies.auth_token;
+    if (token && Boolean(fetchUserProfile)) {
+      fetchUserProfile(token).then((d) => {
+        setUser(d);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const token = cookies.auth_token;
+    if (token && Boolean(fetchUserProfile)) {
+      fetchUserProfile(token).then((d) => {
+        setUser(d);
+      });
+    }
+  }, [cookies.auth_token]);
+
+  return (
+    <AuthProvider value={{ user, setUser }}>
+      <div className="flex flex-col min-h-screen">
+        <div className="relative z-50">
+          <Header network="eth" />
+        </div>
+        <main className="flex-grow">{children}</main>
+        <div className="relative z-10">
+          <Footer />
+        </div>
+      </div>
+    </AuthProvider>
+  );
+};

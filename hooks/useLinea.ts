@@ -5,17 +5,17 @@ import {
   usePublicClient,
   useWalletClient,
 } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
+import { lineaNetwork } from '../helpers/linea';
 
 const useLinea = () => {
   const { address } = useAccount();
-  const { data: walletClient } = useWalletClient({ chainId: lineaTestnet.id });
-  const publicClient = usePublicClient({ chainId: lineaTestnet.id });
+  const { data: walletClient } = useWalletClient({ chainId: lineaNetwork.id });
+  const publicClient = usePublicClient({ chainId: lineaNetwork.id });
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
 
-  if (chain?.id !== lineaTestnet.id) {
-    switchNetwork?.(lineaTestnet.id);
+  if (chain?.id !== lineaNetwork.id) {
+    switchNetwork?.(lineaNetwork.id);
     return { publicClient };
   }
 

@@ -5,18 +5,14 @@ import { CssLoader } from '../../components/CssLoader';
 import { GemItemCard } from '../../components/GemItemCard/GemItemCard';
 import Image from 'next/image';
 import classNames from 'classnames';
-import useFreeGem, { INft } from '../../hooks/useFreeGem';
+import useGem, { INft } from '../../hooks/useGem';
 import { useAuth } from '../../hooks/useAuth';
+import { useReferral } from '../../hooks/useReferral';
 
 const Labs = () => {
-  const {
-    mintFreeGem,
-    successMintFreeGem,
-    mergeFreeGem,
-    successMergeFreeGem,
-    getFreeGemList,
-  } = useFreeGem();
-  const { isAuthorized } = useAuth();
+  const { mergeGem, successMergeGem, getGemList } = useGem();
+  const { isAuthorized, address } = useAuth();
+  const { isReferral } = useReferral();
   const [loader, setLoader] = useState<boolean>(true);
   const [userGems, setUserGems] = useState<INft[]>([]);
   const [selectedGems, setSelectedGems] = useState<
@@ -25,7 +21,7 @@ const Labs = () => {
 
   const refreshGems = async () => {
     setLoader(true);
-    const gems = await getFreeGemList?.();
+    const gems = await getGemList?.();
     gems && setUserGems(gems);
     setLoader(false);
   };
@@ -43,26 +39,28 @@ const Labs = () => {
     setSelectedGems([selectedGems[0], selectedGems[1]]);
   };
 
-  const handleMint = async () => {
-    setLoader(true);
-    await mintFreeGem?.();
-  };
-
   const handleCraft = async () => {
     if (!selectedGems[0] || !selectedGems[1]) return;
     setLoader(true);
-    await mergeFreeGem?.(selectedGems[0], selectedGems[1]);
+    let price = 0.0005;
+    const referal = address && (await isReferral(address));
+    if (referal) {
+      price = 0.000475;
+    }
+    await mergeGem?.(selectedGems[0], selectedGems[1], price);
     setSelectedGems([null, null]);
   };
 
   useEffect(() => {
-    if (!successMintFreeGem && !successMergeFreeGem) return;
+    if (!successMergeGem) return;
     refreshGems();
-  }, [successMintFreeGem, successMergeFreeGem]);
+  }, [successMergeGem]);
 
   useEffect(() => {
-    isAuthorized && refreshGems();
-  }, [isAuthorized]);
+    if (isAuthorized && !!getGemList) {
+      refreshGems();
+    }
+  }, [isAuthorized, !!getGemList]);
 
   if (!isAuthorized) return <BabylonLoader isConnected={false} />;
 
@@ -158,7 +156,7 @@ const Labs = () => {
           </div>
           <div className="text-right">
             <div className="flex" style={{ maxWidth: '780px' }}>
-              <div className="basis-1/2 pr-2">
+              <div className="w-full">
                 <button
                   className={classNames(
                     {
@@ -199,19 +197,6 @@ const Labs = () => {
                     ></path>
                   </svg>
                   Craft
-                </button>
-              </div>
-              <div className="basis-1/2 pl-2">
-                <button
-                  className={classNames(
-                    'flex items-center justify-center p-5 gap-2 rounded-xl w-full font-bold uppercase text-white border border-white border-opacity-50 transition-all'
-                  )}
-                  style={{
-                    background: 'linear-gradient(105.54deg,#594b8f,#6b6198)',
-                  }}
-                  onClick={handleMint}
-                >
-                  Mint
                 </button>
               </div>
             </div>
