@@ -77,7 +77,7 @@ const useMining = () => {
         chain: lineaTestnet,
         functionName: 'sharp',
         args: [pickAxe.tokenId],
-        value: parseEther(['0.0001', '0.00016', '0.00022'][pickAxe.rank]),
+        value: parseEther(['0.0001', '0.00022', '0.001'][pickAxe.rank]),
       });
       const hash = await walletClient?.writeContract(request);
       if (hash) setSharpHash(hash);
