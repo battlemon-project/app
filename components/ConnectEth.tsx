@@ -44,14 +44,6 @@ export const ConnectEth: React.FC = () => {
                 onMouseLeave={onMouseLeave}
               >
                 <li>
-                  <Link
-                    className=" block w-full text-center py-2.5 px-5 text-white hover:text-black hover:bg-white"
-                    href="/referral"
-                  >
-                    Referral
-                  </Link>
-                </li>
-                <li>
                   <button
                     className=" block w-full py-2.5 px-5 text-white hover:text-black hover:bg-white"
                     onClick={disconnect}

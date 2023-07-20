@@ -18,99 +18,105 @@ export interface LinkType {
   isDisabled?: boolean;
 }
 
-const navLinks = process.env.NEXT_PUBLIC_PRODUCTION == 'true' ?
-  [
-    {
-      name: 'Shop',
-      href: '/city/launchpad',
-      subLinks: []
-    },
-    {
-      name: 'Mining',
-      href: '/city/mint',
-      subLinks: []
-    },
-    {
-      name: 'Crafting',
-      href: '/city/labs',
-      subLinks: []
-    }
-  ]
-: [
-  {
-    name: 'NFT Hub',
-    href: '/hub',
-    subLinks: [] as LinkType[],
-  },
-  {
-    name: 'Defi',
-    href: '/city/defi',
-    subLinks: [
-      {
-        name: 'Farming',
-        href: '/city/defi',
-      },
-      {
-        name: 'Bridge',
-        href: '',
-        isDisabled: true,
-      },
-    ] as LinkType[],
-  },
-  {
-    name: 'Labs',
-    href: '/city/labs',
-    subLinks: [
-      {
-        name: 'Crafting',
-        href: '/city/labs',
-      },
-      {
-        name: 'Mixing',
-        href: '/city/mixing',
-      },
-      {
-        name: 'Grading',
-        href: '',
-        isDisabled: true,
-      },
-    ] as LinkType[],
-  },
-  {
-    name: 'Vault',
-    href: '/city/vault',
-    subLinks: [
-      {
-        name: 'NFT Pool',
-        href: '/city/vault',
-      },
-      {
-        name: 'LJC Pool',
-        href: '',
-        isDisabled: true,
-      },
-    ] as LinkType[],
-  },
-  {
-    name: 'Shop',
-    href: '/city/mint',
-    subLinks: [
-      {
-        name: 'Mint',
-        href: '/city/mint',
-      },
-      {
-        name: 'Launchpad',
-        href: '/city/launchpad',
-      },
-      {
-        name: 'Marketplace',
-        href: '/city/marketplace',
-        isDisabled: true,
-      },
-    ] as LinkType[],
-  },
-];
+const navLinks =
+  process.env.NEXT_PUBLIC_PRODUCTION == 'true'
+    ? [
+        {
+          name: 'Shop',
+          href: '/city/launchpad',
+          subLinks: [],
+        },
+        {
+          name: 'Mining',
+          href: '/city/mint',
+          subLinks: [],
+        },
+        {
+          name: 'Crafting',
+          href: '/city/labs',
+          subLinks: [],
+        },
+        {
+          name: 'Referral',
+          href: '/referral',
+          subLinks: [],
+        },
+      ]
+    : [
+        {
+          name: 'NFT Hub',
+          href: '/hub',
+          subLinks: [] as LinkType[],
+        },
+        {
+          name: 'Defi',
+          href: '/city/defi',
+          subLinks: [
+            {
+              name: 'Farming',
+              href: '/city/defi',
+            },
+            {
+              name: 'Bridge',
+              href: '',
+              isDisabled: true,
+            },
+          ] as LinkType[],
+        },
+        {
+          name: 'Labs',
+          href: '/city/labs',
+          subLinks: [
+            {
+              name: 'Crafting',
+              href: '/city/labs',
+            },
+            {
+              name: 'Mixing',
+              href: '/city/mixing',
+            },
+            {
+              name: 'Grading',
+              href: '',
+              isDisabled: true,
+            },
+          ] as LinkType[],
+        },
+        {
+          name: 'Vault',
+          href: '/city/vault',
+          subLinks: [
+            {
+              name: 'NFT Pool',
+              href: '/city/vault',
+            },
+            {
+              name: 'LJC Pool',
+              href: '',
+              isDisabled: true,
+            },
+          ] as LinkType[],
+        },
+        {
+          name: 'Shop',
+          href: '/city/mint',
+          subLinks: [
+            {
+              name: 'Mint',
+              href: '/city/mint',
+            },
+            {
+              name: 'Launchpad',
+              href: '/city/launchpad',
+            },
+            {
+              name: 'Marketplace',
+              href: '/city/marketplace',
+              isDisabled: true,
+            },
+          ] as LinkType[],
+        },
+      ];
 
 export const Header: React.FC<HeaderProps> = ({ network }) => {
   const { size } = useWindowResize();
