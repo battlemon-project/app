@@ -27,8 +27,7 @@ export const Home = async (scene: Scene, router: NextRouter): Promise<void> => {
       page: '/city/labs',
     },
     stake: {
-      stroke: ['stake_stroke', 'stake_coin_stroke'],
-      page: '/city/vault',
+      stroke: ['stake_stroke', 'stake_coin_stroke']
     },
     shop: {
       stroke: ['shop_stroke', 'windmill_stroke_01', 'windmill_stroke_02'],
@@ -36,11 +35,9 @@ export const Home = async (scene: Scene, router: NextRouter): Promise<void> => {
     },
     arena: {
       stroke: ['arena_stroke', 'arena_rotator_a_stroke'],
-      page: '/hub',
     },
     download: {
-      stroke: ['download_client_car_stroke', 'download_client_car_adv_stroke'],
-      page: '/',
+      stroke: ['download_client_car_stroke', 'download_client_car_adv_stroke']
     },
     lemterprise: {
       stroke: ['lemterprise_stroke'],
