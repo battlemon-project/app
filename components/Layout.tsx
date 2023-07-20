@@ -83,7 +83,34 @@ export default function Layout({ children }: Props) {
           <AuthBlock>{children}</AuthBlock>
         </WagmiConfig>
         <Toaster />
-        <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+        <Web3Modal
+          mobileWallets={[
+            {
+              id: '5978418d55211a6fe3f600df88afcc05a94f046998452dd1ca21d86fc7157c17',
+              name: 'UTORG',
+              links: {
+                universal: 'https://link.utorg.com/zp0f',
+                native: 'https://link.utorg.com/zp0f',
+              },
+            },
+          ]}
+          desktopWallets={[
+            {
+              id: '5978418d55211a6fe3f600df88afcc05a94f046998452dd1ca21d86fc7157c17',
+              name: 'UTORG',
+              links: {
+                universal: 'https://utorg.app/',
+                native: 'https://utorg.app/',
+              },
+            },
+          ]}
+          walletImages={{
+            '5978418d55211a6fe3f600df88afcc05a94f046998452dd1ca21d86fc7157c17':
+              'https://static.utorg.com/icons/app.png',
+          }}
+          projectId={projectId}
+          ethereumClient={ethereumClient}
+        />
       </AlertProvider>
     </>
   );
