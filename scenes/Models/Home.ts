@@ -32,7 +32,7 @@ export const Home = async (scene: Scene, router: NextRouter): Promise<void> => {
     },
     shop: {
       stroke: ['shop_stroke', 'windmill_stroke_01', 'windmill_stroke_02'],
-      page: '/city/mint',
+      page: '/city/launchpad',
     },
     arena: {
       stroke: ['arena_stroke', 'arena_rotator_a_stroke'],

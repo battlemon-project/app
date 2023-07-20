@@ -18,7 +18,25 @@ export interface LinkType {
   isDisabled?: boolean;
 }
 
-const navLinks = [
+const navLinks = process.env.NEXT_PUBLIC_PRODUCTION == 'true' ?
+  [
+    {
+      name: 'Shop',
+      href: '/city/launchpad',
+      subLinks: []
+    },
+    {
+      name: 'Mining',
+      href: '/city/mint',
+      subLinks: []
+    },
+    {
+      name: 'Crafting',
+      href: '/city/labs',
+      subLinks: []
+    }
+  ]
+: [
   {
     name: 'NFT Hub',
     href: '/hub',
