@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
 import { AlertTemplate } from './AlertTemplate';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import Head from 'next/head';
@@ -19,6 +18,8 @@ import {
 } from '../context/AuthContext/AuthContext';
 import { useCookies } from 'react-cookie';
 import { useAuth } from '../hooks/useAuth';
+import { lineaMainnet } from '../helpers/linea';
+import { lineaTestnet } from 'wagmi/chains';
 
 interface Props {
   children?: JSX.Element;
@@ -33,10 +34,10 @@ const options = {
 
 const projectId = '30b84ca08da49c3ef8b9a2145c1306e7';
 const { publicClient, chains } = configureChains(
-  [lineaTestnet],
-  [w3mProvider({ projectId })]
+  [lineaMainnet, lineaTestnet],
+  [w3mProvider({ projectId }), w3mProvider({ projectId })]
 );
-
+console.log();
 const config = createConfig({
   autoConnect: true,
   connectors: w3mConnectors({ chains, projectId }),

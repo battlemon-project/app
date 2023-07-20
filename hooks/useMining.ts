@@ -1,6 +1,6 @@
 import useLinea from './useLinea';
 import { useWaitForTransaction } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
+import { lineaNetwork } from '../helpers/linea';
 import PICK_AXE_CONTRACT_SOL from '../helpers/abi/PickAxe.json';
 import GEMS_CONTRACT_SOL from '../helpers/abi/Gem.json';
 import {
@@ -55,7 +55,7 @@ const useMining = () => {
         account: address,
         address: PICK_AXE_CONTRACT_ADDRESS,
         abi: PICK_AXE_CONTRACT_SOL.abi,
-        chain: lineaTestnet,
+        chain: lineaNetwork,
         functionName: 'chipOff',
         gas: 200_000n,
         args: [tokenId],
@@ -74,7 +74,7 @@ const useMining = () => {
         account: address,
         address: PICK_AXE_CONTRACT_ADDRESS,
         abi: PICK_AXE_CONTRACT_SOL.abi,
-        chain: lineaTestnet,
+        chain: lineaNetwork,
         functionName: 'sharp',
         args: [pickAxe.tokenId],
         value: parseEther(['0.0001', '0.00022', '0.001'][pickAxe.rank]),
@@ -120,14 +120,12 @@ const useMining = () => {
     const data = await fetch(`/api/linea/pickaxes?address=${address}`);
     const {
       result: {
-        data: {
-          user
-        },
+        data: { user },
       },
     } = await data.json();
 
     const pickaxes = user?.tokens || [];
-    
+
     pickaxes.map((pickAxe: INft) => {
       pickAxe.image = pickAxeImages[pickAxe.rank];
       return pickAxe;

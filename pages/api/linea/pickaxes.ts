@@ -25,11 +25,13 @@ export default async function handler(
           }`,
       }),
     });
-  
+
     const result = await response.json();
-  
+
     res.status(200).json({ result: result });
   } catch (error: any) {
-    res.status(500).json({ error: error, name: error.name, message: error.message });
+    res
+      .status(500)
+      .json({ error: error, name: error.name, message: error.message });
   }
 }

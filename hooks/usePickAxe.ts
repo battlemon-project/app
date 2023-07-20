@@ -1,6 +1,6 @@
 import useLinea from './useLinea';
 import { useWaitForTransaction } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
+import { lineaNetwork } from '../helpers/linea';
 import { PICK_AXE_CONTRACT_ADDRESS } from '../helpers/linea';
 import PICK_AXE_CONTRACT_SOL from '../helpers/abi/PickAxe.json';
 import { parseEther } from 'viem';
@@ -46,7 +46,7 @@ const usePickAxe = () => {
       const { request } = await publicClient.simulateContract({
         address: PICK_AXE_CONTRACT_ADDRESS,
         abi: PICK_AXE_CONTRACT_SOL.abi,
-        chain: lineaTestnet,
+        chain: lineaNetwork,
         functionName: 'mint',
         args: [address, rank],
         value: parseEther(amount.toString()),

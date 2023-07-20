@@ -1,6 +1,6 @@
 import useLinea from './useLinea';
 import { useWaitForTransaction } from 'wagmi';
-import { lineaTestnet } from 'wagmi/chains';
+import { lineaNetwork } from '../helpers/linea';
 import GEMS_CONTRACT_SOL from '../helpers/abi/Gem.json';
 import { GEMS_CONTRACT_ADDRESS, timeout } from '../helpers/linea';
 import { parseEther } from 'viem';
@@ -31,7 +31,7 @@ const useGem = () => {
         account: address,
         address: GEMS_CONTRACT_ADDRESS,
         abi: GEMS_CONTRACT_SOL.abi,
-        chain: lineaTestnet,
+        chain: lineaNetwork,
         functionName: 'merge',
         args: [gem1, gem2],
         value: parseEther(price.toString()),
@@ -48,12 +48,10 @@ const useGem = () => {
     if (!address) return;
     await timeout(2000);
     const data = await fetch(`/api/linea/gems?address=${address}`);
-    
+
     const {
       result: {
-        data: {
-          user,
-        },
+        data: { user },
       },
     } = await data.json();
 

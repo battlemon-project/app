@@ -43,9 +43,9 @@ const Labs = () => {
     if (!selectedGems[0] || !selectedGems[1]) return;
     setLoader(true);
     let price = 0.0005;
-    const referal = address && await isReferral(address);
+    const referal = address && (await isReferral(address));
     if (referal) {
-      price = 0.000475
+      price = 0.000475;
     }
     await mergeGem?.(selectedGems[0], selectedGems[1], price);
     setSelectedGems([null, null]);

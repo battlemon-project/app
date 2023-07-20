@@ -1,6 +1,6 @@
 import { REFERRAL_CONTRACT_ADDRESS } from '../helpers/linea';
 import REFERRAL_CONTRACT_SOL from '../helpers/abi/Referral.json';
-import { lineaTestnet } from 'wagmi/chains';
+import { lineaNetwork } from '../helpers/linea';
 import useLinea from './useLinea';
 import { type UserType } from './useAuth';
 
@@ -37,7 +37,7 @@ export const useReferral = () => {
       const { request } = await publicClient.simulateContract({
         address: REFERRAL_CONTRACT_ADDRESS,
         abi: REFERRAL_CONTRACT_SOL.abi,
-        chain: lineaTestnet,
+        chain: lineaNetwork,
         functionName: 'addReferral',
         args: [conductorAddress],
       });
