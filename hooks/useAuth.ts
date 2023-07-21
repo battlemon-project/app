@@ -11,7 +11,7 @@ import { useReferral } from './useReferral';
 import toast from 'react-hot-toast';
 import { AuthContext } from '../context/AuthContext/AuthContext';
 
-const cookiesList = ['auth_token', 'current_address'];
+const cookiesList = ['auth_token'];
 
 export interface UserType {
   userId: string;
@@ -153,6 +153,7 @@ export const useAuth = () => {
   const setAuthToken = (token: string) => {
     setCookie('auth_token', token, {
       expires: new Date(((d) => d.setDate(d.getDate() + 365))(new Date())),
+      path: '/'
     });
   };
 
@@ -190,7 +191,6 @@ export const useDisconnect = () => {
 
   const disconnect = () => {
     removeCookie('auth_token');
-    removeCookie('current_address');
     setUser(null);
     disconnectWagmi();
   };
