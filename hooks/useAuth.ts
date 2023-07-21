@@ -153,7 +153,7 @@ export const useAuth = () => {
   const setAuthToken = (token: string) => {
     setCookie('auth_token', token, {
       expires: new Date(((d) => d.setDate(d.getDate() + 365))(new Date())),
-      path: '/'
+      path: '/',
     });
   };
 
