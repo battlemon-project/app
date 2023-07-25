@@ -19,6 +19,7 @@ const Labs = () => {
     getPickAxesList,
     chipOffData,
     getGemRank,
+    reset,
   } = useMining();
   const {
     startGemAppear,
@@ -84,6 +85,14 @@ const Labs = () => {
   };
 
   useEffect(() => {
+    if (reset) {
+      setLoaderSharpness(true);
+      setSelectedSharpness(undefined);
+      setSelectedPickAxe(undefined);
+    }
+  }, [reset]);
+
+  useEffect(() => {
     if (!successChipOff || !selectedPickAxe) return;
 
     if (
@@ -110,6 +119,7 @@ const Labs = () => {
     }
   }, [isAuthorized, !!getPickAxesList]);
 
+  if (reset) return <></>;
   if (!isAuthorized) return <BabylonLoader isConnected={false} />;
 
   return (

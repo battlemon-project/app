@@ -10,8 +10,8 @@ import { useChests } from '../../hooks/useChests';
 const Launchpad = () => {
   const { openA, openB, openC, openAStart, openBStart, openCStart } =
     useChests();
-  const [chestType, setChestType] = useState<string>();
-  const { mintPickAxe, successMintPickAxe, supplies } = usePickAxe();
+  const [chestType, setChestType] = useState<string | undefined>();
+  const { mintPickAxe, successMintPickAxe, supplies, reset } = usePickAxe();
   const { isAuthorized } = useAuth();
 
   const handleOpenA = async () => {
@@ -46,6 +46,12 @@ const Launchpad = () => {
   }, [successMintPickAxe]);
 
   useEffect(() => {
+    if (reset) {
+      setChestType(undefined);
+    }
+  }, [reset]);
+
+  useEffect(() => {
     document?.body.classList.add('babylon-page');
 
     return function cleanup() {
@@ -53,6 +59,7 @@ const Launchpad = () => {
     };
   }, []);
 
+  if (reset) return <></>;
   if (!isAuthorized) return <BabylonLoader isConnected={false} />;
 
   return (

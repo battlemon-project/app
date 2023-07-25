@@ -14,6 +14,7 @@ export interface INft {
 }
 
 const useGem = () => {
+  const [reset, setReset] = useState<boolean>(false);
   const { address, publicClient, walletClient } = useLinea();
   const [mintMergeGemHash, setMergeGemHash] = useState<`0x${string}`>();
 
@@ -41,6 +42,10 @@ const useGem = () => {
     } catch (e) {
       const { message } = e as Error;
       console.log(message);
+      setReset(true);
+      setTimeout(() => {
+        setReset(false);
+      });
     }
   };
 
@@ -69,6 +74,7 @@ const useGem = () => {
     mergeGem,
     successMergeGem,
     getGemList,
+    reset,
   };
 };
 

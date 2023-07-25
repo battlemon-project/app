@@ -7,6 +7,7 @@ import { parseEther } from 'viem';
 import { useEffect, useState } from 'react';
 
 const usePickAxe = () => {
+  const [reset, setReset] = useState<boolean>(false);
   const { address, publicClient, walletClient } = useLinea();
   const [mintPickAxeHash, setMintPickAxeHash] = useState<`0x${string}`>();
   const [supplies, setSupply] = useState<{ [key: number]: string }>({});
@@ -56,10 +57,14 @@ const usePickAxe = () => {
     } catch (e) {
       const { message } = e as Error;
       console.log(message);
+      setReset(true);
+      setTimeout(() => {
+        setReset(false);
+      });
     }
   };
 
-  return { mintPickAxe, successMintPickAxe, supplies };
+  return { mintPickAxe, successMintPickAxe, supplies, reset };
 };
 
 export default usePickAxe;

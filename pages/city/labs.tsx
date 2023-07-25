@@ -10,7 +10,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useReferral } from '../../hooks/useReferral';
 
 const Labs = () => {
-  const { mergeGem, successMergeGem, getGemList } = useGem();
+  const { mergeGem, successMergeGem, getGemList, reset } = useGem();
   const { isAuthorized, address } = useAuth();
   const { isReferral } = useReferral();
   const [loader, setLoader] = useState<boolean>(true);
@@ -52,6 +52,13 @@ const Labs = () => {
   };
 
   useEffect(() => {
+    if (reset) {
+      setSelectedGems([null, null]);
+      setLoader(false);
+    }
+  }, [reset]);
+
+  useEffect(() => {
     if (!successMergeGem) return;
     refreshGems();
   }, [successMergeGem]);
@@ -62,6 +69,7 @@ const Labs = () => {
     }
   }, [isAuthorized, !!getGemList]);
 
+  if (reset) return <></>;
   if (!isAuthorized) return <BabylonLoader isConnected={false} />;
 
   return (

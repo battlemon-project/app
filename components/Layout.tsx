@@ -134,6 +134,7 @@ export default function Layout({ children }: Props) {
 }
 
 const AuthBlock = ({ children }: Props) => {
+  const [hasMounted, setHasMounted] = useState(false);
   const { chain } = useNetwork();
   const [user, setUser] = useState<UserType | null>(null);
   const [cookies] = useCookies();
@@ -144,6 +145,10 @@ const AuthBlock = ({ children }: Props) => {
     e.preventDefault();
     switchNetwork?.(lineaNetwork.id);
   };
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   useEffect(() => {
     const token = cookies.auth_token;
@@ -162,6 +167,8 @@ const AuthBlock = ({ children }: Props) => {
       });
     }
   }, [cookies.auth_token]);
+
+  if (!hasMounted) return <></>;
 
   if (
     (process.env.NEXT_PUBLIC_PRODUCTION !== 'true' && chain?.id != 59140) ||

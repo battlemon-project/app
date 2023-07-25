@@ -32,6 +32,7 @@ const pickAxeImages: Record<number, StaticImageData> = {
 
 const useMining = () => {
   const { address, publicClient, walletClient } = useLinea();
+  const [reset, setReset] = useState<boolean>(false);
   const [chipOffHashHash, setChipOffHash] = useState<`0x${string}`>();
   const [sharpHash, setSharpHash] = useState<`0x${string}`>();
 
@@ -51,7 +52,7 @@ const useMining = () => {
   const chipOff = async (tokenId: string) => {
     console.log(tokenId);
     try {
-      const { request } = await publicClient.simulateContract({
+      const hash = await walletClient?.writeContract({
         account: address,
         address: PICK_AXE_CONTRACT_ADDRESS,
         abi: PICK_AXE_CONTRACT_SOL.abi,
@@ -60,11 +61,14 @@ const useMining = () => {
         gas: 200_000n,
         args: [tokenId],
       });
-      const hash = await walletClient?.writeContract(request);
       if (hash) setChipOffHash(hash);
     } catch (e) {
       const { message } = e as Error;
       console.log(message);
+      setReset(true);
+      setTimeout(() => {
+        setReset(false);
+      });
     }
   };
 
@@ -84,6 +88,10 @@ const useMining = () => {
     } catch (e) {
       const { message } = e as Error;
       console.log(message);
+      setReset(true);
+      setTimeout(() => {
+        setReset(false);
+      });
     }
   };
 
@@ -99,6 +107,10 @@ const useMining = () => {
     } catch (e) {
       const { message } = e as Error;
       console.log(message);
+      setReset(true);
+      setTimeout(() => {
+        setReset(false);
+      });
     }
     return sharpness;
   };
@@ -143,6 +155,7 @@ const useMining = () => {
     getSharpnessOf,
     getPickAxesList,
     getGemRank,
+    reset,
   };
 };
 
