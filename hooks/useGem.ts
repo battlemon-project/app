@@ -43,7 +43,7 @@ const useGem = () => {
 
   const mergeGem = async (gem1: string, gem2: string, price: number) => {
     try {
-      const { request } = await publicClient.simulateContract({
+      const hash = await walletClient?.writeContract({
         account: address,
         address: GEMS_CONTRACT_ADDRESS,
         abi: GEMS_CONTRACT_SOL.abi,
@@ -53,7 +53,6 @@ const useGem = () => {
         args: [gem1, gem2],
         value: parseEther(price.toString()),
       });
-      const hash = await walletClient?.writeContract(request);
       if (hash) setMergeGemHash(hash);
     } catch (e) {
       const { message } = e as Error;
