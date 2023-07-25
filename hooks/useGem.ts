@@ -26,18 +26,33 @@ const useGem = () => {
     return {};
   }
 
+  const getRanks = async (gems: string[]) => {
+    const promises = gems.map(async (gem: string) => {
+      const metaURI = (await publicClient.readContract({
+        address: GEMS_CONTRACT_ADDRESS,
+        abi: GEMS_CONTRACT_SOL.abi,
+        functionName: 'tokenURI',
+        args: [gem],
+      })) as string;
+      const rank = parseInt(metaURI.split('/').at(-1) as string);
+      return rank;
+    });
+  
+    return await Promise.all(promises);
+  }
+
   const mergeGem = async (gem1: string, gem2: string, price: number) => {
     try {
-      const { request } = await publicClient.simulateContract({
+      const hash = await walletClient?.writeContract({
         account: address,
         address: GEMS_CONTRACT_ADDRESS,
         abi: GEMS_CONTRACT_SOL.abi,
         chain: lineaNetwork,
         functionName: 'merge',
+        gas: 200_000n,
         args: [gem1, gem2],
         value: parseEther(price.toString()),
       });
-      const hash = await walletClient?.writeContract(request);
       if (hash) setMergeGemHash(hash);
     } catch (e) {
       const { message } = e as Error;
@@ -74,6 +89,7 @@ const useGem = () => {
     mergeGem,
     successMergeGem,
     getGemList,
+    getRanks,
     reset,
   };
 };
