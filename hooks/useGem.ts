@@ -49,6 +49,7 @@ const useGem = () => {
         abi: GEMS_CONTRACT_SOL.abi,
         chain: lineaNetwork,
         functionName: 'merge',
+        gas: 200_000n,
         args: [gem1, gem2],
         value: parseEther(price.toString()),
       });
