@@ -130,7 +130,7 @@ export const Footer: React.FC = () => {
         <div className="col">
           <a
             className="svg-wrap text-white text-opacity-70 hover:text-opacity-100"
-            href="https://discord.gg/battlemon"
+            href="https://discord.gg/JRNVMgXqBA"
           >
             <svg
               fill="none"

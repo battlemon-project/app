@@ -288,7 +288,7 @@ const Mint = () => {
                 rel="noreferrer"
                 className="relative z-10 flex justify-center p-3 xs:p-0 items-center text-xl h-full text-white border-2 border-white border-opacity-20 rounded-2xl px-2.5 min-w-28"
                 onClick={checkDiscordJoin}
-                href="https://discord.gg/battlemon"
+                href="https://discord.gg/JRNVMgXqBA"
               >
                 {discordCode === true ? 'Done' : 'Join'}
               </a>
