@@ -26,6 +26,7 @@ import { useCookies } from 'react-cookie';
 import { useAuth } from '../hooks/useAuth';
 import { lineaMainnet, lineaNetwork } from '../helpers/linea';
 import { lineaTestnet } from 'wagmi/chains';
+import {useRouter} from "next/router";
 
 interface Props {
   children?: JSX.Element;
@@ -128,6 +129,7 @@ const AuthBlock = ({ children }: Props) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [cookies] = useCookies();
   const { fetchUserProfile } = useAuth();
+  const router = useRouter();
   const { switchNetwork } = useSwitchNetwork();
 
   const changeNetwork = (e: React.MouseEvent<HTMLElement>) => {
@@ -162,6 +164,7 @@ const AuthBlock = ({ children }: Props) => {
   if (
     (process.env.NEXT_PUBLIC_PRODUCTION !== 'true' && chain?.id != 59140) ||
     (process.env.NEXT_PUBLIC_PRODUCTION == 'true' && chain?.id != 59144)
+    && router.asPath !== '/'
   ) {
     return (
       <div className="flex flex-col min-h-screen">

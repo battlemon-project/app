@@ -23,7 +23,7 @@ const ReferrralInvite = () => {
   useEffect(() => {}, [address]);
 
   if (user) {
-    router.push('/referral');
+    router.push('/city/launchpad');
     return;
   }
 
