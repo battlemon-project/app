@@ -11,7 +11,6 @@ import Head from 'next/head';
 import { Header } from './Header/Header';
 import { Footer } from './Footer';
 import { useNetwork } from 'wagmi';
-import Script from 'next/script';
 import {
   EthereumClient,
   w3mConnectors,
@@ -84,16 +83,6 @@ export default function Layout({ children }: Props) {
           name="twitter:image"
           content="https://promo.battlemon.com/battlemon.jpg"
         />
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-FXNCZP5QS7" />
-        <Script id="google-analytics">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-  
-            gtag('config', 'G-FXNCZP5QS7');
-          `}
-        </Script>
       </Head>
       <AlertProvider template={AlertTemplate} {...options}>
         <WagmiConfig config={config}>
