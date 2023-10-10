@@ -25,22 +25,22 @@ export const Chests = async (scene: Scene): Promise<void> => {
       name: 'basket_a',
       functionName: 'openA',
       animationName: 'open_a',
-      position: new Vector3(0, -0.3, 0),
+      position: new Vector3(-2.2, 0, 0),
     },
-    // {
-    //   sceneFileName: 'basket_b.gltf',
-    //   name: 'basket_b',
-    //   functionName: 'openB',
-    //   animationName: 'open_b',
-    //   position: new Vector3(0, 0, 0),
-    // },
-    // {
-    //   sceneFileName: 'basket_c.gltf',
-    //   name: 'basket_c',
-    //   functionName: 'openC',
-    //   animationName: 'open_c',
-    //   position: new Vector3(2.2, 0, 0),
-    // },
+    {
+      sceneFileName: 'basket_b.gltf',
+      name: 'basket_b',
+      functionName: 'openB',
+      animationName: 'open_b',
+      position: new Vector3(0, 0, 0),
+    },
+    {
+      sceneFileName: 'basket_c.gltf',
+      name: 'basket_c',
+      functionName: 'openC',
+      animationName: 'open_c',
+      position: new Vector3(2.2, 0, 0),
+    },
   ];
 
   for (const chest of chests) {
@@ -62,25 +62,25 @@ export const Chests = async (scene: Scene): Promise<void> => {
     ) as AnimationGroup;
 
     useChests.setState({
-      // [chest.functionName + 'Start']: () => {
-      //   openAnimation.reset();
-      //   Animation.CreateAndStartAnimation(
-      //     `Chest_scale`,
-      //     chest.node,
-      //     'scaling',
-      //     30,
-      //     30,
-      //     new Vector3(1, 1, 1),
-      //     new Vector3(1.3, 1.3, 1.3),
-      //     0
-      //   );
-      //   if (chest.node) chest.node.position = new Vector3(0, -0.8, 0);
-      //   chests.forEach((_ch, index) => {
-      //     if (index !== i && _ch.node) {
-      //       _ch.node.scaling = new Vector3(0, 0, 0);
-      //     }
-      //   });
-      // },
+      [chest.functionName + 'Start']: () => {
+        openAnimation.reset();
+        Animation.CreateAndStartAnimation(
+          `Chest_scale`,
+          chest.node,
+          'scaling',
+          30,
+          30,
+          new Vector3(1, 1, 1),
+          new Vector3(1.3, 1.3, 1.3),
+          0
+        );
+        if (chest.node) chest.node.position = new Vector3(0, -0.8, 0);
+        chests.forEach((_ch, index) => {
+          if (index !== i && _ch.node) {
+            _ch.node.scaling = new Vector3(0, 0, 0);
+          }
+        });
+      },
       [chest.functionName]: () => {
         openAnimation.start(false, 1);
       },

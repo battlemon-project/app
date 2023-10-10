@@ -68,7 +68,7 @@ const Launchpad = () => {
       <div
         className={classNames(
           `absolute w-full flex pt-4 justify-center ${
-            chestType && false ? 'bottom-3' : 'top-2/3'
+            chestType ? 'bottom-3' : 'top-1/2'
           }`
         )}
       >
@@ -83,7 +83,7 @@ const Launchpad = () => {
             </button>
           </div>
         )}
-        {/* {(!chestType || chestType == 'B') && (
+        {(!chestType || chestType == 'B') && (
           <div className="text-white text-center text-3xl font-semibold basis-1/3 p-10">
             <div>{supplies?.[1] || 0} / 100 000</div>
             <button
@@ -104,7 +104,7 @@ const Launchpad = () => {
               0.019 ETH
             </button>
           </div>
-        )} */}
+        )}
       </div>
     </>
   );
