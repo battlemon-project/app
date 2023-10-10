@@ -85,7 +85,7 @@ const Launchpad = () => {
         )}
         {(!chestType || chestType == 'B') && (
           <div className="text-white text-center text-3xl font-semibold basis-1/3 p-10">
-            <div>{supplies?.[1] || 0} / 100 000</div>
+            <div>{supplies?.[1] || 0} / 30 000</div>
             <button
               className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all"
               onClick={handleOpenB}
@@ -96,7 +96,7 @@ const Launchpad = () => {
         )}
         {(!chestType || chestType == 'C') && (
           <div className="text-white text-center text-3xl font-semibold basis-1/3 p-10">
-            <div>{supplies?.[2] || 0} / 30 000</div>
+            <div>{supplies?.[2] || 0} / 10 000</div>
             <button
               className="px-6 py-2 mt-3 bg-white rounded-lg text-xl font-normal text-black hover:bg-opacity-70 transition-all"
               onClick={handleOpenC}
