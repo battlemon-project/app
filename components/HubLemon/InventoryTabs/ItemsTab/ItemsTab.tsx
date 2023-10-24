@@ -69,7 +69,7 @@ export const ItemsTab: React.FC = () => {
   };
 
   const { config } = usePrepareContractWrite(
-    mintItemData(address, lemonItems.length)
+    mintItemData(address)
   );
   const { write } = useContractWrite(config);
 

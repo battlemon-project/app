@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 import Layout from '../components/Layout';
 import { useLemonStore } from '../helpers/lemonStore';
 import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
-import alchemy, { getLemons, mintLemonData } from '../helpers/alchemy';
+import { getLemons, mintLemonData } from '../helpers/alchemy';
 import { useAlert } from 'react-alert';
 import { useRouter } from 'next/router';
 
@@ -52,19 +52,19 @@ const Hub = () => {
       setLoader((loader) => ({ ...loader, data: true }));
     } else {
       refreshLemons();
-      alchemy.ws.on(
-        {
-          address: '0xeae26aa7aD3E54C208a22a78bd9E5d2D7ccFC18D',
-          topics: [
-            '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
-            '0x0000000000000000000000000000000000000000000000000000000000000000',
-          ],
-        },
-        (tx) => {
-          setLoader((loader) => ({ ...loader, data: true }));
-          refreshLemons();
-        }
-      );
+      // alchemy.ws.on(
+      //   {
+      //     address: '0xeae26aa7aD3E54C208a22a78bd9E5d2D7ccFC18D',
+      //     topics: [
+      //       '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
+      //       '0x0000000000000000000000000000000000000000000000000000000000000000',
+      //     ],
+      //   },
+      //   (tx) => {
+      //     setLoader((loader) => ({ ...loader, data: true }));
+      //     refreshLemons();
+      //   }
+      // );
     }
   }, [isConnected]);
 

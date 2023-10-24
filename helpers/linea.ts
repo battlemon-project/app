@@ -32,6 +32,8 @@ const MAINNET = {
   REFERRAL: '0x6e58359d2F3Fd0f870cC187246a52848dc7AFCE8' as `0x${string}`,
   GEMS: '0x6bF309Ad2b7c0eBE44e69a53Bb2cCED79f17FC66' as `0x${string}`,
   PICK_AXE: '0x35D42D4BdC36CfE33A5ea6672A1B81752A963d6d' as `0x${string}`,
+  LEMONS: '0x0000000000000000000000000000000000000001' as `0x${string}`,
+  ITEMS: '0x0000000000000000000000000000000000000001' as `0x${string}`,
 };
 
 const TESTNET = {
@@ -39,6 +41,8 @@ const TESTNET = {
   REFERRAL: '0xdf47F874Df464D8aB73Aa52B4116bFFAa2bE9E9b' as `0x${string}`,
   GEMS: '0xfB55102B3b55ae853348CD5Be8C25F28D1729523' as `0x${string}`,
   PICK_AXE: '0xB1E257aaa30d1C586D953820c932e283D550c5e0' as `0x${string}`,
+  LEMONS: '0x900F9d05eff41bB0d49f72b50AF96464fD2387B4' as `0x${string}`,
+  ITEMS: '0x1eD80EFD9E0d5D36222ed4F8513B19949BCc7720' as `0x${string}`,
 };
 
 export const ACCESS_KEY_CONTRACT_ADDRESS: `0x${string}` =
@@ -55,6 +59,14 @@ export const PICK_AXE_CONTRACT_ADDRESS: `0x${string}` =
   process.env.NEXT_PUBLIC_PRODUCTION == 'true'
     ? MAINNET.PICK_AXE
     : TESTNET.PICK_AXE;
+export const LEMONS_CONTRACT_ADDRESS: `0x${string}` =
+  process.env.NEXT_PUBLIC_PRODUCTION == 'true'
+    ? MAINNET.LEMONS
+    : TESTNET.LEMONS;
+export const ITEMS_CONTRACT_ADDRESS: `0x${string}` =
+  process.env.NEXT_PUBLIC_PRODUCTION == 'true'
+    ? MAINNET.ITEMS
+    : TESTNET.ITEMS;
 
 export const lineaNetwork =
   process.env.NEXT_PUBLIC_PRODUCTION == 'true' ? lineaMainnet : lineaTestnet;
