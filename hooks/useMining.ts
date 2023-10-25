@@ -130,12 +130,12 @@ const useMining = () => {
   const getPickAxesList = async () => {
     if (!address) return;
     await timeout(2000);
-    const data = await fetch(`/api/linea/pickaxes?address=${address}`);
+    const fetched = await fetch(`/api/linea/pickaxes?address=${address}`);
     const {
       result: {
         data: { user },
       },
-    } = await data.json();
+    } = await fetched.json();
 
     const pickaxes = user?.tokens || [];
 

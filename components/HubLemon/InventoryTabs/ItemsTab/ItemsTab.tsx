@@ -3,15 +3,14 @@ import { type ItemType, useLemonStore } from '../../../../helpers/lemonStore';
 import { shallow } from 'zustand/shallow';
 import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { useAlert } from 'react-alert';
-import alchemy, { getItems, mintItemData } from '../../../../helpers/alchemy';
+import { getItems, mintItemData } from '../../../../helpers/alchemy';
 import classNames from 'classnames';
 import Image from 'next/image';
 
 export const ItemsTab: React.FC = () => {
-  const { lemons, activePlatform } = useLemonStore(
-    ({ lemons, activePlatform, wearingItem }) => ({
-      lemons,
-      activePlatform,
+  const { lemon } = useLemonStore(
+    ({ lemon, wearingItem }) => ({
+      lemon,
       wearingItem,
     }),
     shallow
@@ -91,19 +90,19 @@ export const ItemsTab: React.FC = () => {
 
   useEffect(() => {
     refreshItems();
-    alchemy.ws.on(
-      {
-        address: '0xeae26aa7aD3E54C208a22a78bd9E5d2D7ccFC18D',
-        topics: [
-          '0xe65085e689b77b126ba0bac3b079aa8288f19f4d5445af11c76003f8ab3075dd',
-          '0x0000000000000000000000000000000000000000000000000000000000000001',
-        ],
-      },
-      (tx) => {
-        setInventoryLoader(true);
-        refreshItems();
-      }
-    );
+    // alchemy.ws.on(
+    //   {
+    //     address: '0xeae26aa7aD3E54C208a22a78bd9E5d2D7ccFC18D',
+    //     topics: [
+    //       '0xe65085e689b77b126ba0bac3b079aa8288f19f4d5445af11c76003f8ab3075dd',
+    //       '0x0000000000000000000000000000000000000000000000000000000000000001',
+    //     ],
+    //   },
+    //   (tx) => {
+    //     setInventoryLoader(true);
+    //     refreshItems();
+    //   }
+    // );
   }, []);
 
   return (
@@ -116,7 +115,7 @@ export const ItemsTab: React.FC = () => {
                 .filter(
                   (item) =>
                     item.attachedTo ==
-                    lemons.ownedNfts[activePlatform - 1].tokenId
+                    lemon?.tokenId
                 )
                 .map((item, idx) => (
                   <div
@@ -142,7 +141,7 @@ export const ItemsTab: React.FC = () => {
               {lemonItems.filter(
                 (item) =>
                   item.attachedTo ==
-                  lemons.ownedNfts[activePlatform - 1].tokenId
+                  lemon?.tokenId
               ).length == 0 ? (
                 <div className="w-full flex items-center justify-center col-span-full text-white text-opacity-50">
                   <div className="w-full text-center pt-4 mt-2 text-lg">

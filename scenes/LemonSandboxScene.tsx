@@ -21,28 +21,28 @@ export default function LemonSandboxScene() {
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const [background, setBackground] = useState<string>('');
   const [visibleInterface, setVisibleInterface] = useState<boolean>(true);
-  const { lemons } = useLemonStore();
+  const { lemon } = useLemonStore();
 
   const changeItem = (type: string, name: string) => {
-    lemons.ownedNfts[0].rawMetadata.items.forEach((item, index) => {
+    lemon.items.forEach((item, index) => {
       if (item.type == type) {
         item.name = name;
       }
     });
 
-    useLemonStore.setState({ lemons });
-    updateSomeLemon?.(lemons.ownedNfts[0]);
+    useLemonStore.setState({ lemon });
+    updateSomeLemon?.(lemon);
   };
 
   const changeProperty = (type: string, name: string) => {
-    lemons.ownedNfts[0].rawMetadata.properties.forEach((property, index) => {
+    lemon.properties.forEach((property, index) => {
       if (property.type == type) {
         property.name = name;
       }
     });
 
-    useLemonStore.setState({ lemons });
-    updateSomeLemon?.(lemons.ownedNfts[0]);
+    useLemonStore.setState({ lemon });
+    updateSomeLemon?.(lemon);
   };
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export default function LemonSandboxScene() {
         className="absolute px-4 left-0 w-72"
         style={{ display: visibleInterface ? 'block' : 'none' }}
       >
-        {lemons.ownedNfts[0].rawMetadata.properties.map((prop, i) => (
+        {lemon.properties.map((prop, i) => (
           <div key={i} className="pt-1 w-full">
             <b
               className="text-sm px-1"
@@ -152,7 +152,7 @@ export default function LemonSandboxScene() {
         className="absolute right-0 w-72 px-4"
         style={{ right: '0', display: visibleInterface ? 'block' : 'none' }}
       >
-        {lemons.ownedNfts[0].rawMetadata.items.map((prop, i) => (
+        {lemon.items.map((prop, i) => (
           <div className="pt-1 w-full" key={i}>
             <b
               className="text-sm px-1"

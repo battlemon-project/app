@@ -1,40 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import LemonSandboxScene from '../scenes/LemonSandboxScene';
 import { useLemonStore } from '../helpers/lemonStore';
 import { dummyLemon } from '../helpers/dummyLemon';
-import { NftTokenType } from 'alchemy-sdk';
 
 const LemonSandbox = () => {
-  const { lemons } = useLemonStore(({ lemons }) => ({ lemons }));
+  const { lemon } = useLemonStore(({ lemon }) => ({ lemon }));
 
   useEffect(() => {
     const dummy = dummyLemon();
-    lemons.ownedNfts = [
-      {
-        tokenId: '1',
-        tokenType: NftTokenType.ERC721,
-        balance: 0,
-        contract: {
-          tokenType: NftTokenType.ERC721,
-          address: '0xeae26aa7aD3E54C208a22a78bd9E5d2D7ccFC18D',
-        },
-        title: '',
-        description: '',
-        timeLastUpdated: '',
-        metadataError: undefined,
-        tokenUri: undefined,
-        media: [],
-        rawMetadata: {
-          properties: dummy.properties,
-          items: dummy.items,
-        },
-      },
-    ];
+    const _lemon = {
+      id: '1',
+      tokenId: '1',
+      owner: '',
+      image: '',
+      type: '',
+      url: '',
+      properties: dummy.properties,
+      items: dummy.items,
+    }
 
-    useLemonStore.setState({ lemons });
+    useLemonStore.setState({ lemon: _lemon });
   }, []);
 
-  return <>{lemons.ownedNfts?.length && <LemonSandboxScene />}</>;
+  return <>{lemon && <LemonSandboxScene /> }</>;
 };
 
 export default LemonSandbox;

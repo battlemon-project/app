@@ -21,11 +21,10 @@ interface TabType {
 export const Inventory: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabsNames>('ITEMS');
 
-  const { lemons, activePlatform } = useLemonStore(
-    ({ inventoryIsOpened, lemons, activePlatform }) => ({
+  const { lemon } = useLemonStore(
+    ({ inventoryIsOpened, lemon }) => ({
       inventoryIsOpened,
-      lemons,
-      activePlatform,
+      lemon
     }),
     shallow
   );
@@ -40,7 +39,7 @@ export const Inventory: React.FC = () => {
     {
       name: 'PLAY',
       href: `/game/home?playerId=${JSON.stringify(
-        lemons?.ownedNfts[activePlatform - 1]
+        lemon?.id
       )}`,
     },
     {
@@ -105,7 +104,7 @@ export const Inventory: React.FC = () => {
         {activeTab === 'INFO' ? (
           <InfoTab
             items={
-              lemons?.ownedNfts[activePlatform - 1].rawMetadata?.properties ||
+              lemon?.properties ||
               []
             }
           />

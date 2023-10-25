@@ -246,7 +246,7 @@ export const Platforms = async ({
         });
 
         activePlatform = index + 1;
-        useLemonStore.setState({ activePlatform });
+        //useLemonStore.setState({ activePlatform });
       })
     );
   });

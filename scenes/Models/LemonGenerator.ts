@@ -6,29 +6,28 @@ import {
   type TransformNode,
   Vector3,
 } from '@babylonjs/core';
-import { type ItemType, useLemonStore } from '../../helpers/lemonStore';
+import { type ItemType, useLemonStore, LemonType } from '../../helpers/lemonStore';
 import { ITEMS_TYPE_PLACEHOLDERS } from '../../helpers/dummyLemon';
-import type { LemonOwnedNft } from '../../helpers/alchemy';
 
 export interface LemonGeneratorResult {
   unsubscribe: () => void;
-  change: (lemon: LemonOwnedNft) => void;
+  change: (lemon: LemonType) => void;
 }
 
 export const LemonGenerator = async (
   scene: Scene
 ): Promise<LemonGeneratorResult> => {
-  const { lemons } = useLemonStore.getState();
+  const { lemon } = useLemonStore.getState();
   const loadedItems: Record<string, Mesh | null> = {};
   let lemonContainer: InstantiatedEntries;
 
-  if (lemons.ownedNfts.length) {
+  if (lemon) {
     const lemonAssetContainer = await SceneLoader.LoadAssetContainerAsync(
       `${process.env.NEXT_PUBLIC_MODELS}/characters/`,
       'BTLMN_Lemon.gltf',
       scene
     );
-    lemons.ownedNfts.slice(0, 3).forEach((lemon, index) => {
+    [0,1,2].forEach((_, index) => {
       [`Plus_${index + 1}`, `Plus_${index + 1}_Stroke`].forEach((mesh) => {
         const plus = scene.getMeshByName(mesh);
         if (plus) plus.dispose();
@@ -44,7 +43,7 @@ export const LemonGenerator = async (
       const lemonNode = lemonContainer.rootNodes[0];
       lemonNode.id = `Lemon__${index + 1}`;
 
-      const properities = lemon.rawMetadata.properties.map(
+      const properities = lemon.properties.map(
         (trait) => trait.name
       );
       lemonNode.getChildMeshes().forEach((mesh) => {
@@ -70,8 +69,8 @@ export const LemonGenerator = async (
         }
       });
 
-      lemon.rawMetadata.items.forEach(async (item) => {
-        await wearItem(item, index + 1);
+      lemon.items.forEach(async (item) => {
+        await wearItem(item);
       });
 
       const idleAnimation = lemonContainer.animationGroups.find(
@@ -102,8 +101,9 @@ export const LemonGenerator = async (
     return loadedItems[name];
   }
 
-  function takeoffItem(itemType: string, activePlatform: number) {
+  function takeoffItem(itemType: string) {
     const placeholderName = ITEMS_TYPE_PLACEHOLDERS[itemType || ''];
+    const activePlatform = 1;
     if (itemType == 'shoes') {
       const basicFeet = scene.getNodeById(`Feet_${activePlatform}`) as Mesh;
       if (basicFeet) basicFeet.scaling = new Vector3(1, 1, 1);
@@ -131,8 +131,9 @@ export const LemonGenerator = async (
     }
   }
 
-  async function wearItem(item: ItemType, activePlatform: number) {
+  async function wearItem(item: ItemType) {
     const placeholderName = ITEMS_TYPE_PLACEHOLDERS[item.type || ''];
+    const activePlatform = 1;
     const { type, name } = item;
     if (!name || name.length < 6) {
       if (item.type == 'cap') {
@@ -186,9 +187,9 @@ export const LemonGenerator = async (
     if (meshOutfit) meshOutfit.clone(`outift_${type}`, placeholder);
   }
 
-  const change = async (lemon: LemonOwnedNft) => {
+  const change = async (lemon: LemonType) => {
     const lemonNode = scene.getNodeById('Lemon__1');
-    const properities = lemon.rawMetadata.properties.map((prop) => prop.name);
+    const properities = lemon?.properties.map((prop) => prop.name) || [];
     if (lemonNode)
       lemonNode.getChildMeshes().forEach((mesh) => {
         if (properities.includes(mesh.name)) {
@@ -198,7 +199,7 @@ export const LemonGenerator = async (
         }
         if (
           mesh.name.includes('Feet') &&
-          lemon.rawMetadata.items.find(
+          lemon?.items.find(
             (item) => item.type == 'shoes' && item.name && item.name.length > 5
           )
         ) {
@@ -206,7 +207,7 @@ export const LemonGenerator = async (
         }
         if (
           mesh.name.includes('Hair') &&
-          lemon.rawMetadata.items.find(
+          lemon?.items.find(
             (item) => item.type == 'cap' && item.name && item.name.length > 5
           )
         ) {
@@ -215,44 +216,40 @@ export const LemonGenerator = async (
       });
 
     Object.keys(ITEMS_TYPE_PLACEHOLDERS).forEach((itemType) => {
-      takeoffItem(itemType, 1);
+      takeoffItem(itemType);
     });
 
-    for (const item of lemon.rawMetadata.items) {
-      await wearItem(item, 1);
+    for (const item of lemon.items) {
+      await wearItem(item);
     }
   };
 
   const unsubscribe = useLemonStore.subscribe((state, prevState) => {
     if (state.unwearingItem != prevState.unwearingItem) {
       Object.keys(ITEMS_TYPE_PLACEHOLDERS).forEach((itemType) => {
-        takeoffItem(itemType, state.activePlatform);
+        takeoffItem(itemType);
       });
 
-      const items = state.lemons.ownedNfts[
-        state.activePlatform - 1
-      ].rawMetadata.items.filter((item) => {
+      const items = state.lemon?.items.filter((item) => {
         return !state.unwearingItem || item.type != state.unwearingItem.type;
       });
 
-      items.forEach((item) => {
-        wearItem(item, state.activePlatform);
+      items?.forEach((item) => {
+        wearItem(item);
       });
     }
     if (state.wearingItem != prevState.wearingItem) {
       Object.keys(ITEMS_TYPE_PLACEHOLDERS).forEach((itemType) => {
-        takeoffItem(itemType, state.activePlatform);
+        takeoffItem(itemType);
       });
 
-      const items = state.lemons.ownedNfts[
-        state.activePlatform - 1
-      ].rawMetadata.items.filter((item) => {
+      const items = state.lemon?.items.filter((item) => {
         return !state.wearingItem || item.type != state.wearingItem.type;
       });
-      if (state.wearingItem) items.push(state.wearingItem);
+      if (state.wearingItem && items?.length) items.push(state.wearingItem);
 
-      items.forEach((item) => {
-        wearItem(item, state.activePlatform);
+      items?.forEach((item) => {
+        wearItem(item);
       });
     }
   });

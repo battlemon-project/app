@@ -8,6 +8,7 @@ import Layout from '../components/Layout';
 import { useLemonStore } from '../helpers/lemonStore';
 import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { getLemons, mintLemonData } from '../helpers/alchemy';
+import useLemon from '../hooks/useLemon'
 import { useAlert } from 'react-alert';
 import { useRouter } from 'next/router';
 
@@ -16,6 +17,7 @@ const HubScene = dynamic(async () => await import('../scenes/HubScene'), {
 });
 
 const Hub = () => {
+  const { safeMint, successSafeMint, getLemonList, reset } = useLemon();
   const [loader, setLoader] = useState<BabylonLoaderType>({
     babylon: true,
     data: true,
@@ -38,17 +40,19 @@ const Hub = () => {
       return;
     }
     if (!address) return;
-    const lemonOwnedNfts = await getLemons(address);
+    console.log(address)
+    const lemonOwnedNfts = await getLemonList?.();
+    debugger;
+    console.log(getLemonList)
     useLemonStore.setState({
-      lemons: lemonOwnedNfts,
-      activePlatform: 1,
+      lemon: lemonOwnedNfts?.[0],
       inventoryIsOpened: false,
     });
     setLoader((loader) => ({ ...loader, data: false }));
   };
 
   useEffect(() => {
-    if (!isConnected) {
+    if (!address) {
       setLoader((loader) => ({ ...loader, data: true }));
     } else {
       refreshLemons();
@@ -66,7 +70,7 @@ const Hub = () => {
       //   }
       // );
     }
-  }, [isConnected]);
+  }, [address]);
 
   const handleMintLemon = async () => {
     if (process.env.NEXT_PUBLIC_PRODUCTION == 'true') {

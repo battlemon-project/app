@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import type { LemonOwnedNftsResponse } from './alchemy';
 
 export interface ItemType {
   id?: string;
@@ -14,7 +13,9 @@ export interface ItemType {
 
 export interface LemonType {
   id: string;
+  tokenId: string;
   owner: string;
+  image: string;
   type: string;
   url: string;
   properties: ItemType[];
@@ -22,23 +23,14 @@ export interface LemonType {
 }
 
 interface LemonState {
-  lemons: LemonOwnedNftsResponse;
+  lemon: LemonType | null;
   inventoryIsOpened: boolean;
-  activePlatform: number;
   wearingItem: ItemType | null;
   unwearingItem: ItemType | null;
 }
 
-const defaultResponse: LemonOwnedNftsResponse = {
-  blockHash: '',
-  ownedNfts: [],
-  pageKey: undefined,
-  totalCount: 0,
-};
-
 export const useLemonStore = create<LemonState>(() => ({
-  lemons: defaultResponse,
-  activePlatform: 1,
+  lemon: null,
   inventoryIsOpened: false,
   wearingItem: null,
   unwearingItem: null,
