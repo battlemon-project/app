@@ -3,12 +3,10 @@ import { useWaitForTransaction } from 'wagmi';
 import { lineaNetwork } from '../helpers/linea';
 import LEMONS_CONTRACT_SOL from '../helpers/abi/Lemons.json';
 import { LEMONS_CONTRACT_ADDRESS, timeout } from '../helpers/linea';
-import { parseEther } from 'viem';
 import { useState } from 'react';
 import type { LemonType } from '../helpers/lemonStore';
 
 const useLemon = () => {
-  const [reset, setReset] = useState<boolean>(false);
   const { address, publicClient, walletClient } = useLinea();
   const [mintSafeMintHash, setSafeMintHash] = useState<`0x${string}`>();
 
@@ -50,10 +48,6 @@ const useLemon = () => {
     } catch (e) {
       const { message } = e as Error;
       console.log(message);
-      setReset(true);
-      setTimeout(() => {
-        setReset(false);
-      });
     }
   };
 
@@ -74,8 +68,7 @@ const useLemon = () => {
   return {
     safeMint,
     successSafeMint,
-    getLemonList,
-    reset,
+    getLemonList
   };
 };
 

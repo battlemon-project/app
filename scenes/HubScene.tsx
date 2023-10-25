@@ -3,6 +3,7 @@ import React, {
   type SetStateAction,
   useEffect,
   useState,
+  useRef,
 } from 'react';
 import * as BABYLON from '@babylonjs/core';
 import {
@@ -10,8 +11,8 @@ import {
   GLTFLoaderAnimationStartMode,
 } from '@babylonjs/loaders';
 import { Platforms } from './Models/Platforms';
+import LoadingScreen from '../components/LoadingScreen';
 import { LemonGenerator } from './Models/LemonGenerator';
-import type { BabylonLoaderType } from '../components/BabylonLoader';
 import { useLemonStore } from '../helpers/lemonStore';
 import { Inventory } from '../components/HubLemon/Inventory';
 import classNames from 'classnames';
@@ -21,19 +22,14 @@ let backPlatforms: () => void;
 let newLemonUnsubscribe: () => void;
 
 export default function HubScene({
-  setLoader,
   handleMintLemon,
 }: {
-  setLoader: Dispatch<SetStateAction<BabylonLoaderType>>;
   handleMintLemon: () => Promise<void | undefined>;
 }) {
   const { inventoryIsOpened } = useLemonStore();
   const FpsElement = document.getElementById('fps');
+  const canvasRef = useRef<null | HTMLCanvasElement>(null);
   const [step, changeStep] = useState<number>(0);
-
-  useEffect(() => {
-    setLoader((loader) => ({ ...loader, babylon: true }));
-  }, []);
 
   useEffect(() => {
     BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (loader) {
@@ -43,6 +39,10 @@ export default function HubScene({
 
     const canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
     const engine = new BABYLON.Engine(canvas, true);
+    engine.loadingScreen = new LoadingScreen(
+      canvasRef.current as HTMLCanvasElement
+    );
+    engine.displayLoadingUI();
 
     const createScene = function () {
       const scene = new BABYLON.Scene(engine);
@@ -98,7 +98,8 @@ export default function HubScene({
 
     const scene = createScene();
     scene.executeWhenReady(() => {
-      setLoader((loader) => ({ ...loader, babylon: false }));
+      //runDebugger(scene)
+      engine.hideLoadingUI();
     });
 
     engine.runRenderLoop(function () {
@@ -113,7 +114,7 @@ export default function HubScene({
     return () => {
       if (destroyPlatforms) destroyPlatforms();
       if (newLemonUnsubscribe) newLemonUnsubscribe();
-      setLoader((loader) => ({ ...loader, babylon: false }));
+      engine.hideLoadingUI();
       engine.dispose();
     };
   }, []);
@@ -128,7 +129,7 @@ export default function HubScene({
 
   return (
     <div className="relative w-full h-full">
-      <canvas className="h-full w-full" id="renderCanvas" />
+      <canvas className="h-full w-full" id="renderCanvas" ref={canvasRef} />
       <div className="container w-full absolute left-0 top-5">
         {step > 0 && (
           <button

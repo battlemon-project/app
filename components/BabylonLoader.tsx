@@ -3,11 +3,6 @@ import Image from 'next/image';
 import classNames from 'classnames';
 import { useAuth } from '../hooks/useAuth';
 
-export interface BabylonLoaderType {
-  babylon: boolean;
-  data: boolean;
-}
-
 interface BabylonLoaderProps {
   isConnected: boolean;
 }
