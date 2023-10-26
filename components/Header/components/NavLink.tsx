@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 interface NavLinkProps {
   name: string;
   href: string;
-  subLinks: LinkType[];
+  subLinks: LinkType[] | undefined;
 }
 
 export const NavLink: React.FC<NavLinkProps> = ({ name, href, subLinks }) => {
@@ -31,9 +31,9 @@ export const NavLink: React.FC<NavLinkProps> = ({ name, href, subLinks }) => {
           ref={outerRef}
           className={classNames(
             {
-              '!text-opacity-100': href === router.pathname,
+              'text-opacity-50': href !== router.pathname,
             },
-            'w-full text-white text-opacity-50 text-xl font-normal hover:text-opacity-100'
+            'w-full text-white text-lg font-normal pb-1'
           )}
         >
           {isOpen || href === router.pathname ? (
@@ -55,7 +55,7 @@ export const NavLink: React.FC<NavLinkProps> = ({ name, href, subLinks }) => {
           {name}
         </button>
       </Link>
-      {subLinks.length && isOpen ? (
+      {subLinks?.length && isOpen ? (
         <div
           className="absolute left-0 top-full p-1 w-full text-center"
           onMouseEnter={onMouseEnter}

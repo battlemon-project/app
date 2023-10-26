@@ -76,24 +76,6 @@ a {
     padding: 0;
 }
 
-.short_address > span {
-    white-space: nowrap;
-    overflow: hidden;
-    vertical-align: middle;
-}
-
-.short_address .ellipsis {
-    display: inline-block;
-    width: calc(40% + 1.2em);
-    text-overflow: ellipsis;
-}
-
-.short_address .indent {
-    display: inline-flex;
-    width: calc(60% - 1.2em);
-    justify-content: flex-end;
-}
-
 body {
     background: linear-gradient(180deg, #035161 0, #010024 100%);
     min-height: 100vh;
@@ -185,7 +167,8 @@ canvas {
 
 .btn-item-bottom {
     display: flex;
-    padding: 20px 20px;
+    padding: 4px 20px;
+    height: 70px;
     justify-content: center;
     align-items: center;
     gap: 4px;
@@ -229,4 +212,31 @@ canvas {
     top: 4%;
     bottom: 4%;
     width: 100%;
+}
+
+.shop-banner {
+    border-radius: 24px;
+    border: 2px solid rgba(255,255,255,0.4);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+    height: 260px;
+    width: 31.5%;
+}
+
+.shop-banner-lemons {
+    background: url(/resources/assets/shop/shop-lemons.png) right center no-repeat, linear-gradient(91deg, rgba(255, 255, 255, 0.30) 0.57%, rgba(255, 255, 255, 0.10) 99.48%);
+}
+.shop-banner-items {
+    background: url(/resources/assets/shop/shop-items.png) right center no-repeat, linear-gradient(91deg, rgba(255, 255, 255, 0.30) 0.57%, rgba(255, 255, 255, 0.10) 99.48%);
+}
+.shop-banner-chests {
+    background: url(/resources/assets/shop/shop-chests.png) right center no-repeat, linear-gradient(91deg, rgba(255, 255, 255, 0.30) 0.57%, rgba(255, 255, 255, 0.10) 99.48%);
+}
+.shop-banner-keys {
+    background: url(/resources/assets/shop/shop-keys.png) right center no-repeat, linear-gradient(91deg, rgba(255, 255, 255, 0.30) 0.57%, rgba(255, 255, 255, 0.10) 99.48%);
+}
+.shop-banner-pickaxes {
+    background: url(/resources/assets/shop/shop-pickaxes.png) right center no-repeat, linear-gradient(91deg, rgba(255, 255, 255, 0.30) 0.57%, rgba(255, 255, 255, 0.10) 99.48%);
+}
+.shop-banner-marketplace {
+    background: linear-gradient(91deg, rgba(255, 255, 255, 0.30) 0.57%, rgba(255, 255, 255, 0.10) 99.48%), url(/resources/assets/shop/shop-marketplace.png) right center no-repeat;
 }

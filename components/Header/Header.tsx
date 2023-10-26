@@ -24,98 +24,103 @@ const navLinks =
         {
           name: 'Shop',
           href: '/city/launchpad',
-          subLinks: [],
+          subLinks: undefined,
         },
         {
           name: 'Mining',
           href: '/city/mint',
-          subLinks: [],
+          // subLinks: [],
         },
         {
           name: 'Crafting',
           href: '/city/labs',
-          subLinks: [],
+          // subLinks: [],
         },
         {
           name: 'Referral',
           href: '/referral',
-          subLinks: [],
+          // subLinks: [],
         },
       ]
     : [
         {
           name: 'NFT Hub',
           href: '/hub',
-          subLinks: [] as LinkType[],
-        },
-        {
-          name: 'Defi',
-          href: '/city/defi',
-          subLinks: [
-            {
-              name: 'Farming',
-              href: '/city/defi',
-            },
-            {
-              name: 'Bridge',
-              href: '',
-              isDisabled: true,
-            },
-          ] as LinkType[],
-        },
-        {
-          name: 'Labs',
-          href: '/city/labs',
-          subLinks: [
-            {
-              name: 'Crafting',
-              href: '/city/labs',
-            },
-            {
-              name: 'Mixing',
-              href: '/city/mixing',
-            },
-            {
-              name: 'Grading',
-              href: '',
-              isDisabled: true,
-            },
-          ] as LinkType[],
-        },
-        {
-          name: 'Vault',
-          href: '/city/vault',
-          subLinks: [
-            {
-              name: 'NFT Pool',
-              href: '/city/vault',
-            },
-            {
-              name: 'LJC Pool',
-              href: '',
-              isDisabled: true,
-            },
-          ] as LinkType[],
+          // subLinks: [] as LinkType[],
         },
         {
           name: 'Shop',
-          href: '/city/mint',
-          subLinks: [
-            {
-              name: 'Mint',
-              href: '/city/mint',
-            },
-            {
-              name: 'Launchpad',
-              href: '/city/launchpad',
-            },
-            {
-              name: 'Marketplace',
-              href: '/city/marketplace',
-              isDisabled: true,
-            },
-          ] as LinkType[],
+          href: '/shop',
+          // subLinks: [
+          //   {
+          //     name: 'Farming',
+          //     href: '/city/defi',
+          //   },
+          //   {
+          //     name: 'Bridge',
+          //     href: '',
+          //     isDisabled: true,
+          //   },
+          // ] as LinkType[],
         },
+        {
+          name: 'Crafting',
+          href: '/city/labs',
+          // subLinks: [],
+        },
+        {
+          name: 'Referral',
+          href: '/referral',
+          // subLinks: [
+          //   {
+          //     name: 'Crafting',
+          //     href: '/city/labs',
+          //   },
+          //   {
+          //     name: 'Mixing',
+          //     href: '/city/mixing',
+          //   },
+          //   {
+          //     name: 'Grading',
+          //     href: '',
+          //     isDisabled: true,
+          //   },
+          // ] as LinkType[],
+        },
+        // {
+        //   name: 'Vault',
+        //   href: '/city/vault',
+        //   subLinks: [
+        //     {
+        //       name: 'NFT Pool',
+        //       href: '/city/vault',
+        //     },
+        //     {
+        //       name: 'LJC Pool',
+        //       href: '',
+        //       isDisabled: true,
+        //     },
+        //   ] as LinkType[],
+        // },
+        // {
+        //   name: 'Shop',
+        //   href: '/city/mint',
+        //   subLinks: [
+        //     {
+        //       name: 'Mint',
+        //       href: '/city/mint',
+        //     },
+        //     {
+        //       name: 'Launchpad',
+        //       href: '/city/launchpad',
+        //     },
+        //     {
+        //       name: 'Marketplace',
+        //       href: '/city/marketplace',
+        //       isDisabled: true,
+        //     },
+        //   ] as LinkType[],
+        // },
       ];
 
 export const Header: React.FC<HeaderProps> = ({ network }) => {
