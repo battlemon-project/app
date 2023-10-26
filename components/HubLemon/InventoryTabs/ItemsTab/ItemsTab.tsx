@@ -240,7 +240,7 @@ export const ItemsTab: React.FC = () => {
                 href={'#'}
                 onClick={filterOutifts('all')}
               >
-                <b className="relative z-10">ALL</b>
+                <b className="relative z-10 btn-link">ALL</b>
                 <img
                   className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 basis-12 2xl:1/2 2xl w-12 h-12 2xl:w-16 2xl:h-16"
                   alt="icon"
