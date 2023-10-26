@@ -55,14 +55,14 @@ const useLemon = () => {
     if (!address) return;
     await timeout(2000);
     const fetched = await fetch(`/api/linea/lemons?address=${address}`);
-    
+
     const {
       result: {
-        data: { user: { tokens } },
+        data: { user },
       },
     } = await fetched.json();
 
-    return tokens;
+    return user?.tokens || [];
   };
 
   return {
