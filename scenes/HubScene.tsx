@@ -10,26 +10,17 @@ import {
   type GLTFFileLoader,
   GLTFLoaderAnimationStartMode,
 } from '@babylonjs/loaders';
-import { Platforms } from './Models/Platforms';
 import LoadingScreen from '../components/LoadingScreen';
 import { LemonGenerator } from './Models/LemonGenerator';
-import { useLemonStore } from '../helpers/lemonStore';
+import { LemonType } from '../helpers/lemonStore';
 import { Inventory } from '../components/HubLemon/Inventory';
-import classNames from 'classnames';
 
-let destroyPlatforms: () => void;
-let backPlatforms: () => void;
-let newLemonUnsubscribe: () => void;
+type updateLemonType = (lemon: LemonType) => Promise<void>;
+let updateSomeLemon: updateLemonType = async () => {};
 
-export default function HubScene({
-  handleMintLemon,
-}: {
-  handleMintLemon: () => Promise<void | undefined>;
-}) {
-  const { inventoryIsOpened } = useLemonStore();
+export default function HubScene() {
   const FpsElement = document.getElementById('fps');
   const canvasRef = useRef<null | HTMLCanvasElement>(null);
-  const [step, changeStep] = useState<number>(0);
 
   useEffect(() => {
     BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (loader) {
@@ -37,8 +28,7 @@ export default function HubScene({
         GLTFLoaderAnimationStartMode.NONE;
     });
 
-    const canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
-    const engine = new BABYLON.Engine(canvas, true);
+    const engine = new BABYLON.Engine(canvasRef.current, true);
     engine.loadingScreen = new LoadingScreen(
       canvasRef.current as HTMLCanvasElement
     );
@@ -49,22 +39,18 @@ export default function HubScene({
 
       const camera = new BABYLON.ArcRotateCamera(
         'camera',
-        -Math.PI / 2,
-        Math.PI / 2.1,
+        Math.PI / 0.292,
+        Math.PI / 1.9,
         450,
-        new BABYLON.Vector3(0, 0, 0),
+        new BABYLON.Vector3(0, 100, 0),
         scene
       );
 
-      camera.lowerAlphaLimit = camera.alpha;
-      camera.upperAlphaLimit = camera.alpha;
-      camera.upperBetaLimit = camera.beta;
-      camera.lowerBetaLimit = camera.beta;
-      camera.wheelPrecision = 0.5;
-      camera.lowerRadiusLimit = 2450;
-      camera.upperRadiusLimit = 2450;
+      camera.lowerRadiusLimit = 450;
+      camera.upperRadiusLimit = 450;
+      camera.viewport.x = -0.2;
 
-      camera.attachControl(canvas, true);
+      camera.attachControl(canvasRef.current, true);
       const light = new BABYLON.HemisphericLight(
         'light',
         new BABYLON.Vector3(1, 1, 1),
@@ -80,17 +66,13 @@ export default function HubScene({
       scene.environmentTexture.level = 1;
       scene.clearColor = new BABYLON.Color4(0, 0, 0, 0.0000000000000001);
 
-      Platforms({
-        scene,
-        canvas,
-        mintEvent: handleMintLemon,
-        changeStep,
-      }).then((Platforms) => {
-        destroyPlatforms = Platforms.destroy;
-        backPlatforms = Platforms.back;
-        LemonGenerator(scene).then(({ unsubscribe }) => {
-          newLemonUnsubscribe = unsubscribe;
-        });
+      LemonGenerator(scene).then((result) => {
+        updateSomeLemon = async (lemon: LemonType) => {
+          await result.change(lemon);
+          console.log('changed');
+          scene.render();
+        };
+        scene.render();
       });
 
       return scene;
@@ -112,47 +94,18 @@ export default function HubScene({
     });
 
     return () => {
-      if (destroyPlatforms) destroyPlatforms();
-      if (newLemonUnsubscribe) newLemonUnsubscribe();
       engine.hideLoadingUI();
       engine.dispose();
     };
   }, []);
 
-  const toggleBack = () => {
-    if (backPlatforms) {
-      changeStep(0);
-      useLemonStore.setState({ inventoryIsOpened: false });
-      backPlatforms();
-    }
-  };
-
   return (
     <div className="relative w-full h-full">
       <canvas className="h-full w-full" id="renderCanvas" ref={canvasRef} />
-      <div className="container w-full absolute left-0 top-5">
-        {step > 0 && (
-          <button
-            className="border border-white rounded-md font-semibold flex items-center text-white leading-none text-xl mb-3 px-6 py-0.5 top-20 hover:text-black hover:bg-white transition-all"
-            onClick={toggleBack}
-          >
-            <span style={{ fontSize: '26px', lineHeight: '32px' }}>
-              &larr;{' '}
-            </span>
-            Back
-          </button>
-        )}
-      </div>
 
-      {inventoryIsOpened ? (
-        <div
-          className={classNames(
-            'absolute top-4 right-0 max-w-xl 2xl:max-w-2xl w-full'
-          )}
-        >
-          <Inventory />
-        </div>
-      ) : null}
+      <div className='absolute top-4 right-0 max-w-xl 2xl:max-w-2xl w-full'>
+        <Inventory />
+      </div>
     </div>
   );
 }

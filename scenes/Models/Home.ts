@@ -35,6 +35,7 @@ export const Home = async (scene: Scene, router: NextRouter): Promise<void> => {
     },
     arena: {
       stroke: ['arena_stroke', 'arena_rotator_a_stroke'],
+      page: '/hub',
     },
     download: {
       stroke: ['download_client_car_stroke', 'download_client_car_adv_stroke'],

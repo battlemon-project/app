@@ -7,7 +7,7 @@ interface InfoTabProps {
 export const InfoTab: React.FC<InfoTabProps> = ({ items }) => {
   return (
     <div className="relative px-10 py-8 text-white">
-      <div className="relative z-10">
+      <div className="relative z-10" style={{minHeight: '400px'}}>
         <div className="text-2xl font-bold italic mb-5">Brand New Lemon</div>
         <div
           className="h-0.5 mb-5"

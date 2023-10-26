@@ -38,9 +38,9 @@ export const Inventory: React.FC = () => {
     },
     {
       name: 'PLAY',
-      href: `/game/home?playerId=${JSON.stringify(
-        lemon?.id
-      )}`,
+      // href: `/game/home?playerId=${JSON.stringify(
+      //   lemon?.id
+      // )}`,
     },
     {
       name: 'RENT',
@@ -68,13 +68,6 @@ export const Inventory: React.FC = () => {
         {TABS.map((tab) =>
           tab.href ? (
             <a
-              className={classNames(
-                {
-                  'text-opacity-100': tab.name === activeTab,
-                  'text-opacity-50': tab.name !== activeTab,
-                },
-                'text-white px-5 py-3 font-semibold flex-grow text-center'
-              )}
               key={tab.name}
               href={tab.href}
             >
@@ -87,7 +80,7 @@ export const Inventory: React.FC = () => {
                   'text-opacity-100': tab.name === activeTab,
                   'text-opacity-50': tab.name !== activeTab,
                 },
-                'relative text-white px-5 py-3 font-semibold flex-grow text-center'
+                'relative text-white px-3 py-3 font-semibold flex-grow text-center'
               )}
               key={tab.name}
               onClick={() => setActiveTab(tab.name)}

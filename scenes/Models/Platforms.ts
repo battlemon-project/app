@@ -57,20 +57,6 @@ export const Platforms = async ({
   if (ring) {
     ring.visibility = 0;
   }
-  // containers.dots.addAllToScene()
-
-  // const ringScene = await Ring(scene)
-
-  // const dots = scene.getTransformNodeByName('icons')
-  // if (dots) {
-  //   dots.position.y = dots.position.y + 10;
-
-  //   dots.getChildMeshes().forEach(mesh => {
-  //     mesh.renderingGroupId = 2;
-  //   })
-  //   dots.scaling = new Vector3(0,0,0);
-  // }
-  // const dotsMeshes = dots?.getChildMeshes() || [];
 
   let originalRotationAngle = 0;
 
@@ -87,9 +73,6 @@ export const Platforms = async ({
   if (showPosfeature) showPosfeature.visibility = 0;
   const showPosOutfit = scene.getMeshByName('showPosOutfit');
   if (showPosOutfit) showPosOutfit.visibility = 0;
-
-  // const platforms = models.meshes[0]
-  // platforms.position.y = -100;
 
   const lookatObjects: string[] = ['LemonPos_1', 'LemonPos_2', 'LemonPos_3'];
   const lemonPositions: TransformNode[] = lookatObjects.map((pos) => {

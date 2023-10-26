@@ -19,49 +19,25 @@ export const ConnectEth: React.FC = () => {
   if (!hasMounted) return null;
 
   return (
-    <ul className="navbar-nav mb-2 mb-lg-0 fs-5">
-      <li className="nav-item dropdown">
-        {address ? (
-          <div className="relative">
-            <button
-              className="flex border border-white py-2.5 px-5 rounded-xl text-white font-normal dropdown-toggle hover:text-black hover:bg-white transition-all"
-              id="navbarDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              onMouseEnter={onMouseEnter}
-              onMouseLeave={onMouseLeave}
-            >
+    <ul className="navbar-nav mb-2 mb-lg-0">
+      <li className="nav-item dropdown" style={{position: 'relative', top: '-9px'}}>
+        {address ?
+          <>
+            <button className="btn py-2 btn-outline-light dropdown-toggle text-start" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <span className="short_address">
                 <span className="ellipsis">{address}</span>
                 <span className="indent">{address}</span>
               </span>
             </button>
-            {isOpen ? (
-              <ul
-                className="absolute flex flex-col top-11 left-0 border border-white w-full  rounded-xl transition-all overflow-hidden"
-                aria-labelledby="navbarDropdown"
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-              >
-                <li>
-                  <button
-                    className=" block w-full py-2.5 px-5 text-white hover:text-black hover:bg-white"
-                    onClick={disconnect}
-                  >
-                    Sign Out
-                  </button>
-                </li>
-              </ul>
-            ) : null}
-          </div>
-        ) : (
-          <button
-            className="block border border-white w-52 py-2.5 px-5 rounded-xl text-white hover:text-black hover:bg-white transition-all"
-            onClick={open}
-          >
+            <ul className="dropdown-menu w-100" aria-labelledby="navbarDropdown">
+              <li><a className="dropdown-item" href={"#"} onClick={disconnect}>Sign Out</a></li>
+            </ul>
+          </>
+          :
+          <button className="btn py-2 btn-outline-light" onClick={() => open()}>
             Connect
           </button>
-        )}
+        }
       </li>
     </ul>
   );

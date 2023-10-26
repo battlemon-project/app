@@ -9,12 +9,11 @@ import {
 } from '@babylonjs/core';
 import '@babylonjs/loaders';
 import { LemonGenerator } from './Models/LemonGenerator';
-import { useLemonStore } from '../helpers/lemonStore';
+import { LemonType, useLemonStore } from '../helpers/lemonStore';
 import { allItems, allProperties } from '../helpers/dummyLemon';
-import { type LemonOwnedNft } from '../helpers/alchemy';
 import classNames from 'classnames';
 
-type updateLemonType = (lemon: LemonOwnedNft) => Promise<void>;
+type updateLemonType = (lemon: LemonType) => Promise<void>;
 let updateSomeLemon: updateLemonType = async () => {};
 
 export default function LemonSandboxScene() {
@@ -24,6 +23,7 @@ export default function LemonSandboxScene() {
   const { lemon } = useLemonStore();
 
   const changeItem = (type: string, name: string) => {
+    if (!lemon) return;
     lemon.items.forEach((item, index) => {
       if (item.type == type) {
         item.name = name;
@@ -35,6 +35,7 @@ export default function LemonSandboxScene() {
   };
 
   const changeProperty = (type: string, name: string) => {
+    if (!lemon) return;
     lemon.properties.forEach((property, index) => {
       if (property.type == type) {
         property.name = name;
@@ -74,7 +75,7 @@ export default function LemonSandboxScene() {
       scene.clearColor = new Color4(0, 0, 0, 0.0000000000000001);
 
       LemonGenerator(scene).then((result) => {
-        updateSomeLemon = async (lemon: LemonOwnedNft) => {
+        updateSomeLemon = async (lemon: LemonType) => {
           await result.change(lemon);
           console.log('changed');
           scene.render();
@@ -115,7 +116,7 @@ export default function LemonSandboxScene() {
         className="absolute px-4 left-0 w-72"
         style={{ display: visibleInterface ? 'block' : 'none' }}
       >
-        {lemon.properties.map((prop, i) => (
+        {lemon?.properties.map((prop, i) => (
           <div key={i} className="pt-1 w-full">
             <b
               className="text-sm px-1"
@@ -152,7 +153,7 @@ export default function LemonSandboxScene() {
         className="absolute right-0 w-72 px-4"
         style={{ right: '0', display: visibleInterface ? 'block' : 'none' }}
       >
-        {lemon.items.map((prop, i) => (
+        {lemon?.items.map((prop, i) => (
           <div className="pt-1 w-full" key={i}>
             <b
               className="text-sm px-1"

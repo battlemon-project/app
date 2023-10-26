@@ -376,107 +376,75 @@ export const ItemsTab: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="absolute w-full -bottom-20 left-0 flex gap-3">
-        <div className="flex py-1 basis-1/3">
-          <a
-            href={'#'}
-            className="relative text-xs uppercase font-semibold py-4 bg-white bg-opacity-20 rounded-xl text-center rounded-md text-xl justify-center w-full flex text-black border border-white border-opacity-80"
-            onClick={handleMintItem}
-          >
-            <div
-              className="absolute w-full h-3/5 blur-[30px]"
-              style={{ backgroundColor: '#A04CF4' }}
-            ></div>
-            <span className="relative flex items-center gap-2 justify-center self-center text-white text-center w-full">
-              <svg
-                width="25"
-                height="24"
-                viewBox="0 0 25 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M5 22V17M5 7V2M2.5 4.5H7.5M2.5 19.5H7.5M13.5 3L11.7658 7.50886C11.4838 8.24209 11.3428 8.60871 11.1235 8.91709C10.9292 9.1904 10.6904 9.42919 10.4171 9.62353C10.1087 9.84281 9.74209 9.98381 9.00886 10.2658L4.5 12L9.00886 13.7342C9.74209 14.0162 10.1087 14.1572 10.4171 14.3765C10.6904 14.5708 10.9292 14.8096 11.1235 15.0829C11.3428 15.3913 11.4838 15.7579 11.7658 16.4911L13.5 21L15.2342 16.4911C15.5162 15.7579 15.6572 15.3913 15.8765 15.0829C16.0708 14.8096 16.3096 14.5708 16.5829 14.3765C16.8913 14.1572 17.2579 14.0162 17.9911 13.7342L22.5 12L17.9911 10.2658C17.2579 9.98381 16.8913 9.8428 16.5829 9.62353C16.3096 9.42919 16.0708 9.1904 15.8765 8.91709C15.6572 8.60871 15.5162 8.24209 15.2342 7.50886L13.5 3Z"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Mint random item
-            </span>
-          </a>
+      <div className="absolute w-full -bottom-20 left-0 flex gap-2">
+        <div className="flex py-1 basis-1/3 relative">
+          <div className="btn-mint-background"></div>
+          <button onClick={handleMintItem} className='btn-item-bottom relative'>
+            <svg
+              width="25"
+              height="24"
+              viewBox="0 0 25 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 22V17M5 7V2M2.5 4.5H7.5M2.5 19.5H7.5M13.5 3L11.7658 7.50886C11.4838 8.24209 11.3428 8.60871 11.1235 8.91709C10.9292 9.1904 10.6904 9.42919 10.4171 9.62353C10.1087 9.84281 9.74209 9.98381 9.00886 10.2658L4.5 12L9.00886 13.7342C9.74209 14.0162 10.1087 14.1572 10.4171 14.3765C10.6904 14.5708 10.9292 14.8096 11.1235 15.0829C11.3428 15.3913 11.4838 15.7579 11.7658 16.4911L13.5 21L15.2342 16.4911C15.5162 15.7579 15.6572 15.3913 15.8765 15.0829C16.0708 14.8096 16.3096 14.5708 16.5829 14.3765C16.8913 14.1572 17.2579 14.0162 17.9911 13.7342L22.5 12L17.9911 10.2658C17.2579 9.98381 16.8913 9.8428 16.5829 9.62353C16.3096 9.42919 16.0708 9.1904 15.8765 8.91709C15.6572 8.60871 15.5162 8.24209 15.2342 7.50886L13.5 3Z"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Mint random item
+          </button>
         </div>
-        <div className="flex py-1 basis-1/3">
-          <a
-            href={'#'}
-            className="relative text-xs uppercase font-semibold py-4 bg-white bg-opacity-20 rounded-xl text-center rounded-md text-xl justify-center w-full flex text-black border border-white border-opacity-80"
-            onClick={handleDressedMode}
-          >
-            <div
-              className="absolute w-full h-3/5 blur-[30px]"
-              style={{ backgroundColor: '#11A6C5' }}
-            ></div>
-            <span className="relative z-10 flex items-center gap-2 text-white justify-center self-center text-center w-full">
-              <svg
-                width="25"
-                height="24"
-                viewBox="0 0 25 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3.5 9H17C19.4853 9 21.5 11.0147 21.5 13.5C21.5 15.9853 19.4853 18 17 18H12.5M3.5 9L7.5 5M3.5 9L7.5 13"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              {currentItemsFilter == 'dressed' ? 'Back' : 'Dressed items'}
-            </span>
-          </a>
+        <div className="flex py-1 basis-1/3 relative">
+          <div className="btn-dressed-background"></div>
+          <button onClick={handleDressedMode} className='btn-item-bottom relative'>
+            <svg
+              width="25"
+              height="24"
+              viewBox="0 0 25 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3.5 9H17C19.4853 9 21.5 11.0147 21.5 13.5C21.5 15.9853 19.4853 18 17 18H12.5M3.5 9L7.5 5M3.5 9L7.5 13"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Dressed items
+          </button>
         </div>
-        <div className="flex py-1 basis-1/3">
-          <a
-            href={'#'}
-            className={classNames(
-              {
-                'bg-stone-400 bg-opacity-40': !selectedItem,
-                'bg-white bg-opacity-20': selectedItem,
-              },
-              'relative text-xs uppercase font-semibold py-4 text-center rounded-md text-xl justify-center w-full flex text-black border border-white border-opacity-80 rounded-xl'
-            )}
-          >
-            <div
-              className="absolute w-full left-1/2 -translate-x-1/2 h-3/5 blur-[30px]"
-              style={{ backgroundColor: '#19CA60' }}
-            ></div>
-            <span className="relative z-10 flex items-center gap-2 text-white justify-center self-center text-center w-full">
-              <svg
-                width="25"
-                height="24"
-                viewBox="0 0 25 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12.5 22.5C18.299 22.5 23 17.799 23 12C23 6.20101 18.299 1.5 12.5 1.5C6.70101 1.5 2 6.20101 2 12C2 17.799 6.70101 22.5 12.5 22.5Z"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeMiterlimit="10"
-                />
-                <path
-                  d="M7.5 12L10.1644 14.3979C10.5447 14.7402 11.122 14.7402 11.5023 14.3979L17.5 9"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                />
-              </svg>
-              {currentItemsFilter == 'dressed' ? 'Take Off' : 'Confirm'}
-            </span>
-          </a>
+        <div className="flex py-1 basis-1/3 relative">
+          <div className="btn-confirm-background"></div>
+          <button onClick={handleDressedMode} className='btn-item-bottom relative'>
+            <svg
+              width="25"
+              height="24"
+              viewBox="0 0 25 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12.5 22.5C18.299 22.5 23 17.799 23 12C23 6.20101 18.299 1.5 12.5 1.5C6.70101 1.5 2 6.20101 2 12C2 17.799 6.70101 22.5 12.5 22.5Z"
+                stroke="white"
+                strokeWidth="2"
+                strokeMiterlimit="10"
+              />
+              <path
+                d="M7.5 12L10.1644 14.3979C10.5447 14.7402 11.122 14.7402 11.5023 14.3979L17.5 9"
+                stroke="white"
+                strokeWidth="2"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+              />
+            </svg>
+            Confirm
+          </button>
         </div>
       </div>
     </>

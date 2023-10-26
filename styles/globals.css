@@ -182,3 +182,51 @@ canvas {
     color: #000 !important;
     background-color: #fff !important;
 }
+
+.btn-item-bottom {
+    display: flex;
+    padding: 20px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    flex: 1 0 0;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    align-self: stretch;
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.40);
+    background: linear-gradient(106deg, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0.10) 100%);
+    backdrop-filter: blur(15px);
+}
+
+.btn-mint-background {
+    border-radius: 16px;
+    opacity: 0.5;
+    background: #A04CF4;
+    position: absolute;
+    top: 4%;
+    bottom: 4%;
+    width: 100%;
+}
+
+.btn-dressed-background {
+    border-radius: 16px;
+    opacity: 0.5;
+    background: #11A6C5;
+    position: absolute;
+    top: 4%;
+    bottom: 4%;
+    width: 100%;
+}
+
+.btn-confirm-background {
+    border-radius: 16px;
+    opacity: 0.5;
+    background: #19CA60;
+    position: absolute;
+    top: 4%;
+    bottom: 4%;
+    width: 100%;
+}
