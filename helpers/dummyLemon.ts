@@ -416,6 +416,8 @@ export const dummyLemon = (withoutItems?: boolean): LemonType => {
 
   const lemon: LemonType = {
     id: '',
+    tokenId: '1',
+    image: '',
     owner: '',
     properties: [
       {

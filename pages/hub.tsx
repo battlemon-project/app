@@ -22,18 +22,7 @@ const Hub = () => {
     const lemons = await getLemonList?.();
     if (lemons && lemons.length > 0) {
       const dummy = dummyLemon();
-      const _lemon = {
-        id: '1',
-        tokenId: '1',
-        owner: '',
-        image: '',
-        type: '',
-        url: '',
-        properties: dummy.properties,
-        items: dummy.items,
-      }
-      console.log(_lemon)
-      useLemonStore.setState({ lemon: _lemon });
+      useLemonStore.setState({ lemon: dummy });
     }
     setLoader(false)
   };
