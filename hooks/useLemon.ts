@@ -54,7 +54,7 @@ const useLemon = () => {
   const getLemonList = async (): Promise<LemonType[] | undefined> => {
     if (!address) return;
     await timeout(2000);
-    const fetched = await fetch(`/api/linea/lemons?address=${address}`);
+    const fetched = await fetch(`/api/linea/lemons?address=${address}`)
 
     const {
       result: {
